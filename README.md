@@ -2,6 +2,7 @@
 |Name|Photo
 |---|---|
 |David Zhao|<img src="profiles/davidzhao.jpg">|
+|Jonathan Khamis|<img src="profiles/jonathan.jpg">|
 
 ## Dependencies
 
