@@ -12,13 +12,13 @@ import { link } from './Link'
 import { getLoginPath, getPath, getSurveyPath, Route } from './route'
 
 const title = {
-  name: 'CS188',
+  name: 'Home',
   path: getPath(Route.HOME),
   title: true,
 }
 
 const otherTabs = [
-  {
+  /*{
     name: 'lectures',
     path: getPath(Route.LECTURES),
   },
@@ -26,10 +26,20 @@ const otherTabs = [
     name: 'projects',
     path: getPath(Route.PROJECTS),
   },
+*/
   {
-    name: 'playground',
+    name: 'Create Event',
+    path: getPath(Route.CREATEEVENT),
+  },
+  {
+    name: 'Profile',
+    path: getPath(Route.PROFILE),
+  },
+  {
+    name: 'Login',
     path: getPath(Route.PLAYGROUND),
   },
+
 ]
 
 export function NavBar() {
@@ -109,8 +119,8 @@ function SubNav() {
   }
   return (
     <Nav $isSubNav>
-      <NavItem name="surveys" path={getSurveyPath()} />
-      <NavItem name={user ? 'logout' : 'login'} path={getLoginPath()} />
+      <NavItem name="Sign Up" path={getSurveyPath()} />
+      <NavItem name={user ? 'logout' : 'Sign In'} path={getLoginPath()} />
     </Nav>
   )
 }

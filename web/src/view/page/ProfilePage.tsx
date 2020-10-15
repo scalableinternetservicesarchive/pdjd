@@ -1,27 +1,26 @@
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { ColorName, Colors } from '../../../../common/src/colors'
-import { H1, H2, H3 } from '../../style/header'
+import { H1, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
 import { BodyText } from '../../style/text'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
-interface HomePageProps extends RouteComponentProps, AppRouteParams {}
+interface ProfilePageProps extends RouteComponentProps, AppRouteParams {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function HomePage(props: HomePageProps) {
+export function ProfilePage(props: ProfilePageProps) {
   return (
     <Page>
       <Hero>
-        <H1>CS 188</H1>
-        <H3>class</H3>
-        <H3>welcome</H3>
+        <H1>This is the profile page</H1>
+
       </Hero>
       <Content>
         <LContent>
           <Section>
-            <H2>From </H2>
+
             <Spacer $h4 />
 
             <BodyText>
@@ -32,7 +31,7 @@ export function HomePage(props: HomePageProps) {
         </LContent>
         <RContent>
         <Section>
-            <H2>From </H2>
+
             <Spacer $h4 />
 
             <BodyText>

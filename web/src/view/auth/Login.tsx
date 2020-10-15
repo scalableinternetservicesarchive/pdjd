@@ -48,7 +48,7 @@ export function Login() {
     <>
       <div className="mt3">
         <label className="db fw4 lh-copy f6" htmlFor="email">
-          Email address
+          Email add
         </label>
         <Input $hasError={err.email} $onChange={setEmail} $onSubmit={login} name="email" type="email" />
       </div>
@@ -81,7 +81,7 @@ function Logout() {
   return (
     <>
       <Spacer $h5 />
-      <Button onClick={logout}>Logout</Button>
+      <Button onClick={logout}>Logout now</Button>
     </>
   )
 }

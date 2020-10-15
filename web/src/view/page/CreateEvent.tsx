@@ -7,17 +7,13 @@ import { style } from '../../style/styled'
 import { BodyText } from '../../style/text'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
-interface HomePageProps extends RouteComponentProps, AppRouteParams {}
+interface CreateEventProps extends RouteComponentProps, AppRouteParams {}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function HomePage(props: HomePageProps) {
+export function CreateEventPage(props: CreateEventProps) {
   return (
     <Page>
-      <Hero>
-        <H1>CS 188</H1>
-        <H3>class</H3>
-        <H3>welcome</H3>
-      </Hero>
+        <H1>Create Event</H1>
       <Content>
         <LContent>
           <Section>
@@ -47,12 +43,12 @@ export function HomePage(props: HomePageProps) {
   )
 }
 
-const Hero = style('div', 'mb4 w-100 ba b--mid-gray br2 pa3 tc', {
-  borderLeftColor: Colors.lemon + '!important',
-  borderRightColor: Colors.lemon + '!important',
-  borderLeftWidth: '4px',
-  borderRightWidth: '4px',
-})
+// const Hero = style('div', 'mb4 w-100 ba b--mid-gray br2 pa3 tc', {
+//   borderLeftColor: Colors.lemon + '!important',
+//   borderRightColor: Colors.lemon + '!important',
+//   borderLeftWidth: '4px',
+//   borderRightWidth: '4px',
+// })
 
 const Content = style('div', 'flex-l')
 
