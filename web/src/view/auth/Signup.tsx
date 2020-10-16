@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useContext, useEffect, useState } from "react";
+import Form from "react-bootstrap/Form";
 import { check } from "../../../../common/src/util";
 import { Button } from "../../style/button";
-import { H2 } from '../../style/header';
+import { H2 } from "../../style/header";
 import { Input } from "../../style/input";
 import { Spacer } from "../../style/spacer";
 import { style } from "../../style/styled";
@@ -10,7 +11,6 @@ import { Page } from "../page/Page";
 import { handleError } from "../toast/error";
 import { toastErr } from "../toast/toast";
 import { UserContext } from "./user";
-
 export function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -54,9 +54,8 @@ export function SignUp() {
   return (
     <Page>
       <ButtonContainer>
-           <H2>Sign Up Today!</H2>
+        <H2>Sign Up Today!</H2>
       </ButtonContainer>
-
       <Content>
         <RContent>
           <div className="mt3">
@@ -75,12 +74,7 @@ export function SignUp() {
             <label className="db fw4 lh-copy f6" htmlFor="bio">
               Biography
             </label>
-            <Input
-              $onChange={setBio}
-              $onSubmit={login}
-              name="bio"
-              type="bio"
-            />
+            <Input $onChange={setBio} $onSubmit={login} name="bio" type="bio" />
             {bio}
           </div>
           <div className="mt3">
@@ -94,6 +88,17 @@ export function SignUp() {
               name="email"
               type="email"
             />
+          </div>
+          <div>
+            <Spacer $h2/>
+            <Form>
+              <Form.Group>
+                <Form.File
+                  id="userImage"
+                  label="What do you look like?"
+                />
+              </Form.Group>
+            </Form>
           </div>
         </RContent>
         <LContent>
@@ -133,15 +138,13 @@ export function SignUp() {
               type="password"
             />
           </div>
-
         </LContent>
       </Content>
       <ButtonContainer>
-      <div className="mt3">
-        <Button onClick={login}>Sign Up</Button>
-      </div>
+        <div className="mt3">
+          <Button onClick={login}>Sign Up</Button>
+        </div>
       </ButtonContainer>
-
     </Page>
   );
 }
@@ -193,3 +196,4 @@ const LContent = style("div", "flex-grow-0 w-60-l mr3-l");
 const RContent = style("div", "flex-grow-0  w-60-l mr6-l");
 
 const ButtonContainer = style("div", " w-100 br2 pa3 tc");
+
