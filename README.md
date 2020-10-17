@@ -4,6 +4,7 @@
 |David Zhao|<img src="profiles/davidzhao.jpg">|
 |Parham Hajzavar|<img src="profiles/parham.jpg">|
 |Jonathan Khamis|<img src="profiles/jonathan.jpg">|
+|Duy Duong||
 
 
 ## Dependencies
