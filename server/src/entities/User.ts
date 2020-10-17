@@ -1,5 +1,8 @@
-import { BaseEntity, Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
+import { BaseEntity, Column, CreateDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm'
 import { User as GraphqlUser, UserType } from '../graphql/schema.types'
+import { Events } from './Events'
+import { Request } from './Request'
+
 
 @Entity()
 export class User extends BaseEntity implements GraphqlUser {
@@ -29,4 +32,25 @@ export class User extends BaseEntity implements GraphqlUser {
     nullable: true,
   })
   name: string
+
+  @Column({
+    nullable: true
+  })
+  bio: string
+
+  @Column({
+    length: 20,
+    nullable: true
+  })
+  phoneNumber: string
+
+  @ManyToMany(() => Events)
+  @JoinTable()
+  events: Events[]
+
+  @ManyToOne(() => Request)
+  hostRequests: Request[]
+
+  @ManyToOne(() => Request)
+  guestRequests: Request[]
 }

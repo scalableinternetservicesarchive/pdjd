@@ -34,13 +34,6 @@ type Subscription {
   surveyUpdates (surveyId: Int!): Survey
 }
 
-type User {
-  id: Int!
-  userType: UserType!
-  email: String!
-  name: String!
-}
-
 enum UserType { ADMIN, USER }
 
 type Survey {
@@ -89,3 +82,65 @@ input SurveyInput {
   answer: String!
 }
 
+# Additional table definitions
+scalar Date
+
+# Extended User
+type User {
+  id: Int!
+  userType: UserType!
+  email: String!
+  name: String!
+  bio: String!
+  phoneNumber: String!
+
+  events: [Events]!
+
+  # Requests for events where user is host
+  hostRequests: [Request]!
+
+  # Requests for events where user is guest
+  guestRequests: [Request]!
+}
+
+type Events {
+  id: Int!
+
+  title: String!
+
+  description: String!
+
+  startTime: Date!
+  endTime: Date!
+
+  location: Location!
+
+  # List of event attendees
+  attendees: [User]!
+
+  eventStatus: eventStatus!
+  # True if the event has started.
+  isStarted: Boolean!
+
+  # True if the event has completed.
+  isCompleted: Boolean!
+}
+
+enum eventStatus {OPEN, CLOSED, CANCELLED}
+
+type Location {
+  id: Int!
+  buildingName: String!
+  room: Int!
+  events: [Events]!
+}
+
+type Request {
+  id: Int!
+  event: Events!
+  host: User!
+  guest: User!
+  requestStatus: requestStatus!
+}
+
+enum requestStatus {PENDING, ACCEPTED, REJECTED}
