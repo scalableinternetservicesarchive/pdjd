@@ -1,18 +1,17 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { Events } from './Events'
+import { BaseEntity, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { Building } from './Building'
+import { Event } from './Event'
 @Entity()
 export class Location extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({
-    length: 100
-  })
-  buildingName: string
+  @ManyToOne(() => Building, building => building.locations)
+  building: Building
 
   @Column()
   room: number
 
-  @OneToMany(() => Events, events => events.location)
-  events: Events[]
+  @OneToMany(() => Event, events => events.location)
+  events: Event[]
 }

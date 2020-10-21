@@ -1,3 +1,0 @@
-insert into `user` (`email`, `name`, `bio`, `phoneNumber`, `userType`) values ('jbruin@ucla.edu', 'Joe Bruin', 'Joe Bruin bio', '123456789', 'USER');
-insert into `events` (`title`, `description`, `startTime`, `endTime`, `eventStatus`) values ('CS188', 'Scalable Internet Services', '2020-10-19 08:00:00', '2020-10-19 10:00:00', 'OPEN');
-insert into `location` (`buildingName`, `room`) values ('Boelter Hall', '3400');

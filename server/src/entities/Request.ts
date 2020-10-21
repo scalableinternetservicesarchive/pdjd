@@ -1,6 +1,6 @@
-import { BaseEntity, Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { RequestStatus } from '../graphql/schema.types'
-import { Events } from './Events'
+import { Event } from './Event'
 import { User } from './User'
 
 @Entity()
@@ -8,13 +8,13 @@ export class Request extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @OneToMany(() => Events, event => event.requests)
-  event: Events
+  @ManyToOne(() => Event)
+  event: Event
 
-  @OneToMany(() => User, host => host.hostRequests)
+  @ManyToOne(() => User)
   host: User
 
-  @OneToMany(() => User, guest => guest.guestRequests)
+  @ManyToOne(() => User)
   guest: User
 
   @Column({

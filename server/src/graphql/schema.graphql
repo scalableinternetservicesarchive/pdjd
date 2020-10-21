@@ -90,11 +90,15 @@ type User {
   id: Int!
   userType: UserType!
   email: String!
-  name: String!
-  bio: String!
-  phoneNumber: String!
+  password: String!
 
-  events: [Events]!
+  name: String!
+  bio: String
+  phoneNumber: String
+
+  # Relations
+  hostEvents: [Event]!
+  guestEvents: [Event]!
 
   # Requests for events where user is host
   hostRequests: [Request]!
@@ -103,7 +107,7 @@ type User {
   guestRequests: [Request]!
 }
 
-type Events {
+type Event {
   id: Int!
 
   title: String!
@@ -113,31 +117,47 @@ type Events {
   startTime: Date!
   endTime: Date!
 
+  maxGuestCount: Int!
+  eventStatus: eventStatus!
+
+  # Relations
+  host: User!
   location: Location!
 
   # List of event attendees
-  attendees: [User]!
+  guests: [User]!
 
-  eventStatus: eventStatus!
+  # List of pending requests for the event
+  requests: [Request]!
+  # Functions
   # True if the event has started.
   isStarted: Boolean!
 
   # True if the event has completed.
   isCompleted: Boolean!
+
+  # Return number of guests
+  guestCount: Int!
 }
 
 enum eventStatus {OPEN, CLOSED, CANCELLED}
 
 type Location {
   id: Int!
-  buildingName: String!
+  building: Building!
   room: Int!
-  events: [Events]!
+  events: [Event]!
+}
+
+type Building {
+  id: Int!
+  name: String!
+  locations: [Location]!
 }
 
 type Request {
   id: Int!
-  event: Events!
+  event: Event!
   host: User!
   guest: User!
   requestStatus: requestStatus!

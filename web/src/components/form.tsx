@@ -1,20 +1,18 @@
 import * as React from 'react'
-import { useContext, useEffect, useState } from 'react'
-import { Button } from '../../style/button'
-import { Input } from '../../style/input'
-import { UserContext } from './user'
+import { useEffect, useState } from 'react'
+import { Button } from '../style/button'
+import { Input } from '../style/input'
+// import { UserContext } from './user'
 
 export function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [err, setError] = useState({ email: false, password: false })
-  const { user } = useContext(UserContext)
+  // const { user } = useContext(UserContext)
 
   // reset error when email/password change
-  useEffect(() => setError({ ...err, email: false }), [email])
+  React.useEffect(() => setError({ ...err, email: false }), [email])
   useEffect(() => setError({ ...err, password: false }), [password])
-
-
 
   return (
     <>

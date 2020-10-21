@@ -88,26 +88,32 @@ export interface User {
   id: Scalars['Int']
   userType: UserType
   email: Scalars['String']
+  password: Scalars['String']
   name: Scalars['String']
-  bio: Scalars['String']
-  phoneNumber: Scalars['String']
-  events: Array<Maybe<Events>>
+  bio?: Maybe<Scalars['String']>
+  phoneNumber?: Maybe<Scalars['String']>
+  hostEvents: Array<Maybe<Event>>
+  guestEvents: Array<Maybe<Event>>
   hostRequests: Array<Maybe<Request>>
   guestRequests: Array<Maybe<Request>>
 }
 
-export interface Events {
-  __typename?: 'Events'
+export interface Event {
+  __typename?: 'Event'
   id: Scalars['Int']
   title: Scalars['String']
   description: Scalars['String']
   startTime: Scalars['Date']
   endTime: Scalars['Date']
-  location: Location
-  attendees: Array<Maybe<User>>
+  maxGuestCount: Scalars['Int']
   eventStatus: EventStatus
+  host: User
+  location: Location
+  guests: Array<Maybe<User>>
+  requests: Array<Maybe<Request>>
   isStarted: Scalars['Boolean']
   isCompleted: Scalars['Boolean']
+  guestCount: Scalars['Int']
 }
 
 export enum EventStatus {
@@ -119,15 +125,22 @@ export enum EventStatus {
 export interface Location {
   __typename?: 'Location'
   id: Scalars['Int']
-  buildingName: Scalars['String']
+  building: Building
   room: Scalars['Int']
-  events: Array<Maybe<Events>>
+  events: Array<Maybe<Event>>
+}
+
+export interface Building {
+  __typename?: 'Building'
+  id: Scalars['Int']
+  name: Scalars['String']
+  locations: Array<Maybe<Location>>
 }
 
 export interface Request {
   __typename?: 'Request'
   id: Scalars['Int']
-  event: Events
+  event: Event
   host: User
   guest: User
   requestStatus: RequestStatus
@@ -229,9 +242,10 @@ export type ResolversTypes = {
   SurveyInput: SurveyInput
   Date: ResolverTypeWrapper<Scalars['Date']>
   User: ResolverTypeWrapper<User>
-  Events: ResolverTypeWrapper<Events>
+  Event: ResolverTypeWrapper<Event>
   eventStatus: EventStatus
   Location: ResolverTypeWrapper<Location>
+  Building: ResolverTypeWrapper<Building>
   Request: ResolverTypeWrapper<Request>
   requestStatus: RequestStatus
 }
@@ -250,8 +264,9 @@ export type ResolversParentTypes = {
   SurveyInput: SurveyInput
   Date: Scalars['Date']
   User: User
-  Events: Events
+  Event: Event
   Location: Location
+  Building: Building
   Request: Request
 }
 
@@ -346,29 +361,35 @@ export type UserResolvers<
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   userType?: Resolver<ResolversTypes['UserType'], ParentType, ContextType>
   email?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  password?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  bio?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  phoneNumber?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  events?: Resolver<Array<Maybe<ResolversTypes['Events']>>, ParentType, ContextType>
+  bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
+  hostEvents?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
+  guestEvents?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
   hostRequests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
   guestRequests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
-export type EventsResolvers<
+export type EventResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Events'] = ResolversParentTypes['Events']
+  ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   startTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
   endTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
-  attendees?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>
+  maxGuestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   eventStatus?: Resolver<ResolversTypes['eventStatus'], ParentType, ContextType>
+  host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
+  guests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>
+  requests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
   isStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   isCompleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  guestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
@@ -377,9 +398,19 @@ export type LocationResolvers<
   ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  buildingName?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  building?: Resolver<ResolversTypes['Building'], ParentType, ContextType>
   room?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  events?: Resolver<Array<Maybe<ResolversTypes['Events']>>, ParentType, ContextType>
+  events?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}
+
+export type BuildingResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Building'] = ResolversParentTypes['Building']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  locations?: Resolver<Array<Maybe<ResolversTypes['Location']>>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
@@ -388,7 +419,7 @@ export type RequestResolvers<
   ParentType extends ResolversParentTypes['Request'] = ResolversParentTypes['Request']
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  event?: Resolver<ResolversTypes['Events'], ParentType, ContextType>
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>
   host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   guest?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   requestStatus?: Resolver<ResolversTypes['requestStatus'], ParentType, ContextType>
@@ -404,8 +435,9 @@ export type Resolvers<ContextType = any> = {
   SurveyAnswer?: SurveyAnswerResolvers<ContextType>
   Date?: GraphQLScalarType
   User?: UserResolvers<ContextType>
-  Events?: EventsResolvers<ContextType>
+  Event?: EventResolvers<ContextType>
   Location?: LocationResolvers<ContextType>
+  Building?: BuildingResolvers<ContextType>
   Request?: RequestResolvers<ContextType>
 }
 
