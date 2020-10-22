@@ -49,6 +49,37 @@ export const graphqlRoot: Resolvers<Context> = {
 
       return true
     },
+    nextSurveyQuestion: async (_, { surveyId }, ctx) => {
+      // check(ctx.user?.userType === UserType.Admin)
+      const survey = check(await Survey.findOne({ where: { id: surveyId } }))
+      survey.currQuestion = survey.currQuestion == null ? 0 : survey.currQuestion + 1
+      await survey.save()
+      ctx.pubsub.publish('SURVEY_UPDATE_' + surveyId, survey)
+      return survey
+    },
+
+    // static findOne<T extends BaseEntity>(this: ObjectType<T>, options?: FindOneOptions<T>): Promise<T | undefined>;
+
+    // static create<T extends BaseEntity>(this: ObjectType<T>, entityLikeArray: DeepPartial<T>[]): T[];
+
+    createEvent: async (_, { event_input }, ctx) => {
+      // const event = check(await Event.create({ id: event_input.eventId }))
+
+      const event = new Event()
+      event.id = event_input.eventId
+      event.title = event_input.eventTitle
+      event.description = event_input.eventDesc
+      event.startTime = event_input.eventStartTime
+      event.endTime = event_input.eventEndTime
+      event.maxGuestCount = event_input.eventMaxGuestCount
+
+      const myEvent = check(await Event.create(event))
+      await myEvent.save()
+      // ctx.pubsub.publish('NEW_EVENT_' + event_input.eventId, myEvent)
+      return myEvent
+
+      //pubsub.publish(SOMETHING_CHANGED_TOPIC, { somethingChanged: { id: "123" }});
+    },
   },
   Subscription: {
     surveyUpdates: {

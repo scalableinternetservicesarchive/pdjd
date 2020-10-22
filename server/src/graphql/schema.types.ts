@@ -30,6 +30,7 @@ export interface Mutation {
   __typename?: 'Mutation'
   answerSurvey: Scalars['Boolean']
   nextSurveyQuestion?: Maybe<Survey>
+  createEvent?: Maybe<Event>
 }
 
 export interface MutationAnswerSurveyArgs {
@@ -38,6 +39,19 @@ export interface MutationAnswerSurveyArgs {
 
 export interface MutationNextSurveyQuestionArgs {
   surveyId: Scalars['Int']
+}
+
+export interface MutationCreateEventArgs {
+  event_input: EventInput
+}
+
+export interface EventInput {
+  eventId: Scalars['Int']
+  eventTitle: Scalars['String']
+  eventDesc: Scalars['String']
+  eventStartTime: Date
+  eventEndTime: Date
+  eventMaxGuestCount: Scalars['Int']
 }
 
 export interface Subscription {
@@ -303,6 +317,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationNextSurveyQuestionArgs, 'surveyId'>
+  >
+  createEvent?: Resolver<
+    Maybe<ResolversTypes['Event']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateEventArgs, 'event_input'>
   >
 }
 
