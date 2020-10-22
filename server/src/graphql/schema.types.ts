@@ -23,6 +23,8 @@ export interface Query {
   userProfile?: Maybe<User>
   userHostRequests?: Maybe<Array<Request>>
   userGuestRequests?: Maybe<Array<Request>>
+  events: Array<Event>
+  activeEvents: Array<Event>
 }
 
 export interface QuerySurveyArgs {
@@ -328,6 +330,8 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryUserGuestRequestsArgs, 'id'>
   >
+  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  activeEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
 }
 
 export type MutationResolvers<
