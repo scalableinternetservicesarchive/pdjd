@@ -8,13 +8,13 @@ export class Request extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number
 
-  @ManyToOne(() => Event)
+  @ManyToOne(() => Event, event => event.requests)
   event: Event
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, user => user.hostRequests)
   host: User
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, user => user.guestRequests)
   guest: User
 
   @Column({

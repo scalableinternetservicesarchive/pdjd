@@ -55,7 +55,8 @@ export class Event extends BaseEntity {
     return this.endTime.getTime() > timestamp
   }
 
-  get guestCount() {
-    return this.guests.length
-  }
+  @Column({
+    default: 1,
+  })
+  guestCount: number
 }
