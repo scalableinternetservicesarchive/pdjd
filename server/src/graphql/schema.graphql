@@ -46,6 +46,8 @@ type Mutation {
 
   # reject request
   rejectRequest(requestId: Int!): Boolean!
+  # Creates a new event
+  createEvent (eventId: Int!): Event
 }
 
 type Subscription {
