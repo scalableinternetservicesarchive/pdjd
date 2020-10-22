@@ -2,11 +2,12 @@ import { readFileSync } from 'fs'
 import { PubSub } from 'graphql-yoga'
 import path from 'path'
 import { check } from '../../../common/src/util'
+import { Event } from '../entities/Event'
 import { Survey } from '../entities/Survey'
 import { SurveyAnswer } from '../entities/SurveyAnswer'
 import { SurveyQuestion } from '../entities/SurveyQuestion'
 import { User } from '../entities/User'
-import { Resolvers } from './schema.types'
+import { EventStatus, Resolvers } from './schema.types'
 
 export const pubsub = new PubSub()
 
@@ -27,6 +28,11 @@ export const graphqlRoot: Resolvers<Context> = {
     self: (_, args, ctx) => ctx.user,
     survey: async (_, { surveyId }) => (await Survey.findOne({ where: { id: surveyId } })) || null,
     surveys: () => Survey.find(),
+    activeEvents: () =>
+      Event.find({
+        where: { eventStatus: EventStatus.Open },
+        relations: ['host', 'location', 'location.building'],
+      }), // find only open events
   },
   Mutation: {
     answerSurvey: async (_, { input }, ctx) => {
@@ -42,14 +48,6 @@ export const graphqlRoot: Resolvers<Context> = {
       ctx.pubsub.publish('SURVEY_UPDATE_' + question.survey.id, question.survey)
 
       return true
-    },
-    nextSurveyQuestion: async (_, { surveyId }, ctx) => {
-      // check(ctx.user?.userType === UserType.Admin)
-      const survey = check(await Survey.findOne({ where: { id: surveyId } }))
-      survey.currQuestion = survey.currQuestion == null ? 0 : survey.currQuestion + 1
-      await survey.save()
-      ctx.pubsub.publish('SURVEY_UPDATE_' + surveyId, survey)
-      return survey
     },
   },
   Subscription: {

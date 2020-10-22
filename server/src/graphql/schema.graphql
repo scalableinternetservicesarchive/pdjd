@@ -20,6 +20,9 @@ type Query {
 
   surveys: [Survey!]!
   survey (surveyId: Int!): Survey
+
+  events: [Event!]!
+  activeEvents: [Event!]!
 }
 
 type Mutation {
