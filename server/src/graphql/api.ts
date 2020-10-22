@@ -118,7 +118,7 @@ export const graphqlRoot: Resolvers<Context> = {
 
       const myEvent = check(await Event.create(event))
       await myEvent.save()
-      // ctx.pubsub.publish('NEW_EVENT_' + event_input.eventId, myEvent)
+      ctx.pubsub.publish('NEW_EVENT_' + event_input, myEvent)
       return myEvent
 
       //pubsub.publish(SOMETHING_CHANGED_TOPIC, { somethingChanged: { id: "123" }});
