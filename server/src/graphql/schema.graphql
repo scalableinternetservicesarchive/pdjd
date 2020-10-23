@@ -47,7 +47,7 @@ type Mutation {
   # reject request
   rejectRequest(requestId: Int!): Boolean!
   # Creates a new event
-  createEvent (eventId: Int!): Event
+  createEvent (event_input: EventInput!): Event
 }
 
 type Subscription {
@@ -100,6 +100,15 @@ type SurveyAnswer {
 input SurveyInput {
   questionId: Int!
   answer: String!
+}
+
+input EventInput {
+  eventId: Int!
+  eventTitle: String!
+  eventDesc: String!
+  eventStartTime: Date!
+  eventEndTime: Date!
+  eventMaxGuestCount: Int!
 }
 
 # Additional table definitions
