@@ -18,10 +18,16 @@ export interface Query {
   self?: Maybe<User>
   surveys: Array<Survey>
   survey?: Maybe<Survey>
+  building?: Maybe<Building>
+  buildings: Array<Building>
 }
 
 export interface QuerySurveyArgs {
   surveyId: Scalars['Int']
+}
+
+export interface QueryBuildingArgs {
+  buildingID: Scalars['Int']
 }
 
 export interface Mutation {
@@ -282,6 +288,13 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QuerySurveyArgs, 'surveyId'>
   >
+  building?: Resolver<
+    Maybe<ResolversTypes['Building']>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryBuildingArgs, 'buildingID'>
+  >
+  buildings?: Resolver<Array<ResolversTypes['Building']>, ParentType, ContextType>
 }
 
 export type MutationResolvers<
