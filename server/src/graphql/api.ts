@@ -10,10 +10,6 @@ import { SurveyAnswer } from '../entities/SurveyAnswer'
 import { SurveyQuestion } from '../entities/SurveyQuestion'
 import { User } from '../entities/User'
 import { EventStatus, RequestStatus, Resolvers } from './schema.types'
-<<<<<<< HEAD
-=======
-import { EventStatus, Resolvers } from './schema.types'
->>>>>>> d21d2c7da98a12b58be725a2ca7d1f671933fac9
 
 export const pubsub = new PubSub()
 
