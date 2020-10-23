@@ -49,6 +49,8 @@ export interface Mutation {
   __typename?: 'Mutation'
   answerSurvey: Scalars['Boolean']
   nextSurveyQuestion?: Maybe<Survey>
+  acceptRequest: Scalars['Boolean']
+  rejectRequest: Scalars['Boolean']
 }
 
 export interface MutationAnswerSurveyArgs {
@@ -57,6 +59,14 @@ export interface MutationAnswerSurveyArgs {
 
 export interface MutationNextSurveyQuestionArgs {
   surveyId: Scalars['Int']
+}
+
+export interface MutationAcceptRequestArgs {
+  requestId: Scalars['Int']
+}
+
+export interface MutationRejectRequestArgs {
+  requestId: Scalars['Int']
 }
 
 export interface Subscription {
@@ -345,6 +355,18 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationNextSurveyQuestionArgs, 'surveyId'>
+  >
+  acceptRequest?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAcceptRequestArgs, 'requestId'>
+  >
+  rejectRequest?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRejectRequestArgs, 'requestId'>
   >
 }
 

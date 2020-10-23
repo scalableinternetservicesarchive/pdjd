@@ -38,6 +38,12 @@ type Mutation {
 
   # Moves the survey to the next question (or starts it if it hasn't started). ADMIN only.
   nextSurveyQuestion (surveyId: Int!): Survey
+
+  # accept request
+  acceptRequest(requestId: Int!): Boolean!
+
+  # reject request
+  rejectRequest(requestId: Int!): Boolean!
 }
 
 type Subscription {

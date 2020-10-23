@@ -8,7 +8,7 @@ import { Survey } from '../entities/Survey'
 import { SurveyAnswer } from '../entities/SurveyAnswer'
 import { SurveyQuestion } from '../entities/SurveyQuestion'
 import { User } from '../entities/User'
-import { Resolvers } from './schema.types'
+import { RequestStatus, Resolvers } from './schema.types'
 
 export const pubsub = new PubSub()
 
@@ -70,6 +70,30 @@ export const graphqlRoot: Resolvers<Context> = {
       await survey.save()
       ctx.pubsub.publish('SURVEY_UPDATE_' + surveyId, survey)
       return survey
+    },
+    acceptRequest: async (_, { requestId }) => {
+      // todo: 1. put everything in a transaction 2. check if reaching attendee limit already 3. should not allow a user to attend same event twice
+      const request = check(
+        await Request.findOne({ where: { id: requestId }, relations: ['event', 'guest', 'guest.guestEvents'] })
+      )
+      request.requestStatus = RequestStatus.Accepted
+
+      const event = request.event
+      event.guestCount += 1
+
+      const guest = request.guest
+      guest.guestEvents.push(event)
+
+      await request.save()
+      await event.save()
+      await guest.save()
+      return true
+    },
+    rejectRequest: async (_, { requestId }) => {
+      const request = check(await Request.findOne({ where: { id: requestId } }))
+      request.requestStatus = RequestStatus.Rejected
+      await request.save()
+      return true
     },
   },
   Subscription: {
