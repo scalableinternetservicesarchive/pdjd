@@ -80,6 +80,48 @@ export interface FetchUserContext {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchAllActiveEvents
+// ====================================================
+
+export interface FetchAllActiveEvents_activeEvents_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents_location {
+  __typename: "Location";
+  building: FetchAllActiveEvents_activeEvents_location_building;
+  room: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents_host {
+  __typename: "User";
+  name: string;
+  email: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents {
+  __typename: "Event";
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  location: FetchAllActiveEvents_activeEvents_location;
+  host: FetchAllActiveEvents_activeEvents_host;
+  guestCount: number;
+}
+
+export interface FetchAllActiveEvents {
+  activeEvents: FetchAllActiveEvents_activeEvents[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchSurveys
 // ====================================================
 

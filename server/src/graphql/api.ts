@@ -3,12 +3,17 @@ import { PubSub } from 'graphql-yoga'
 import path from 'path'
 import { check } from '../../../common/src/util'
 import { Building } from '../entities/Building'
+import { Event } from '../entities/Event'
 import { Request } from '../entities/Request'
 import { Survey } from '../entities/Survey'
 import { SurveyAnswer } from '../entities/SurveyAnswer'
 import { SurveyQuestion } from '../entities/SurveyQuestion'
 import { User } from '../entities/User'
-import { RequestStatus, Resolvers } from './schema.types'
+import { EventStatus, RequestStatus, Resolvers } from './schema.types'
+<<<<<<< HEAD
+=======
+import { EventStatus, Resolvers } from './schema.types'
+>>>>>>> d21d2c7da98a12b58be725a2ca7d1f671933fac9
 
 export const pubsub = new PubSub()
 
@@ -47,6 +52,11 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { guest: id },
         relations: ['event', 'host', 'guest'],
       })) || null,
+    activeEvents: () =>
+      Event.find({
+        where: { eventStatus: EventStatus.Open },
+        relations: ['host', 'location', 'location.building'],
+      }), // find only open events
   },
   Mutation: {
     answerSurvey: async (_, { input }, ctx) => {

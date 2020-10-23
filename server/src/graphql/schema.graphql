@@ -30,6 +30,8 @@ type Query {
   userHostRequests(id: Int!): [Request!]
   # return the requests where the user with id is a guest for the event
   userGuestRequests(id: Int!): [Request!]
+  events: [Event!]!
+  activeEvents: [Event!]!
 }
 
 type Mutation {
