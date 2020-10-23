@@ -4,6 +4,62 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchUserProfile
+// ====================================================
+
+export interface FetchUserProfile_userProfile_hostEvents {
+  __typename: "Event";
+  id: number;
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  eventStatus: eventStatus;
+  isStarted: boolean;
+  isCompleted: boolean;
+  guestCount: number;
+}
+
+export interface FetchUserProfile_userProfile_guestEvents {
+  __typename: "Event";
+  id: number;
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  eventStatus: eventStatus;
+  isStarted: boolean;
+  isCompleted: boolean;
+  guestCount: number;
+}
+
+export interface FetchUserProfile_userProfile {
+  __typename: "User";
+  id: number;
+  email: string;
+  name: string;
+  bio: string | null;
+  phoneNumber: string | null;
+  hostEvents: (FetchUserProfile_userProfile_hostEvents | null)[];
+  guestEvents: (FetchUserProfile_userProfile_guestEvents | null)[];
+}
+
+export interface FetchUserProfile {
+  userProfile: FetchUserProfile_userProfile | null;
+}
+
+export interface FetchUserProfileVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchUserContext
 // ====================================================
 
@@ -252,6 +308,12 @@ export interface SurveyQuestion {
 export enum UserType {
   ADMIN = "ADMIN",
   USER = "USER",
+}
+
+export enum eventStatus {
+  CANCELLED = "CANCELLED",
+  CLOSED = "CLOSED",
+  OPEN = "OPEN",
 }
 
 export interface SurveyInput {

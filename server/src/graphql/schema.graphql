@@ -23,6 +23,13 @@ type Query {
 
   building(buildingID: Int!): Building
   buildings: [Building!]!
+
+  # return the user with id with the necessary field to display the profile page
+  userProfile(id: Int!): User
+  # return the requests where the user with id is the host for the event
+  userHostRequests(id: Int!): [Request!]
+  # return the requests where the user with id is a guest for the event
+  userGuestRequests(id: Int!): [Request!]
 }
 
 type Mutation {

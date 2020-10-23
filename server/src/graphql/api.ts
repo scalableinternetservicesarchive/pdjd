@@ -3,6 +3,7 @@ import { PubSub } from 'graphql-yoga'
 import path from 'path'
 import { check } from '../../../common/src/util'
 import { Building } from '../entities/Building'
+import { Request } from '../entities/Request'
 import { Survey } from '../entities/Survey'
 import { SurveyAnswer } from '../entities/SurveyAnswer'
 import { SurveyQuestion } from '../entities/SurveyQuestion'
@@ -31,6 +32,21 @@ export const graphqlRoot: Resolvers<Context> = {
     building: async (_, { buildingID }) =>
       (await Building.findOne({ where: { id: buildingID }, relations: ['locations'] })) || null,
     buildings: () => Building.find(),
+    userProfile: async (_, { id }) =>
+      (await User.findOne({
+        where: { id },
+        relations: ['hostEvents', 'guestEvents'],
+      })) || null,
+    userHostRequests: async (_, { id }) =>
+      (await Request.find({
+        where: { host: id },
+        relations: ['event', 'host', 'guest'],
+      })) || null,
+    userGuestRequests: async (_, { id }) =>
+      (await Request.find({
+        where: { guest: id },
+        relations: ['event', 'host', 'guest'],
+      })) || null,
   },
   Mutation: {
     answerSurvey: async (_, { input }, ctx) => {
