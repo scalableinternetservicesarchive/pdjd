@@ -1,5 +1,5 @@
-insert into `building` (`name`) values
-('Boelter Hall'),
-('Ackerman Union'),
-('Royce Hall'),
-('Covel Commons');
+LOAD DATA INFILE '../migration_data/buildings.csv'
+INTO TABLE `building`
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;

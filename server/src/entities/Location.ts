@@ -10,7 +10,7 @@ export class Location extends BaseEntity {
   building: Building
 
   @Column()
-  room: number
+  room: string
 
   @OneToMany(() => Event, events => events.location)
   events: Event[]

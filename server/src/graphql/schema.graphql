@@ -145,7 +145,7 @@ enum eventStatus {OPEN, CLOSED, CANCELLED}
 type Location {
   id: Int!
   building: Building!
-  room: Int!
+  room: String!
   events: [Event]!
 }
 

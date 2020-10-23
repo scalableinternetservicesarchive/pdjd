@@ -1,7 +1,6 @@
-insert into `location` (`buildingID`, `room`) values
-(1, 3400),
-(2, 3000),
-(3, 92),
-(4, 100),
-(1, 5600),
-(1, 3660);
+LOAD DATA INFILE '../migration_data/locations.csv'
+INTO TABLE `location`
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(`buildingID`, `room`);

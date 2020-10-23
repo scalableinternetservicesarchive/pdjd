@@ -126,7 +126,7 @@ export interface Location {
   __typename?: 'Location'
   id: Scalars['Int']
   building: Building
-  room: Scalars['Int']
+  room: Scalars['String']
   events: Array<Maybe<Event>>
 }
 
@@ -399,7 +399,7 @@ export type LocationResolvers<
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   building?: Resolver<ResolversTypes['Building'], ParentType, ContextType>
-  room?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  room?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   events?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
