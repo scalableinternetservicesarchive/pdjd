@@ -73,7 +73,7 @@ export interface MutationRejectRequestArgs {
 }
 
 export interface MutationCreateEventArgs {
-  eventId: Scalars['Int']
+  event_input: EventInput
 }
 
 export interface Subscription {
@@ -119,6 +119,19 @@ export interface SurveyAnswer {
 export interface SurveyInput {
   questionId: Scalars['Int']
   answer: Scalars['String']
+}
+
+export interface EventInput {
+  eventId: Scalars['Int']
+  eventTitle: Scalars['String']
+  eventDesc: Scalars['String']
+  eventStartTime: Scalars['Date']
+  eventEndTime: Scalars['Date']
+  eventMaxGuestCount: Scalars['Int']
+  eventStatus: EventStatus
+  eventLocationID: Scalars['Int']
+  eventHostID: Scalars['Int']
+  eventGuestCount: Scalars['Int']
 }
 
 export interface User {
@@ -278,6 +291,7 @@ export type ResolversTypes = {
   SurveyQuestion: ResolverTypeWrapper<SurveyQuestion>
   SurveyAnswer: ResolverTypeWrapper<SurveyAnswer>
   SurveyInput: SurveyInput
+  EventInput: EventInput
   Date: ResolverTypeWrapper<Scalars['Date']>
   User: ResolverTypeWrapper<User>
   Event: ResolverTypeWrapper<Event>
@@ -300,6 +314,7 @@ export type ResolversParentTypes = {
   SurveyQuestion: SurveyQuestion
   SurveyAnswer: SurveyAnswer
   SurveyInput: SurveyInput
+  EventInput: EventInput
   Date: Scalars['Date']
   User: User
   Event: Event
@@ -381,7 +396,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Event']>,
     ParentType,
     ContextType,
-    RequireFields<MutationCreateEventArgs, 'eventId'>
+    RequireFields<MutationCreateEventArgs, 'event_input'>
   >
 }
 

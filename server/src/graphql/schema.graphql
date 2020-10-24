@@ -104,16 +104,21 @@ input SurveyInput {
 
 input EventInput {
   eventId: Int!
+   # survey (surveyId: Int!): Survey
+  #event_Id (id:Int!): Event
   eventTitle: String!
   eventDesc: String!
   eventStartTime: Date!
   eventEndTime: Date!
   eventMaxGuestCount: Int!
+  eventStatus: eventStatus!
+  eventLocationID:Int!
+  eventHostID:Int!
+  eventGuestCount: Int!
 }
 
 # Additional table definitions
 scalar Date
-
 # Extended User
 type User {
   id: Int!
