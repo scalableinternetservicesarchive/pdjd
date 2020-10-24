@@ -64,21 +64,23 @@ export const graphqlRoot: Resolvers<Context> = {
 
     createEvent: async (_, { event_input }, ctx) => {
       // const event = check(await Event.create({ id: event_input.eventId }))
-
       const event = new Event()
       event.id = event_input.eventId
       event.title = event_input.eventTitle
       event.description = event_input.eventDesc
-      event.startTime = event_input.eventStartTime
-      event.endTime = event_input.eventEndTime
+      event.startTime = new Date(event_input.eventStartTime)
+      event.endTime =  new Date(event_input.eventEndTime)
       event.maxGuestCount = event_input.eventMaxGuestCount
-
+      event.eventStatus=event_input.eventStatus
+      event.location.id= event_input.eventLocationID
+      event.host.id=event_input.eventHostID
+      event.guestCount=event_input.eventGuestCount
       const myEvent = check(await Event.create(event))
       await myEvent.save()
-      ctx.pubsub.publish('NEW_EVENT_' + event_input, myEvent)
+      // ctx.pubsub.publish('NEW_EVENT_' + event_input.eventId, myEvent)
+      ctx.pubsub.publish('NEW_EVENT_' + event_input.eventId, myEvent)
+      //ctx.pubsub.publish('NEW_EVENT_' + event.id, myEvent)
       return myEvent
-
-      //pubsub.publish(SOMETHING_CHANGED_TOPIC, { somethingChanged: { id: "123" }});
     },
   },
   Subscription: {
