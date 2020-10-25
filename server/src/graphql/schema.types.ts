@@ -73,7 +73,17 @@ export interface MutationRejectRequestArgs {
 }
 
 export interface MutationCreateEventArgs {
-  event_input: EventInput
+  event_input?: Maybe<EventInput>
+}
+
+export interface EventInput {
+  eventTitle: Scalars['String']
+  eventDesc: Scalars['String']
+  eventStartTime: Scalars['Date']
+  eventEndTime: Scalars['Date']
+  eventMaxGuestCount: Scalars['Int']
+  eventStatus: EventStatus
+  eventGuestCount: Scalars['Int']
 }
 
 export interface Subscription {
@@ -119,19 +129,6 @@ export interface SurveyAnswer {
 export interface SurveyInput {
   questionId: Scalars['Int']
   answer: Scalars['String']
-}
-
-export interface EventInput {
-  eventId: Scalars['Int']
-  eventTitle: Scalars['String']
-  eventDesc: Scalars['String']
-  eventStartTime: Scalars['Date']
-  eventEndTime: Scalars['Date']
-  eventMaxGuestCount: Scalars['Int']
-  eventStatus: EventStatus
-  eventLocationID: Scalars['Int']
-  eventHostID: Scalars['Int']
-  eventGuestCount: Scalars['Int']
 }
 
 export interface User {
@@ -284,14 +281,14 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>
   Mutation: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  EventInput: EventInput
+  String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
   UserType: UserType
   Survey: ResolverTypeWrapper<Survey>
-  String: ResolverTypeWrapper<Scalars['String']>
   SurveyQuestion: ResolverTypeWrapper<SurveyQuestion>
   SurveyAnswer: ResolverTypeWrapper<SurveyAnswer>
   SurveyInput: SurveyInput
-  EventInput: EventInput
   Date: ResolverTypeWrapper<Scalars['Date']>
   User: ResolverTypeWrapper<User>
   Event: ResolverTypeWrapper<Event>
@@ -308,13 +305,13 @@ export type ResolversParentTypes = {
   Int: Scalars['Int']
   Mutation: {}
   Boolean: Scalars['Boolean']
+  EventInput: EventInput
+  String: Scalars['String']
   Subscription: {}
   Survey: Survey
-  String: Scalars['String']
   SurveyQuestion: SurveyQuestion
   SurveyAnswer: SurveyAnswer
   SurveyInput: SurveyInput
-  EventInput: EventInput
   Date: Scalars['Date']
   User: User
   Event: Event
@@ -396,7 +393,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Event']>,
     ParentType,
     ContextType,
-    RequireFields<MutationCreateEventArgs, 'event_input'>
+    RequireFields<MutationCreateEventArgs, never>
   >
 }
 
