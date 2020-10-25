@@ -46,15 +46,15 @@ export interface MutationCreateEventArgs {
 }
 
 export interface EventInput {
-  eventId: Scalars['Int']
+  //eventId: Scalars['Int']
   eventTitle: Scalars['String']
   eventDesc: Scalars['String']
   eventStartTime: Date
   eventEndTime: Date
   eventMaxGuestCount: Scalars['Int']
   eventStatus: EventStatus
-  eventLocationID:Scalars['Int']
-  eventHostID:Scalars['Int']
+  //eventLocationID:Scalars['Int']
+  //eventHostID:Scalars['Int']
   eventGuestCount: Scalars['Int']
 }
 
