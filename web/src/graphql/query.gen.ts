@@ -42,9 +42,8 @@ export interface createNewEventVariables {
   eventDesc: string;
   eventStartTime: any;
   eventEndTime: any;
-  maxGuestCount: number;
-  eventStatus: eventStatus;
-  eventGuesCount: number;
+  maxGuestCount: string;
+  eventGuestCount: string;
 }
 
 /* tslint:disable */
@@ -323,12 +322,6 @@ export interface SurveyQuestion {
 export enum UserType {
   ADMIN = "ADMIN",
   USER = "USER",
-}
-
-export enum eventStatus {
-  CANCELLED = "CANCELLED",
-  CLOSED = "CLOSED",
-  OPEN = "OPEN",
 }
 
 export interface SurveyInput {

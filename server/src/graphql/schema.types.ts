@@ -50,9 +50,8 @@ export interface EventInput {
   eventDesc: Scalars['String']
   eventStartTime: Scalars['Date']
   eventEndTime: Scalars['Date']
-  eventMaxGuestCount: Scalars['Int']
-  eventStatus: EventStatus
-  eventGuestCount: Scalars['Int']
+  eventMaxGuestCount: Scalars['String']
+  eventGuestCount: Scalars['String']
 }
 
 export interface Subscription {

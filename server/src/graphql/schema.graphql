@@ -43,11 +43,11 @@ input EventInput {
   eventDesc: String!
   eventStartTime: Date!
   eventEndTime: Date!
-  eventMaxGuestCount: Int!
-  eventStatus: eventStatus!
+  eventMaxGuestCount: String!
+ # eventStatus: eventStatus!
   #eventLocationID:Int!
  # eventHostID:Int!
-  eventGuestCount: Int!
+  eventGuestCount: String!
 }
 
 type Subscription {
