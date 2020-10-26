@@ -60,26 +60,6 @@ export interface FetchUserProfileVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: FetchUserContext
-// ====================================================
-
-export interface FetchUserContext_self {
-  __typename: "User";
-  id: number;
-  name: string;
-  userType: UserType;
-}
-
-export interface FetchUserContext {
-  self: FetchUserContext_self | null;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
 // GraphQL mutation operation: createNewEvent
 // ====================================================
 
@@ -98,9 +78,28 @@ export interface createNewEventVariables {
   eventDesc: string;
   eventStartTime: any;
   eventEndTime: any;
-  maxGuestCount: number;
-  eventStatus: eventStatus;
-  eventGuesCount: number;
+  maxGuestCount: string;
+  eventGuestCount: string;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchUserContext
+// ====================================================
+
+export interface FetchUserContext_self {
+  __typename: "User";
+  id: number;
+  name: string;
+  userType: UserType;
+}
+
+export interface FetchUserContext {
+  self: FetchUserContext_self | null;
 }
 
 /* tslint:disable */
