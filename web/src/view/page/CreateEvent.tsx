@@ -1,6 +1,7 @@
 /*TO DO:-
 <Button onSubmit={POST_to_API}/>
 */
+import { gql, useMutation } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { Button } from '../../style/button'
@@ -11,7 +12,39 @@ import { BodyText } from '../../style/text'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 interface CreateEventProps extends RouteComponentProps, AppRouteParams {}
+const CREATE_EVENT = gql`mutation createNewEvent (
+  $eventTitle:String!
+  $eventDesc:String!,
+  $eventStartTime:Date!,
+  $eventEndTime:Date!,
+  $maxGuestCount:Int!,
+  $eventStatus:eventStatus!,
+  $eventGuesCount:Int!
+){
+    createEvent(event_input: {
+      eventTitle:$eventTitle
+      eventDesc:$eventDesc,
+      eventEndTime:$eventEndTime,
+      eventStartTime:$eventStartTime,
+      eventMaxGuestCount:$maxGuestCount,
+      eventStatus:$eventStatus,
+      eventGuestCount:$eventGuesCount
+    })
+      {
+       id,
+        title
 
+     }
+}`
+interface eventTypes {
+  eventTitle:string
+  eventDesc:string,
+  eventStartTime:Date,
+  eventEndTime:Date,
+  maxGuestCount:number,
+  eventStatus:string,
+  eventGuesCount:number
+}
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function CreateEventPage(props: CreateEventProps) {
   const [title, setTitle] = React.useState('')
@@ -21,10 +54,15 @@ export function CreateEventPage(props: CreateEventProps) {
   const [startTime, setStartTime] = React.useState('')
   const [endTime, setEndTime] = React.useState('')
   const [attendes, setAttendes] = React.useState('')
-
+  const [create_event, {error,data}]=useMutation<{create_event:eventTypes}>(CREATE_EVENT,{variables:{
+    eventTitle:title,eventDesc:description,eventStartTime:startTime,eventEndTime:endTime,
+    eventStatus:"OPEN",eventGuesCount:12,eventMaxGuestCount:attendes}
+  })
   return (
     <Page>
         <H1>Create Event</H1>
+        {error ? <p>Oh no! {error.message}</p> : null}
+        {data  ? <p>Savedfffffffffffffff !</p> : null}
         <Spacer $h6/>
         <BodyText>EVENT TITLE</BodyText>
         <Input $onChange={setTitle} name="title" type="title" /> {title}
@@ -46,8 +84,11 @@ export function CreateEventPage(props: CreateEventProps) {
         <Spacer $h5/>
         <BodyText>ATTENDES HEADCOUNT REQUESTED</BodyText>
         <Input $onChange={setAttendes} name="attendes" type="attendes" /> {attendes}
+
         <Spacer $h5/>
-        <Button>CREATE EVENT</Button>
+        <Button
+          onClick={()=>create_event()}
+        >CREATE EVENT</Button>
     </Page>
   )
 }

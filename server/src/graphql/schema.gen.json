@@ -1280,9 +1280,13 @@
                 "name": "event_input",
                 "description": null,
                 "type": {
-                  "kind": "INPUT_OBJECT",
-                  "name": "EventInput",
-                  "ofType": null
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "EventInput",
+                    "ofType": null
+                  }
                 },
                 "defaultValue": null
               }

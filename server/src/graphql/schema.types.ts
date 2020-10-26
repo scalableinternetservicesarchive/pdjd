@@ -73,7 +73,7 @@ export interface MutationRejectRequestArgs {
 }
 
 export interface MutationCreateEventArgs {
-  event_input?: Maybe<EventInput>
+  event_input: EventInput
 }
 
 export interface EventInput {
@@ -393,7 +393,7 @@ export type MutationResolvers<
     Maybe<ResolversTypes['Event']>,
     ParentType,
     ContextType,
-    RequireFields<MutationCreateEventArgs, never>
+    RequireFields<MutationCreateEventArgs, 'event_input'>
   >
 }
 

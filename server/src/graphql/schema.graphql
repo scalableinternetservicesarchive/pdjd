@@ -47,7 +47,7 @@ type Mutation {
   # reject request
   rejectRequest(requestId: Int!): Boolean!
   # Creates a new event
-  createEvent (event_input: EventInput): Event
+  createEvent (event_input: EventInput!): Event
 }
 input EventInput {
  # eventId: Int
