@@ -46,15 +46,12 @@ export interface MutationCreateEventArgs {
 }
 
 export interface EventInput {
-  //eventId: Scalars['Int']
   eventTitle: Scalars['String']
   eventDesc: Scalars['String']
-  eventStartTime: Date
-  eventEndTime: Date
+  eventStartTime: Scalars['Date']
+  eventEndTime: Scalars['Date']
   eventMaxGuestCount: Scalars['Int']
   eventStatus: EventStatus
-  //eventLocationID:Scalars['Int']
-  //eventHostID:Scalars['Int']
   eventGuestCount: Scalars['Int']
 }
 
@@ -253,10 +250,11 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>
   Mutation: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  EventInput: EventInput
+  String: ResolverTypeWrapper<Scalars['String']>
   Subscription: ResolverTypeWrapper<{}>
   UserType: UserType
   Survey: ResolverTypeWrapper<Survey>
-  String: ResolverTypeWrapper<Scalars['String']>
   SurveyQuestion: ResolverTypeWrapper<SurveyQuestion>
   SurveyAnswer: ResolverTypeWrapper<SurveyAnswer>
   SurveyInput: SurveyInput
@@ -276,9 +274,10 @@ export type ResolversParentTypes = {
   Int: Scalars['Int']
   Mutation: {}
   Boolean: Scalars['Boolean']
+  EventInput: EventInput
+  String: Scalars['String']
   Subscription: {}
   Survey: Survey
-  String: Scalars['String']
   SurveyQuestion: SurveyQuestion
   SurveyAnswer: SurveyAnswer
   SurveyInput: SurveyInput

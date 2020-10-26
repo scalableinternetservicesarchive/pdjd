@@ -24,6 +24,35 @@ export interface FetchUserContext {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: createNewEvent
+// ====================================================
+
+export interface createNewEvent_createEvent {
+  __typename: "Event";
+  id: number;
+  title: string;
+}
+
+export interface createNewEvent {
+  createEvent: createNewEvent_createEvent | null;
+}
+
+export interface createNewEventVariables {
+  eventTitle: string;
+  eventDesc: string;
+  eventStartTime: any;
+  eventEndTime: any;
+  maxGuestCount: number;
+  eventStatus: eventStatus;
+  eventGuesCount: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchAllActiveEvents
 // ====================================================
 
@@ -294,6 +323,12 @@ export interface SurveyQuestion {
 export enum UserType {
   ADMIN = "ADMIN",
   USER = "USER",
+}
+
+export enum eventStatus {
+  CANCELLED = "CANCELLED",
+  CLOSED = "CLOSED",
+  OPEN = "OPEN",
 }
 
 export interface SurveyInput {
