@@ -32,6 +32,7 @@ type Query {
   userGuestRequests(id: Int!): [Request!]
   events: [Event!]!
   activeEvents: [Event!]!
+  fetchEventDetails(eventId: Int!): Event
 }
 
 type Mutation {

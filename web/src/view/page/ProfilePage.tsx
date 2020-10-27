@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
-import { ColorName, Colors } from '../../../../common/src/colors'
+import { Colors } from '../../../../common/src/colors'
 import { fetchUserProfile } from '../../graphql/fetchUserProfile'
 import { FetchUserProfile, FetchUserProfileVariables } from '../../graphql/query.gen'
 import { H1, H3 } from '../../style/header'
@@ -75,10 +75,10 @@ const LContent = style('div', 'flex-grow-0 w-60-l mr4-l')
 
 const RContent = style('div', 'flex-grow-0  w-60-l')
 
-const Section = style('div', 'mb4 mid-gray ba b--mid-gray br2 pa3', (p: { $color?: ColorName }) => ({
-  borderLeftColor: Colors[p.$color || 'lemon'] + '!important',
-  borderLeftWidth: '3px',
-}))
+// const Section = style('div', 'mb4 mid-gray ba b--mid-gray br2 pa3', (p: { $color?: ColorName }) => ({
+//   borderLeftColor: Colors[p.$color || 'lemon'] + '!important',
+//   borderLeftWidth: '3px',
+// }))
 
 // const TD = style('td', 'pa1', p => ({
 //   color: p.$theme.textColor(),

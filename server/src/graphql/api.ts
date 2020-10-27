@@ -53,6 +53,11 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { eventStatus: EventStatus.Open },
         relations: ['host', 'location', 'location.building'],
       }), // find only open events
+    fetchEventDetails: async(_,{eventId}) =>
+       (await Event.findOne({
+        where: { id:eventId },
+        relations: ['host','location','location.building'],
+      })) || null,
   },
   Mutation: {
     answerSurvey: async (_, { input }, ctx) => {
