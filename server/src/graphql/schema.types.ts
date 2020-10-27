@@ -20,10 +20,15 @@ export interface Query {
   survey?: Maybe<Survey>
   events: Array<Event>
   activeEvents: Array<Event>
+  fetchEventDetails: Maybe<Event>
 }
 
 export interface QuerySurveyArgs {
   surveyId: Scalars['Int']
+}
+
+export interface QueryFetchEventDetailsArgs {
+  eventId: Scalars['Int']
 }
 
 export interface Mutation {
@@ -302,6 +307,12 @@ export type QueryResolvers<
   >
   events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
   activeEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  fetchEventDetails?:Resolver<
+      Maybe<ResolversTypes['Event']>,
+      ParentType,
+      ContextType,
+      RequireFields<QueryFetchEventDetailsArgs, 'eventId'>
+      >
 }
 
 export type MutationResolvers<

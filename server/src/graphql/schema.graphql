@@ -23,6 +23,7 @@ type Query {
 
   events: [Event!]!
   activeEvents: [Event!]!
+  fetchEventDetails(eventId: Int!): Event
 }
 
 type Mutation {
