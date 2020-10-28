@@ -25,6 +25,7 @@ export interface Query {
   userGuestRequests?: Maybe<Array<Request>>
   events: Array<Event>
   activeEvents: Array<Event>
+  eventRequests?: Maybe<Array<Request>>
   fetchEventDetails?: Maybe<Event>
 }
 
@@ -48,6 +49,10 @@ export interface QueryUserGuestRequestsArgs {
   id: Scalars['Int']
 }
 
+export interface QueryEventRequestsArgs {
+  eventID: Scalars['Int']
+}
+
 export interface QueryFetchEventDetailsArgs {
   eventId: Scalars['Int']
 }
@@ -59,6 +64,7 @@ export interface Mutation {
   acceptRequest: Scalars['Boolean']
   rejectRequest: Scalars['Boolean']
   createEvent?: Maybe<Event>
+  createRequest?: Maybe<Request>
 }
 
 export interface MutationAnswerSurveyArgs {
@@ -81,6 +87,10 @@ export interface MutationCreateEventArgs {
   event_input: EventInput
 }
 
+export interface MutationCreateRequestArgs {
+  request_input: RequestInput
+}
+
 export interface EventInput {
   eventTitle: Scalars['String']
   eventDesc: Scalars['String']
@@ -90,6 +100,11 @@ export interface EventInput {
   eventLocationID: Scalars['Int']
   eventHostID: Scalars['Int']
   eventGuestCount: Scalars['String']
+}
+
+export interface RequestInput {
+  guestID: Scalars['Int']
+  eventID: Scalars['Int']
 }
 
 export interface Subscription {
@@ -289,6 +304,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   EventInput: EventInput
   String: ResolverTypeWrapper<Scalars['String']>
+  RequestInput: RequestInput
   Subscription: ResolverTypeWrapper<{}>
   UserType: UserType
   Survey: ResolverTypeWrapper<Survey>
@@ -313,6 +329,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean']
   EventInput: EventInput
   String: Scalars['String']
+  RequestInput: RequestInput
   Subscription: {}
   Survey: Survey
   SurveyQuestion: SurveyQuestion
@@ -365,6 +382,12 @@ export type QueryResolvers<
   >
   events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
   activeEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  eventRequests?: Resolver<
+    Maybe<Array<ResolversTypes['Request']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryEventRequestsArgs, 'eventID'>
+  >
   fetchEventDetails?: Resolver<
     Maybe<ResolversTypes['Event']>,
     ParentType,
@@ -406,6 +429,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateEventArgs, 'event_input'>
+  >
+  createRequest?: Resolver<
+    Maybe<ResolversTypes['Request']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateRequestArgs, 'request_input'>
   >
 }
 

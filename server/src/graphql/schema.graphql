@@ -21,7 +21,10 @@ type Query {
   surveys: [Survey!]!
   survey (surveyId: Int!): Survey
 
+  # return building with ID and all its location
   building(buildingID: Int!): Building
+
+  # return a list of all buildings
   buildings: [Building!]!
 
   # return the user with id with the necessary field to display the profile page
@@ -30,8 +33,16 @@ type Query {
   userHostRequests(id: Int!): [Request!]
   # return the requests where the user with id is a guest for the event
   userGuestRequests(id: Int!): [Request!]
+
+  # return all events
   events: [Event!]!
+
+  # return all active events
   activeEvents: [Event!]!
+
+  # return requests associated with event with eventID
+  eventRequests(eventID: Int!): [Request!]
+
   fetchEventDetails(eventId: Int!): Event
 }
 
@@ -47,22 +58,28 @@ type Mutation {
 
   # reject request
   rejectRequest(requestId: Int!): Boolean!
+
   # Creates a new event
   createEvent (event_input: EventInput!): Event
+
+  # Create a new request
+  createRequest (request_input: RequestInput!): Request
 }
+
 input EventInput {
- # eventId: Int
-   # survey (surveyId: Int!): Survey
-  #event_Id (id:Int!): Event
   eventTitle: String!
   eventDesc: String!
   eventStartTime: Date!
   eventEndTime: Date!
   eventMaxGuestCount: String!
- # eventStatus: eventStatus!
   eventLocationID:Int!
   eventHostID:Int!
   eventGuestCount: String!
+}
+
+input RequestInput {
+  guestID: Int!
+  eventID: Int!
 }
 
 type Subscription {

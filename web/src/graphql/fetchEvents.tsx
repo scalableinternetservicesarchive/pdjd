@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const fetchAllActiveEvents = gql`
   query FetchAllActiveEvents {
     activeEvents {
+      id
       title
       description
       startTime
@@ -19,6 +20,16 @@ export const fetchAllActiveEvents = gql`
         email
       }
       guestCount
+    }
+  }
+`
+
+export const fetchEventRequestsGuests = gql`
+  query FetchEventRequestsGuests($eventID: Int!) {
+    eventRequests(eventID: $eventID) {
+      guest {
+        id
+      }
     }
   }
 `

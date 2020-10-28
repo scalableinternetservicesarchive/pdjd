@@ -3,8 +3,15 @@ import { RouteComponentProps } from '@reach/router'
 import { format, parseISO } from 'date-fns'
 import * as React from 'react'
 import Card from 'react-bootstrap/Card'
-import { fetchAllActiveEvents } from '../../graphql/fetchEvents'
-import { FetchAllActiveEvents } from '../../graphql/query.gen'
+import { getApolloClient } from '../../graphql/apolloClient'
+import { fetchAllActiveEvents, fetchEventRequestsGuests } from '../../graphql/fetchEvents'
+import { create_request } from '../../graphql/mutateCreateRequest'
+import {
+  FetchAllActiveEvents,
+  FetchEventRequestsGuests,
+  FetchEventRequestsGuestsVariables
+} from '../../graphql/query.gen'
+import { Button } from '../../style/button'
 import { H2, H4, H5 } from '../../style/header'
 import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
@@ -12,20 +19,70 @@ import { Page } from './Page'
 
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}
 
+function RequestButton({ eventID, parentCallback }: { eventID: number; parentCallback: (eventID: number) => void }) {
+  const { loading, data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(
+    fetchEventRequestsGuests,
+    {
+      variables: { eventID },
+    }
+  )
+
+  function handleClick() {
+    parentCallback(eventID)
+    setbuttonActive(false)
+  }
+
+  const guestID = 1
+  let activeCheck = true
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  if (!data || !data.eventRequests) {
+    return <div>Error?</div>
+  } else {
+    for (const guests of data.eventRequests) {
+      if (guests.guest.id == guestID) {
+        activeCheck = false
+        break
+      }
+    }
+  }
+
+  const [buttonActive, setbuttonActive] = React.useState(activeCheck)
+
+  if (buttonActive) {
+    return <Button onClick={handleClick} />
+  } else {
+    return <div>Request sent!</div> //TODO: cancel request
+  }
+}
+
 function ActiveEventList() {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
+
+  // const [event, setEvent] = React.useState('')
+
   if (loading) {
     return <div>Loading...</div>
   }
   if (!data || !data.activeEvents) {
     return <div>No events available. Make one!</div>
   }
-  // const [attendance, setAttendance] = React.useState('1')
 
-  // const attendanceStatus = [
-  //   { name: 'Going', value: '1' },
-  //   { name: 'Not Going', value: '2' },
-  // ]
+  const handleSubmit = function (eventID: number) {
+    create_request(getApolloClient(), {
+      eventID: eventID,
+      guestID: 1, //TODO: update this after sign in
+    })
+      .then(data => {
+        console.log('Successful Mutation: ', data)
+      })
+      .catch(err => {
+        console.log('handlesubmit ERROR : ', err)
+      })
+  }
+
   return (
     <div>
       {data.activeEvents.map((e, i) => (
@@ -48,21 +105,7 @@ function ActiveEventList() {
                   # of People: {e.guestCount}/{e.maxGuestCount} confirmed
                 </H5>
                 <H5>Contact: {e.host.name}</H5>
-                {/* <ButtonGroup toggle>
-                  {attendanceStatus.map((status, idx) => (
-                    <ToggleButton
-                      key={idx}
-                      type="radio"
-                      variant="secondary"
-                      name="radio"
-                      value={status.value}
-                      checked={attendance === status.value}
-                      onChange={e => setAttendance(e.currentTarget.value)}
-                    >
-                      {status.name}
-                    </ToggleButton>
-                  ))}
-                </ButtonGroup> */}
+                <RequestButton eventID={e.id} parentCallback={handleSubmit} />
               </LContent>
             </Content>
           </Card>

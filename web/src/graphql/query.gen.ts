@@ -26,6 +26,7 @@ export interface FetchAllActiveEvents_activeEvents_host {
 
 export interface FetchAllActiveEvents_activeEvents {
   __typename: "Event";
+  id: number;
   title: string;
   description: string;
   startTime: any;
@@ -38,6 +39,33 @@ export interface FetchAllActiveEvents_activeEvents {
 
 export interface FetchAllActiveEvents {
   activeEvents: FetchAllActiveEvents_activeEvents[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchEventRequestsGuests
+// ====================================================
+
+export interface FetchEventRequestsGuests_eventRequests_guest {
+  __typename: "User";
+  id: number;
+}
+
+export interface FetchEventRequestsGuests_eventRequests {
+  __typename: "Request";
+  guest: FetchEventRequestsGuests_eventRequests_guest;
+}
+
+export interface FetchEventRequestsGuests {
+  eventRequests: FetchEventRequestsGuests_eventRequests[] | null;
+}
+
+export interface FetchEventRequestsGuestsVariables {
+  eventID: number;
 }
 
 /* tslint:disable */
@@ -171,6 +199,29 @@ export interface createNewEventVariables {
   eventGuestCount: string;
   eventLocationID: number;
   eventHostID: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: CreateRequest
+// ====================================================
+
+export interface CreateRequest_createRequest {
+  __typename: "Request";
+  id: number;
+}
+
+export interface CreateRequest {
+  createRequest: CreateRequest_createRequest | null;
+}
+
+export interface CreateRequestVariables {
+  eventID: number;
+  guestID: number;
 }
 
 /* tslint:disable */

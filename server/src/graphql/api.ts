@@ -52,8 +52,13 @@ export const graphqlRoot: Resolvers<Context> = {
     activeEvents: () =>
       Event.find({
         where: { eventStatus: EventStatus.Open },
-        relations: ['host', 'location', 'location.building'],
+        relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
       }), // find only open events
+    eventRequests: async (_, { eventID }) =>
+      (await Request.find({
+        where: { event: eventID },
+        relations: ['host', 'guest'],
+      })) || null,
     fetchEventDetails: async (_, { eventId }) =>
       (await Event.findOne({
         where: { id: eventId },
