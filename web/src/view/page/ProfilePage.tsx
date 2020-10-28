@@ -39,23 +39,19 @@ export function ProfilePage(props: ProfilePageProps) {
       </Hero>
       <Content>
         <LContent>
-          <Section>
-            <Spacer $h4 />
+          <Spacer $h4 />
 
-            <BodyText>
-              <H3> </H3>
-            </BodyText>
-          </Section>
+          <BodyText>
+            <H3> </H3>
+          </BodyText>
         </LContent>
         <RContent>
-          <Section>
-            <Spacer $h4 />
+          <Spacer $h4 />
 
-            <BodyText>
-              <H3> </H3>
-            </BodyText>
-            <Spacer $h4 />
-          </Section>
+          <BodyText>
+            <H3> </H3>
+          </BodyText>
+          <Spacer $h4 />
         </RContent>
       </Content>
     </Page>
