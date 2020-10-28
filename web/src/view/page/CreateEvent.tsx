@@ -24,7 +24,7 @@ function LocationList({
   buildingID: number
   parentCallback: (locationID: string) => void
 }) {
-  const [location, setLocation] = React.useState('')
+  const [location, setLocation] = React.useState('1')
 
   function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
     const locationID = event.target.value
@@ -55,7 +55,7 @@ function LocationList({
 export function CreateEventPage(props: CreateEventProps) {
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
-  const [location, setLocation] = React.useState('')
+  const [location, setLocation] = React.useState('1')
   const [startTime, setStartTime] = React.useState('')
   const [endTime, setEndTime] = React.useState('')
   const [guest, setGuest] = React.useState('')
