@@ -12,14 +12,23 @@ import {
   FetchEventRequestsGuestsVariables
 } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
-import { H2, H4, H5 } from '../../style/header'
+import { H2, H3, H5 } from '../../style/header'
+import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}
 
-function RequestButton({ eventID, parentCallback }: { eventID: number; parentCallback: (eventID: number) => void }) {
+function RequestButton({
+  eventID,
+  hostID,
+  parentCallback,
+}: {
+  eventID: number
+  hostID: number
+  parentCallback: (eventID: number, hostID: number) => void
+}) {
   const { loading, data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(
     fetchEventRequestsGuests,
     {
@@ -28,12 +37,16 @@ function RequestButton({ eventID, parentCallback }: { eventID: number; parentCal
   )
 
   function handleClick() {
-    parentCallback(eventID)
+    parentCallback(eventID, hostID)
     setbuttonActive(false)
   }
 
-  const guestID = 1
+  const guestID = 2
   let activeCheck = true
+
+  if (hostID == guestID) {
+    return <div>You're the host of this event!</div>
+  }
   if (loading) {
     return <div>Loading...</div>
   }
@@ -52,7 +65,7 @@ function RequestButton({ eventID, parentCallback }: { eventID: number; parentCal
   const [buttonActive, setbuttonActive] = React.useState(activeCheck)
 
   if (buttonActive) {
-    return <Button onClick={handleClick} />
+    return <Button onClick={handleClick}>Send Request</Button>
   } else {
     return <div>Request sent!</div> //TODO: cancel request
   }
@@ -70,9 +83,10 @@ function ActiveEventList() {
     return <div>No events available. Make one!</div>
   }
 
-  const handleSubmit = function (eventID: number) {
+  const handleSubmit = function (eventID: number, hostID: number) {
     create_request(getApolloClient(), {
       eventID: eventID,
+      hostID: hostID,
       guestID: 1, //TODO: update this after sign in
     })
       .then(data => {
@@ -88,8 +102,10 @@ function ActiveEventList() {
       {data.activeEvents.map((e, i) => (
         <div key={i}>
           <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
-            <H2>{e.title}</H2>
-            <H4>{e.description}</H4>
+            <div style={{ textAlign: 'center' }}>
+              <H2>{e.title}</H2>
+              <H3>{e.description}</H3>
+            </div>
             <Content>
               <RContent>
                 <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
@@ -105,10 +121,11 @@ function ActiveEventList() {
                   # of People: {e.guestCount}/{e.maxGuestCount} confirmed
                 </H5>
                 <H5>Contact: {e.host.name}</H5>
-                <RequestButton eventID={e.id} parentCallback={handleSubmit} />
+                <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
               </LContent>
             </Content>
           </Card>
+          <Spacer $h4 />
         </div>
       ))}
       <br />

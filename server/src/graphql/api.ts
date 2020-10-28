@@ -112,6 +112,20 @@ export const graphqlRoot: Resolvers<Context> = {
       await request.save()
       return true
     },
+    createRequest: async (_, { request_input }) => {
+      const request = new Request()
+      const guest = check(await User.findOne({ where: { id: request_input.guestID } }))
+      const event = check(await Event.findOne({ where: { id: request_input.eventID } }))
+      const host = check(await User.findOne({ where: { id: request_input.hostID } }))
+
+      request.host = host
+      request.guest = guest
+      request.event = event
+      const myRequest = Request.create(request)
+      await myRequest.save()
+
+      return myRequest
+    },
     // static findOne<T extends BaseEntity>(this: ObjectType<T>, options?: FindOneOptions<T>): Promise<T | undefined>;
 
     // static create<T extends BaseEntity>(this: ObjectType<T>, entityLikeArray: DeepPartial<T>[]): T[];

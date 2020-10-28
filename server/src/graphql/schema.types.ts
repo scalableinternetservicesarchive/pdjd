@@ -105,6 +105,7 @@ export interface EventInput {
 export interface RequestInput {
   guestID: Scalars['Int']
   eventID: Scalars['Int']
+  hostID: Scalars['Int']
 }
 
 export interface Subscription {

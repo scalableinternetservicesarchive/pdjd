@@ -16,6 +16,7 @@ export const fetchAllActiveEvents = gql`
         room
       }
       host {
+        id
         name
         email
       }

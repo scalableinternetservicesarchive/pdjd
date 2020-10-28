@@ -2,8 +2,8 @@ import { ApolloClient, gql } from '@apollo/client'
 import { CreateRequest, CreateRequestVariables } from './query.gen'
 
 const createRequest = gql`
-  mutation CreateRequest($eventID: Int!, $guestID: Int!) {
-    createRequest(request_input: { eventID: $eventID, guestID: $guestID }) {
+  mutation CreateRequest($eventID: Int!, $guestID: Int!, $hostID: Int!) {
+    createRequest(request_input: { eventID: $eventID, guestID: $guestID, hostID: $hostID }) {
       id
     }
   }
@@ -15,6 +15,7 @@ export function create_request(client: ApolloClient<any>, request_input: CreateR
     variables: {
       eventID: request_input.eventID,
       guestID: request_input.guestID,
+      hostID: request_input.hostID,
     },
   })
 }

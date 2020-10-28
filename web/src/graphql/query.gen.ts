@@ -20,6 +20,7 @@ export interface FetchAllActiveEvents_activeEvents_location {
 
 export interface FetchAllActiveEvents_activeEvents_host {
   __typename: "User";
+  id: number;
   name: string;
   email: string;
 }
@@ -222,6 +223,7 @@ export interface CreateRequest {
 export interface CreateRequestVariables {
   eventID: number;
   guestID: number;
+  hostID: number;
 }
 
 /* tslint:disable */

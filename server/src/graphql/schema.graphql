@@ -80,6 +80,7 @@ input EventInput {
 input RequestInput {
   guestID: Int!
   eventID: Int!
+  hostID: Int!
 }
 
 type Subscription {
