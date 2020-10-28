@@ -1,10 +1,13 @@
 /*TO DO:-
 <Button onSubmit={POST_to_API}/>
 */
+import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { getApolloClient } from '../../graphql/apolloClient'
+import { fetchBuildings, fetchLocation } from '../../graphql/fetchLocations'
 import { create_new_event } from '../../graphql/mutateCreateEvent'
+import { FetchBuildings, FetchLocation, FetchLocationVariables } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
 import { H1 } from '../../style/header'
 import { Input } from '../../style/input'
@@ -14,58 +17,117 @@ import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 interface CreateEventProps extends RouteComponentProps, AppRouteParams {}
 
+function LocationList({
+  buildingID,
+  parentCallback,
+}: {
+  buildingID: number
+  parentCallback: (locationID: string) => void
+}) {
+  const [location, setLocation] = React.useState('')
+
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    const locationID = event.target.value
+    setLocation(locationID)
+    parentCallback(locationID)
+  }
+
+  const { loading, data } = useQuery<FetchLocation, FetchLocationVariables>(fetchLocation, {
+    variables: { buildingID },
+  })
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
+
+  return (
+    <select value={location} onChange={handleChange}>
+      {' '}
+      {data?.building?.locations.map((l, i) => (
+        <option value={String(l?.id)} key={i}>
+          {l?.room}
+        </option>
+      ))}
+    </select>
+  )
+}
+
 export function CreateEventPage(props: CreateEventProps) {
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
   const [location, setLocation] = React.useState('')
-  const [startTime, setStartTime] = React.useState('2018-08-12T08:56:37.331336')
-  const [endTime, setEndTime] = React.useState('2018-08-12T08:56:37.331336')
-  const [attendes, setAttendes] = React.useState('')
+  const [startTime, setStartTime] = React.useState('')
+  const [endTime, setEndTime] = React.useState('')
+  const [guest, setGuest] = React.useState('')
+  const [building, setBuilding] = React.useState('1')
+
+  const { loading, data } = useQuery<FetchBuildings>(fetchBuildings)
+
+  if (loading) {
+    return <div>Loading...</div>
+  }
 
   function handleSubmit() {
     create_new_event(getApolloClient(), {
-      eventTitle:title,
-      eventDesc:description,
-      eventStartTime:startTime,
-      eventEndTime:endTime,
-      maxGuestCount:attendes,
-      eventGuestCount:"1"
+      eventTitle: title,
+      eventDesc: description,
+      eventStartTime: startTime,
+      eventEndTime: endTime,
+      maxGuestCount: guest,
+      eventGuestCount: '1',
+      eventLocationID: Number(location),
+      eventHostID: 1,
     })
-      .then((data) => {
-       console.log("Successful Mutation: ", data)
+      .then(data => {
+        console.log('Successful Mutation: ', data)
       })
       .catch(err => {
-       // console.log("StartTime Is: ",startTime )
-       console.log("handlesubmit ERROR : ",err)
+        // console.log("StartTime Is: ",startTime )
+        console.log('handlesubmit ERROR : ', err)
       })
   }
 
+  function handleChange(event: React.ChangeEvent<HTMLSelectElement>) {
+    setBuilding(event.target.value)
+  }
+
+  const parentCallback = function (locationID: string) {
+    setLocation(locationID)
+  }
 
   return (
     <Page>
-        <H1>Create Event</H1>
-        <Spacer $h6/>
-        <BodyText>EVENT TITLE</BodyText>
-        <Input $onChange={setTitle} name="title" type="title" /> {title}
-        <Spacer $h5/>
-        <BodyText>EVENT DESCRIPTION</BodyText>
-        <Input $onChange={setDescription} name="description" type="description" /> {description}
-        <Spacer $h5/>
-        <BodyText>START TIME</BodyText>
-        <Input $onChange={setStartTime} name="date" type="string" /> {startTime}
-        <Spacer $h5/>
-        <BodyText>END TIME</BodyText>
-        <Input $onChange={setEndTime} name="date" type="string" /> {endTime}
-        <Spacer $h5/>
-        <BodyText>WHERE SHOULD WE MEET?</BodyText>
-        <Input $onChange={setLocation} name="location" type="location" /> {location}
-        <Spacer $h5/>
-        <BodyText>ATTENDEES HEADCOUNT REQUESTED</BodyText>
-        <Input $onChange={setAttendes} name="attendes" type="attendes" /> {attendes}
-        <Spacer $h5/>
-        <Button
-          onClick={()=>handleSubmit()}
-        >CREATE EVENT</Button>
+      <H1>Create Event</H1>
+      <Spacer $h6 />
+      <BodyText>EVENT TITLE</BodyText>
+      <Input $onChange={setTitle} name="title" type="title" /> {title}
+      <Spacer $h5 />
+      <BodyText>EVENT DESCRIPTION</BodyText>
+      <Input $onChange={setDescription} name="description" type="description" /> {description}
+      <Spacer $h5 />
+      <BodyText>START TIME</BodyText>
+      <Input $onChange={setStartTime} name="time" type="datetime-local" /> {startTime}
+      <Spacer $h5 />
+      <BodyText>END TIME</BodyText>
+      <Input $onChange={setEndTime} name="time" type="datetime-local" /> {endTime}
+      <Spacer $h5 />
+      <BodyText>Building Name</BodyText>
+      <select value={building} onChange={handleChange}>
+        {' '}
+        {data?.buildings.map((b, i) => (
+          <option value={b?.id} key={i}>
+            {b?.name}
+          </option>
+        ))}
+      </select>
+      <Spacer $h5 />
+      <BodyText>Room Name</BodyText>
+      <LocationList parentCallback={parentCallback} buildingID={Number(building)} />
+      <Spacer $h5 />
+      <BodyText>MAXINUM NUMBER OF GUESTS</BodyText>
+      <Input $onChange={setGuest} name="guest" type="guest" /> {guest}
+      <Spacer $h5 />
+      <Button onClick={() => handleSubmit()}>CREATE EVENT</Button>
     </Page>
   )
 }

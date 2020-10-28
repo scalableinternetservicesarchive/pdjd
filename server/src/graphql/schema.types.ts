@@ -87,6 +87,8 @@ export interface EventInput {
   eventStartTime: Scalars['Date']
   eventEndTime: Scalars['Date']
   eventMaxGuestCount: Scalars['String']
+  eventLocationID: Scalars['Int']
+  eventHostID: Scalars['Int']
   eventGuestCount: Scalars['String']
 }
 

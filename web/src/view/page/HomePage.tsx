@@ -3,11 +3,11 @@ import { RouteComponentProps } from '@reach/router'
 import { format, parseISO } from 'date-fns'
 import * as React from 'react'
 import Card from 'react-bootstrap/Card'
+import { fetchAllActiveEvents } from '../../graphql/fetchEvents'
 import { FetchAllActiveEvents } from '../../graphql/query.gen'
 import { H2, H4, H5 } from '../../style/header'
 import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
-import { fetchAllActiveEvents } from './fetchEvents'
 import { Page } from './Page'
 
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}

@@ -60,8 +60,8 @@ input EventInput {
   eventEndTime: Date!
   eventMaxGuestCount: String!
  # eventStatus: eventStatus!
-  #eventLocationID:Int!
- # eventHostID:Int!
+  eventLocationID:Int!
+  eventHostID:Int!
   eventGuestCount: String!
 }
 

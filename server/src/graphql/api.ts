@@ -4,6 +4,7 @@ import path from 'path'
 import { check } from '../../../common/src/util'
 import { Building } from '../entities/Building'
 import { Event } from '../entities/Event'
+import { Location } from '../entities/Location'
 import { Request } from '../entities/Request'
 import { Survey } from '../entities/Survey'
 import { SurveyAnswer } from '../entities/SurveyAnswer'
@@ -53,10 +54,10 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { eventStatus: EventStatus.Open },
         relations: ['host', 'location', 'location.building'],
       }), // find only open events
-    fetchEventDetails: async(_,{eventId}) =>
-       (await Event.findOne({
-        where: { id:eventId },
-        relations: ['host','location','location.building'],
+    fetchEventDetails: async (_, { eventId }) =>
+      (await Event.findOne({
+        where: { id: eventId },
+        relations: ['host', 'location', 'location.building'],
       })) || null,
   },
   Mutation: {
@@ -112,6 +113,10 @@ export const graphqlRoot: Resolvers<Context> = {
 
     createEvent: async (_, { event_input }, ctx) => {
       // const event = check(await Event.create({ id: event_input.eventId }))
+      const location = check(await Location.findOne({ where: { id: event_input.eventLocationID } }))
+
+      const host = check(await User.findOne({ where: { id: event_input.eventHostID } }))
+
       const event = new Event()
       //event.id = event_input.eventId
       event.title = event_input.eventTitle
@@ -123,8 +128,8 @@ export const graphqlRoot: Resolvers<Context> = {
       //event.maxGuestCount=1
       event.maxGuestCount = Number(event_input.eventMaxGuestCount)
       //event.eventStatus=event_input.eventStatus
-      //event.location.id= event_input.eventLocationID
-      //event.host.id=event_input.eventHostID
+      event.location = location
+      event.host = host
       event.guestCount = Number(event_input.eventGuestCount)
       // const myEvent = check( Event.insert(event))
       const myEvent = Event.create(event)

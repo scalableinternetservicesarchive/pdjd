@@ -4,6 +4,95 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchAllActiveEvents
+// ====================================================
+
+export interface FetchAllActiveEvents_activeEvents_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents_location {
+  __typename: "Location";
+  building: FetchAllActiveEvents_activeEvents_location_building;
+  room: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents_host {
+  __typename: "User";
+  name: string;
+  email: string;
+}
+
+export interface FetchAllActiveEvents_activeEvents {
+  __typename: "Event";
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  location: FetchAllActiveEvents_activeEvents_location;
+  host: FetchAllActiveEvents_activeEvents_host;
+  guestCount: number;
+}
+
+export interface FetchAllActiveEvents {
+  activeEvents: FetchAllActiveEvents_activeEvents[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchBuildings
+// ====================================================
+
+export interface FetchBuildings_buildings {
+  __typename: "Building";
+  id: number;
+  name: string;
+}
+
+export interface FetchBuildings {
+  buildings: FetchBuildings_buildings[];
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchLocation
+// ====================================================
+
+export interface FetchLocation_building_locations {
+  __typename: "Location";
+  id: number;
+  room: string;
+}
+
+export interface FetchLocation_building {
+  __typename: "Building";
+  locations: (FetchLocation_building_locations | null)[];
+}
+
+export interface FetchLocation {
+  building: FetchLocation_building | null;
+}
+
+export interface FetchLocationVariables {
+  buildingID: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchUserProfile
 // ====================================================
 
@@ -80,6 +169,8 @@ export interface createNewEventVariables {
   eventEndTime: any;
   maxGuestCount: string;
   eventGuestCount: string;
+  eventLocationID: number;
+  eventHostID: number;
 }
 
 /* tslint:disable */
@@ -100,48 +191,6 @@ export interface FetchUserContext_self {
 
 export interface FetchUserContext {
   self: FetchUserContext_self | null;
-}
-
-/* tslint:disable */
-/* eslint-disable */
-// @generated
-// This file was automatically generated and should not be edited.
-
-// ====================================================
-// GraphQL query operation: FetchAllActiveEvents
-// ====================================================
-
-export interface FetchAllActiveEvents_activeEvents_location_building {
-  __typename: "Building";
-  name: string;
-}
-
-export interface FetchAllActiveEvents_activeEvents_location {
-  __typename: "Location";
-  building: FetchAllActiveEvents_activeEvents_location_building;
-  room: string;
-}
-
-export interface FetchAllActiveEvents_activeEvents_host {
-  __typename: "User";
-  name: string;
-  email: string;
-}
-
-export interface FetchAllActiveEvents_activeEvents {
-  __typename: "Event";
-  title: string;
-  description: string;
-  startTime: any;
-  endTime: any;
-  maxGuestCount: number;
-  location: FetchAllActiveEvents_activeEvents_location;
-  host: FetchAllActiveEvents_activeEvents_host;
-  guestCount: number;
-}
-
-export interface FetchAllActiveEvents {
-  activeEvents: FetchAllActiveEvents_activeEvents[];
 }
 
 /* tslint:disable */

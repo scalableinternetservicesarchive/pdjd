@@ -17,8 +17,6 @@ export class Event extends BaseEntity {
   @Column()
   description: string
 
-
-
   @Column()
   startTime: Date
 
