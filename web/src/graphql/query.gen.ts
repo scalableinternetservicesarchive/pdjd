@@ -4,6 +4,53 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchEventDetails
+// ====================================================
+
+export interface FetchEventDetails_eventDetails_host {
+  __typename: "User";
+  name: string;
+  email: string;
+}
+
+export interface FetchEventDetails_eventDetails_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchEventDetails_eventDetails_location {
+  __typename: "Location";
+  building: FetchEventDetails_eventDetails_location_building;
+  room: string;
+}
+
+export interface FetchEventDetails_eventDetails {
+  __typename: "Event";
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  eventStatus: eventStatus;
+  host: FetchEventDetails_eventDetails_host;
+  location: FetchEventDetails_eventDetails_location;
+  guestCount: number;
+}
+
+export interface FetchEventDetails {
+  eventDetails: FetchEventDetails_eventDetails | null;
+}
+
+export interface FetchEventDetailsVariables {
+  eventId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchAllActiveEvents
 // ====================================================
 

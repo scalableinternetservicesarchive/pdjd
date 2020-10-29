@@ -129,7 +129,7 @@ export function HomePage(props: HomePageProps) {
                   style={{margin:5}}
                   onClick={()=>{navigate(getEventPath(e.id))}}
                 >
-                  Event Details Page
+                  Check Event Details
                 </Button>
                 </Content>
 
