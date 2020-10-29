@@ -318,6 +318,23 @@ export interface CreateEventVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: CancelEvent
+// ====================================================
+
+export interface CancelEvent {
+  cancelEvent: boolean;
+}
+
+export interface CancelEventVariables {
+  eventId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateRequest
 // ====================================================
 

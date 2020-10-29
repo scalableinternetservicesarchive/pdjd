@@ -29,12 +29,9 @@ function RequestButton({
   hostID: number
   parentCallback: (eventID: number, hostID: number) => void
 }) {
-  const { loading, data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(
-    fetchEventRequestsGuests,
-    {
-      variables: { eventID },
-    }
-  )
+  const { data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(fetchEventRequestsGuests, {
+    variables: { eventID },
+  })
 
   function handleClick() {
     parentCallback(eventID, hostID)
@@ -43,16 +40,9 @@ function RequestButton({
 
   const guestID = 2
   let activeCheck = true
-
-  if (hostID == guestID) {
-    return <div>You're the host of this event!</div>
-  }
-  if (loading) {
-    return <div>Loading...</div>
-  }
-
+  let err = false
   if (!data || !data.eventRequests) {
-    return <div>Error?</div>
+    err = true
   } else {
     for (const guests of data.eventRequests) {
       if (guests.guest.id == guestID) {
@@ -66,6 +56,10 @@ function RequestButton({
 
   if (buttonActive) {
     return <Button onClick={handleClick}>Send Request</Button>
+  } else if (hostID == guestID) {
+    return <div>You're the host of this event!</div>
+  } else if (err) {
+    return <div>Error?</div>
   } else {
     return <div>Request sent!</div> //TODO: cancel request
   }
@@ -99,48 +93,48 @@ export function HomePage(props: HomePageProps) {
 
   return (
     <Page>
-    <div>
-      {data.activeEvents.map((e, i) => (
-        <div key={i}>
-          <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
-            <div style={{ textAlign: 'center' }}>
-              <H2>{e.title}</H2>
-              <H3>{e.description}</H3>
-              {()=>{}}
-            </div>
-            <Content>
-              <RContent>
-                <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
-                <H5>
-                  Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
-                </H5>
-                <H5>
-                  Location: {e.location.building.name} {e.location.room}
-                </H5>
-              </RContent>
-              <LContent>
-                <H5>
-                  # of People: {e.guestCount}/{e.maxGuestCount} confirmed
-                </H5>
-                <H5>Contact: {e.host.name}</H5>
-                <Content>
-                <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
-                <Button
-                  style={{margin:5}}
-                  onClick={()=>{navigate(getEventPath(e.id))}}
-                >
-                  Check Event Details
-                </Button>
-                </Content>
-
-              </LContent>
-            </Content>
-          </Card>
-          <Spacer $h4 />
-        </div>
-      ))}
-      <br />
-    </div>
+      <div>
+        {data.activeEvents.map((e, i) => (
+          <div key={i}>
+            <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
+              <div style={{ textAlign: 'center' }}>
+                <H2>{e.title}</H2>
+                <H3>{e.description}</H3>
+              </div>
+              <Content>
+                <RContent>
+                  <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
+                  <H5>
+                    Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
+                  </H5>
+                  <H5>
+                    Location: {e.location.building.name} {e.location.room}
+                  </H5>
+                </RContent>
+                <LContent>
+                  <H5>
+                    # of People: {e.guestCount}/{e.maxGuestCount} confirmed
+                  </H5>
+                  <H5>Contact: {e.host.name}</H5>
+                  <Content>
+                    <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={() => handleSubmit} />
+                    <Button
+                      style={{ margin: 5 }}
+                      onClick={() => {
+                        void navigate(getEventPath(e.id))
+                      }}
+                    >
+                      Check Event Details
+                    </Button>
+                  </Content>
+                </LContent>
+              </Content>
+            </Card>
+            <Spacer $h4 />
+          </div>
+        ))}
+        <br />
+      </div>
     </Page>
   )
 }

@@ -62,6 +62,9 @@ type Mutation {
   # Creates a new event
   createEvent (event_input: EventInput!): Event
 
+  # Remove an event
+  cancelEvent (eventId: Int!): Boolean!
+
   # Create a new request
   createRequest (request_input: RequestInput!): Request
 }

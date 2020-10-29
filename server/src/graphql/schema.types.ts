@@ -64,6 +64,7 @@ export interface Mutation {
   acceptRequest: Scalars['Boolean']
   rejectRequest: Scalars['Boolean']
   createEvent?: Maybe<Event>
+  cancelEvent: Scalars['Boolean']
   createRequest?: Maybe<Request>
 }
 
@@ -85,6 +86,10 @@ export interface MutationRejectRequestArgs {
 
 export interface MutationCreateEventArgs {
   event_input: EventInput
+}
+
+export interface MutationCancelEventArgs {
+  eventId: Scalars['Int']
 }
 
 export interface MutationCreateRequestArgs {
@@ -430,6 +435,12 @@ export type MutationResolvers<
     ParentType,
     ContextType,
     RequireFields<MutationCreateEventArgs, 'event_input'>
+  >
+  cancelEvent?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCancelEventArgs, 'eventId'>
   >
   createRequest?: Resolver<
     Maybe<ResolversTypes['Request']>,

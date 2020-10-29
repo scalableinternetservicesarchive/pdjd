@@ -137,16 +137,12 @@ export const graphqlRoot: Resolvers<Context> = {
       const host = check(await User.findOne({ where: { id: event_input.eventHostID } }))
 
       const event = new Event()
-      //event.id = event_input.eventId
+
       event.title = event_input.eventTitle
       event.description = event_input.eventDesc
       event.startTime = new Date(event_input.eventStartTime)
-      //event.startTime= new Date (1603488676)
       event.endTime = new Date(event_input.eventEndTime)
-      // event.endTime = new Date(1603488676)
-      //event.maxGuestCount=1
       event.maxGuestCount = Number(event_input.eventMaxGuestCount)
-      //event.eventStatus=event_input.eventStatus
       event.location = location
       event.host = host
       event.guestCount = Number(event_input.eventGuestCount)
@@ -158,6 +154,13 @@ export const graphqlRoot: Resolvers<Context> = {
       // ctx.pubsub.publish('NEW_EVENT_' + , myEvent)
       //ctx.pubsub.publish('NEW_EVENT_' + event.id, myEvent)
       return myEvent
+    },
+    cancelEvent: async (_, { eventId }) => {
+      const event = check(await Event.findOne({ where: { id: eventId } }))
+
+      event.eventStatus = EventStatus.Cancelled
+      // TODO: subscription propagation? notify users that event is cancelled?
+      return true
     },
   },
   Subscription: {
