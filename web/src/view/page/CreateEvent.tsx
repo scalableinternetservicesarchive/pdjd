@@ -6,7 +6,7 @@ import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchBuildings, fetchLocation } from '../../graphql/fetchLocations'
-import { create_new_event } from '../../graphql/mutateCreateEvent'
+import { createEvent } from '../../graphql/mutateEvents'
 import { FetchBuildings, FetchLocation, FetchLocationVariables } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
 import { H1 } from '../../style/header'
@@ -68,7 +68,7 @@ export function CreateEventPage(props: CreateEventProps) {
   }
 
   function handleSubmit() {
-    create_new_event(getApolloClient(), {
+    createEvent(getApolloClient(), {
       eventTitle: title,
       eventDesc: description,
       eventStartTime: startTime,

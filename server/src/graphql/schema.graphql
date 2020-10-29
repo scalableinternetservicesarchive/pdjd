@@ -43,7 +43,7 @@ type Query {
   # return requests associated with event with eventID
   eventRequests(eventID: Int!): [Request!]
 
-  fetchEventDetails(eventId: Int!): Event
+  eventDetails(eventId: Int!): Event
 }
 
 type Mutation {

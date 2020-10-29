@@ -122,6 +122,69 @@ export interface FetchLocationVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchUserHostRequests
+// ====================================================
+
+export interface FetchUserHostRequests_userHostRequests_event {
+  __typename: "Event";
+  title: string;
+}
+
+export interface FetchUserHostRequests_userHostRequests_guest {
+  __typename: "User";
+  name: string;
+}
+
+export interface FetchUserHostRequests_userHostRequests {
+  __typename: "Request";
+  id: number;
+  event: FetchUserHostRequests_userHostRequests_event;
+  guest: FetchUserHostRequests_userHostRequests_guest;
+}
+
+export interface FetchUserHostRequests {
+  userHostRequests: FetchUserHostRequests_userHostRequests[] | null;
+}
+
+export interface FetchUserHostRequestsVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchUserGuestRequests
+// ====================================================
+
+export interface FetchUserGuestRequests_userGuestRequests_event {
+  __typename: "Event";
+  title: string;
+}
+
+export interface FetchUserGuestRequests_userGuestRequests {
+  __typename: "Request";
+  id: number;
+  event: FetchUserGuestRequests_userGuestRequests_event;
+  requestStatus: requestStatus;
+}
+
+export interface FetchUserGuestRequests {
+  userGuestRequests: FetchUserGuestRequests_userGuestRequests[] | null;
+}
+
+export interface FetchUserGuestRequestsVariables {
+  id: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchUserProfile
 // ====================================================
 
@@ -178,20 +241,20 @@ export interface FetchUserProfileVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL mutation operation: createNewEvent
+// GraphQL mutation operation: CreateEvent
 // ====================================================
 
-export interface createNewEvent_createEvent {
+export interface CreateEvent_createEvent {
   __typename: "Event";
   id: number;
   title: string;
 }
 
-export interface createNewEvent {
-  createEvent: createNewEvent_createEvent | null;
+export interface CreateEvent {
+  createEvent: CreateEvent_createEvent | null;
 }
 
-export interface createNewEventVariables {
+export interface CreateEventVariables {
   eventTitle: string;
   eventDesc: string;
   eventStartTime: any;
@@ -224,6 +287,40 @@ export interface CreateRequestVariables {
   eventID: number;
   guestID: number;
   hostID: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: AcceptRequest
+// ====================================================
+
+export interface AcceptRequest {
+  acceptRequest: boolean;
+}
+
+export interface AcceptRequestVariables {
+  requestId: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL mutation operation: RejectRequest
+// ====================================================
+
+export interface RejectRequest {
+  rejectRequest: boolean;
+}
+
+export interface RejectRequestVariables {
+  requestId: number;
 }
 
 /* tslint:disable */
@@ -486,6 +583,12 @@ export enum eventStatus {
   CANCELLED = "CANCELLED",
   CLOSED = "CLOSED",
   OPEN = "OPEN",
+}
+
+export enum requestStatus {
+  ACCEPTED = "ACCEPTED",
+  PENDING = "PENDING",
+  REJECTED = "REJECTED",
 }
 
 export interface SurveyInput {

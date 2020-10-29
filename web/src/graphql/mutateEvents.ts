@@ -1,8 +1,8 @@
 import { ApolloClient, gql } from '@apollo/client'
-import { createNewEvent, createNewEventVariables } from './query.gen'
+import { CreateEvent, CreateEventVariables } from './query.gen'
 
 const createEventMutation = gql`
-  mutation createNewEvent(
+  mutation CreateEvent(
     $eventTitle: String!
     $eventDesc: String!
     $eventStartTime: Date!
@@ -30,8 +30,8 @@ const createEventMutation = gql`
   }
 `
 
-export function create_new_event(client: ApolloClient<any>, event_input: createNewEventVariables) {
-  return client.mutate<createNewEvent, createNewEventVariables>({
+export function createEvent(client: ApolloClient<any>, event_input: CreateEventVariables) {
+  return client.mutate<CreateEvent, CreateEventVariables>({
     mutation: createEventMutation,
     variables: {
       eventTitle: event_input.eventTitle,

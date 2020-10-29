@@ -32,6 +32,10 @@ const otherTabs = [
     path: getPath(Route.CREATEEVENT),
   },
   {
+    name: 'My Requests',
+    path: getPath(Route.REQUESTS),
+  },
+  {
     name: 'Profile',
     path: getPath(Route.PROFILE),
   },
@@ -39,7 +43,6 @@ const otherTabs = [
     name: 'Login',
     path: getPath(Route.PLAYGROUND),
   },
-
 ]
 
 export function NavBar() {
@@ -119,10 +122,9 @@ function SubNav() {
   }
   return (
     <Nav $isSubNav>
-     {/* <NavItem name="Sign Up" path={getSurveyPath()} />*/}
+      {/* <NavItem name="Sign Up" path={getSurveyPath()} />*/}
       <NavItem name={user ? 'logout' : 'Sign In'} path={getLoginPath()} />
       <NavItem name={user ? 'sign out' : 'Sign Up'} path={getSignupPath()} />
-
     </Nav>
   )
 }

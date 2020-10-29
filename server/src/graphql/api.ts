@@ -41,7 +41,7 @@ export const graphqlRoot: Resolvers<Context> = {
       })) || null,
     userHostRequests: async (_, { id }) =>
       (await Request.find({
-        where: { host: id },
+        where: { host: id, requestStatus: RequestStatus.Pending },
         relations: ['event', 'host', 'guest'],
       })) || null,
     userGuestRequests: async (_, { id }) =>
@@ -59,7 +59,7 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { event: eventID },
         relations: ['host', 'guest'],
       })) || null,
-    fetchEventDetails: async (_, { eventId }) =>
+    eventDetails: async (_, { eventId }) =>
       (await Event.findOne({
         where: { id: eventId },
         relations: ['host', 'location', 'location.building'],

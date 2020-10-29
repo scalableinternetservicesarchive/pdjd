@@ -16,6 +16,7 @@ import { LecturesPage } from './page/LecturesPage'
 import { PlaygroundPage } from './page/PlaygroundPage'
 import { ProfilePage } from './page/ProfilePage'
 import { ProjectsPage } from './page/ProjectsPage'
+import { RequestsPage } from './page/RequestsPage'
 
 const Styletron = require('styletron-engine-monolithic')
 
@@ -59,8 +60,9 @@ export function AppBody() {
         <ProjectsPage path={Route.PROJECTS} />
         <PlaygroundPage path={Route.PLAYGROUND} />
         <PlaygroundPage path={Route.PLAYGROUND_APP} />
-        <ProfilePage path={Route.PROFILE}/>
-        <CreateEventPage path={Route.CREATEEVENT}/>
+        <ProfilePage path={Route.PROFILE} />
+        <CreateEventPage path={Route.CREATEEVENT} />
+        <RequestsPage path={Route.REQUESTS} />
       </Router>
       <Footer>
         <FooterText>© 20xw20 John Rothfels</FooterText>

@@ -5,7 +5,7 @@ import * as React from 'react'
 import Card from 'react-bootstrap/Card'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchAllActiveEvents, fetchEventRequestsGuests } from '../../graphql/fetchEvents'
-import { create_request } from '../../graphql/mutateCreateRequest'
+import { createRequest } from '../../graphql/mutateRequests'
 import {
   FetchAllActiveEvents,
   FetchEventRequestsGuests,
@@ -84,7 +84,7 @@ function ActiveEventList() {
   }
 
   const handleSubmit = function (eventID: number, hostID: number) {
-    create_request(getApolloClient(), {
+    createRequest(getApolloClient(), {
       eventID: eventID,
       hostID: hostID,
       guestID: 1, //TODO: update this after sign in

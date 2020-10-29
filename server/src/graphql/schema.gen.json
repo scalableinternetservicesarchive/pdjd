@@ -1167,7 +1167,7 @@
             "deprecationReason": null
           },
           {
-            "name": "fetchEventDetails",
+            "name": "eventDetails",
             "description": null,
             "args": [
               {

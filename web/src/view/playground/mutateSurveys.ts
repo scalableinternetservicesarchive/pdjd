@@ -5,7 +5,7 @@ import {
   AnswerSurveyQuestionVariables,
   NextSurveyQuestion,
   NextSurveyQuestionVariables,
-  SurveyInput
+  SurveyInput,
 } from '../../graphql/query.gen'
 import { fragmentSurvey, fragmentSurveyQuestion } from './fetchSurveys'
 
@@ -14,8 +14,6 @@ const answerSurveyQuestionMutation = gql`
     answerSurvey(input: $input)
   }
 `
-
-
 
 const nextSurveyQuestionMutation = gql`
   mutation NextSurveyQuestion($surveyId: Int!) {

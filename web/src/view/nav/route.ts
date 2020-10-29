@@ -10,14 +10,15 @@ export enum Route {
   PROJECTS = 'app/projects',
   PLAYGROUND = 'app/playground',
   PLAYGROUND_APP = 'app/playground/:app',
-  PROFILE='app/profile',
-  CREATEEVENT='app/createevent'
+  PROFILE = 'app/profile',
+  CREATEEVENT = 'app/createevent',
+  REQUESTS = 'app/requests',
 }
 
 export enum PlaygroundApp {
   SURVEYS = 'Sign Up',
   LOGIN = 'Sign In',
-  SIGNUP='SIGNUP'
+  SIGNUP = 'SIGNUP',
 }
 
 export function getSurveyPath(surveyId?: number) {

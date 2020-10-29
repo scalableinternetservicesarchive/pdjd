@@ -26,7 +26,7 @@ export interface Query {
   events: Array<Event>
   activeEvents: Array<Event>
   eventRequests?: Maybe<Array<Request>>
-  fetchEventDetails?: Maybe<Event>
+  eventDetails?: Maybe<Event>
 }
 
 export interface QuerySurveyArgs {
@@ -53,7 +53,7 @@ export interface QueryEventRequestsArgs {
   eventID: Scalars['Int']
 }
 
-export interface QueryFetchEventDetailsArgs {
+export interface QueryEventDetailsArgs {
   eventId: Scalars['Int']
 }
 
@@ -389,11 +389,11 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryEventRequestsArgs, 'eventID'>
   >
-  fetchEventDetails?: Resolver<
+  eventDetails?: Resolver<
     Maybe<ResolversTypes['Event']>,
     ParentType,
     ContextType,
-    RequireFields<QueryFetchEventDetailsArgs, 'eventId'>
+    RequireFields<QueryEventDetailsArgs, 'eventId'>
   >
 }
 
