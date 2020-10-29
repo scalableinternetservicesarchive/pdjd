@@ -70,7 +70,7 @@ export function ProfilePage(props: ProfilePageProps) {
                   <Content>
                     <RContent>
                       <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
-                      <H5>Location:</H5>
+                      <H5>Location: {`${event?.location.building.name} ${event?.location.room}`}</H5>
                     </RContent>
                     <LContent>
                       <H5>
@@ -101,7 +101,7 @@ export function ProfilePage(props: ProfilePageProps) {
                   <Content>
                     <RContent>
                       <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
-                      <H5>Location:</H5>
+                      <H5>Location: {`${event?.location.building.name} ${event?.location.room}`}</H5>
                     </RContent>
                     <LContent>
                       <H5>

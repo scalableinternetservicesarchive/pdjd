@@ -20,6 +20,12 @@ export const fetchUserProfile = gql`
         isStarted
         isCompleted
         guestCount
+        location {
+          building{
+            name
+          }
+          room
+        }
       }
       guestEvents {
         id

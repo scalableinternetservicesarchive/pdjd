@@ -235,6 +235,17 @@ export interface FetchUserGuestRequestsVariables {
 // GraphQL query operation: FetchUserProfile
 // ====================================================
 
+export interface FetchUserProfile_userProfile_hostEvents_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchUserProfile_userProfile_hostEvents_location {
+  __typename: "Location";
+  building: FetchUserProfile_userProfile_hostEvents_location_building;
+  room: string;
+}
+
 export interface FetchUserProfile_userProfile_hostEvents {
   __typename: "Event";
   id: number;
@@ -247,6 +258,7 @@ export interface FetchUserProfile_userProfile_hostEvents {
   isStarted: boolean;
   isCompleted: boolean;
   guestCount: number;
+  location: FetchUserProfile_userProfile_hostEvents_location;
 }
 
 export interface FetchUserProfile_userProfile_guestEvents {

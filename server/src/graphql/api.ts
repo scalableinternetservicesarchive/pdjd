@@ -37,7 +37,7 @@ export const graphqlRoot: Resolvers<Context> = {
     userProfile: async (_, { id }) =>
       (await User.findOne({
         where: { id },
-        relations: ['hostEvents', 'guestEvents'],
+        relations: ['hostEvents', 'guestEvents','hostEvents.location','hostEvents.location.building'],
       })) || null,
     userHostRequests: async (_, { id }) =>
       (await Request.find({
