@@ -9,7 +9,7 @@ import { createRequest } from '../../graphql/mutateRequests'
 import {
   FetchAllActiveEvents,
   FetchEventRequestsGuests,
-  FetchEventRequestsGuestsVariables
+  FetchEventRequestsGuestsVariables,
 } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
 import { H2, H3, H5 } from '../../style/header'
@@ -99,48 +99,48 @@ export function HomePage(props: HomePageProps) {
 
   return (
     <Page>
-    <div>
-      {data.activeEvents.map((e, i) => (
-        <div key={i}>
-          <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
-            <div style={{ textAlign: 'center' }}>
-              <H2>{e.title}</H2>
-              <H3>{e.description}</H3>
-              {()=>{}}
-            </div>
-            <Content>
-              <RContent>
-                <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
-                <H5>
-                  Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
-                </H5>
-                <H5>
-                  Location: {e.location.building.name} {e.location.room}
-                </H5>
-              </RContent>
-              <LContent>
-                <H5>
-                  # of People: {e.guestCount}/{e.maxGuestCount} confirmed
-                </H5>
-                <H5>Contact: {e.host.name}</H5>
-                <Content>
-                <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
-                <Button
-                  style={{margin:5}}
-                  onClick={()=>{navigate(getEventPath(e.id))}}
-                >
-                  Check Event Details
-                </Button>
-                </Content>
-
-              </LContent>
-            </Content>
-          </Card>
-          <Spacer $h4 />
-        </div>
-      ))}
-      <br />
-    </div>
+      <div>
+        {data.activeEvents.map((e, i) => (
+          <div key={i}>
+            <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
+              <div style={{ textAlign: 'center' }}>
+                <H2>{e.title}</H2>
+                <H3>{e.description}</H3>
+              </div>
+              <Content>
+                <RContent>
+                  <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
+                  <H5>
+                    Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
+                  </H5>
+                  <H5>
+                    Location: {e.location.building.name} {e.location.room}
+                  </H5>
+                </RContent>
+                <LContent>
+                  <H5>
+                    # of People: {e.guestCount}/{e.maxGuestCount} confirmed
+                  </H5>
+                  <H5>Contact: {e.host.name}</H5>
+                  <Content>
+                    <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
+                    <Button
+                      style={{ margin: 5 }}
+                      onClick={() => {
+                        navigate(getEventPath(e.id))
+                      }}
+                    >
+                      Check Event Details
+                    </Button>
+                  </Content>
+                </LContent>
+              </Content>
+            </Card>
+            <Spacer $h4 />
+          </div>
+        ))}
+        <br />
+      </div>
     </Page>
   )
 }

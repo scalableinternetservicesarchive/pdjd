@@ -1,13 +1,14 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
+import { format, parseISO } from 'date-fns'
 import * as React from 'react'
+import { Card } from 'react-bootstrap'
 import { Colors } from '../../../../common/src/colors'
 import { fetchUserProfile } from '../../graphql/fetchUsers'
 import { FetchUserProfile, FetchUserProfileVariables } from '../../graphql/query.gen'
-import { H1, H3 } from '../../style/header'
+import { H1, H2, H3, H5 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
-import { BodyText } from '../../style/text'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 interface ProfilePageProps extends RouteComponentProps, AppRouteParams {}
@@ -24,35 +25,99 @@ export function ProfilePage(props: ProfilePageProps) {
   if (!data || !data.userProfile) {
     return <div> user does not exist </div>
   }
-
+  const getActiveEvents = () => data.userProfile?.hostEvents.filter(event => event?.eventStatus === 'OPEN')
+  const getInactiveEvents = () =>
+    data.userProfile?.hostEvents.filter(event => event?.eventStatus === 'CANCELLED' || event?.eventStatus === 'CLOSED')
   return (
     <Page>
-      <div>{data.userProfile.email}</div>
-      <div>{data.userProfile.name}</div>
-      <div>{data.userProfile.bio}</div>
-      <div>{data.userProfile.phoneNumber}</div>
-      {data.userProfile.hostEvents.map((event, i) => (
-        <div key={i}> {(event?.title, event?.description)} </div>
-      ))}
+      <H1 style={{ color: 'Navy', textAlign: 'center' }}>My Profile</H1>
+      <Spacer $h6 />
+      <H1 style={{ textAlign: 'center' }}>{data.userProfile.name}</H1>
+      <Spacer $h2 />
       <Hero>
-        <H1>This is the profile page</H1>
+        <H2 style={{ color: 'Navy' }}>Bio</H2>
+        <Spacer $h3 />
+        <H3>{data.userProfile.bio}</H3>
+        <Spacer $h6 />
+        <Content>
+          <RContent>
+            <H2 style={{ color: 'Navy' }}>Email</H2>
+            <Spacer $h3 />
+            <H3 style={{ marginRight: 20 }}>{data.userProfile.email}</H3>
+          </RContent>
+          <LContent>
+            <H2 style={{ color: 'Navy' }}>Phone</H2>
+            <Spacer $h3 />
+            <H3 style={{ marginLeft: 20 }}>{data.userProfile.phoneNumber}</H3>
+          </LContent>
+        </Content>
       </Hero>
+
       <Content>
-        <LContent>
-          <Spacer $h4 />
+        <Hero>
+          <H2>Upcoming Events</H2>
+          <Spacer $h3 />
+          <LContent>
+            {getActiveEvents()?.map((event, i) => (
+              // <div key={i}> {(event?.title, event?.description)} </div>
 
-          <BodyText>
-            <H3> </H3>
-          </BodyText>
-        </LContent>
-        <RContent>
-          <Spacer $h4 />
-
-          <BodyText>
-            <H3> </H3>
-          </BodyText>
-          <Spacer $h4 />
-        </RContent>
+              <div key={i}>
+                <Card style={{ width: '30rem', backgroundColor: '#F2D9D9' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <H2>{event?.title}</H2>
+                    <H3>{event?.description}</H3>
+                  </div>
+                  <Content>
+                    <RContent>
+                      <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
+                      <H5>Location:</H5>
+                    </RContent>
+                    <LContent>
+                      <H5>
+                        Time: {format(parseISO(event?.startTime), 'h:mm b')} -{' '}
+                        {format(parseISO(event?.endTime), 'h:mm b')}
+                      </H5>
+                      <H5># of People: {event?.guestCount} confirmed</H5>
+                      <Content></Content>
+                    </LContent>
+                  </Content>
+                </Card>
+                <Spacer $h5 />
+              </div>
+            ))}
+          </LContent>
+        </Hero>
+        <Hero>
+          <H2>Previous Events</H2>
+          <Spacer $h3 />
+          <RContent>
+            {getInactiveEvents()?.map((event, i) => (
+              <div key={i}>
+                <Card style={{ width: '30rem', backgroundColor: '#F2D9D9' }}>
+                  <div style={{ textAlign: 'center' }}>
+                    <H2>{event?.title}</H2>
+                    <H3>{event?.description}</H3>
+                  </div>
+                  <Content>
+                    <RContent>
+                      <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
+                      <H5>Location:</H5>
+                    </RContent>
+                    <LContent>
+                      <H5>
+                        Time: {format(parseISO(event?.startTime), 'h:mm b')} -{' '}
+                        {format(parseISO(event?.endTime), 'h:mm b')}
+                      </H5>
+                      <H5># of People: {event?.guestCount} confirmed</H5>
+                      <Content></Content>
+                    </LContent>
+                  </Content>
+                </Card>
+                <Spacer $h5 />
+              </div>
+            ))}
+          </RContent>
+        </Hero>
       </Content>
     </Page>
   )

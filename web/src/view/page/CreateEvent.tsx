@@ -80,10 +80,12 @@ export function CreateEventPage(props: CreateEventProps) {
     })
       .then(data => {
         console.log('Successful Mutation: ', data)
+        alert('Event Created Successfully')
       })
       .catch(err => {
         // console.log("StartTime Is: ",startTime )
         console.log('handlesubmit ERROR : ', err)
+        alert(err)
       })
   }
 
@@ -100,16 +102,16 @@ export function CreateEventPage(props: CreateEventProps) {
       <H1>Create Event</H1>
       <Spacer $h6 />
       <BodyText>EVENT TITLE</BodyText>
-      <Input $onChange={setTitle} name="title" type="title" /> {title}
+      <Input $onChange={setTitle} name="title" type="title" />
       <Spacer $h5 />
       <BodyText>EVENT DESCRIPTION</BodyText>
-      <Input $onChange={setDescription} name="description" type="description" /> {description}
+      <Input $onChange={setDescription} name="description" type="description" />
       <Spacer $h5 />
       <BodyText>START TIME</BodyText>
-      <Input $onChange={setStartTime} name="time" type="datetime-local" /> {startTime}
+      <Input $onChange={setStartTime} name="time" type="datetime-local" />
       <Spacer $h5 />
       <BodyText>END TIME</BodyText>
-      <Input $onChange={setEndTime} name="time" type="datetime-local" /> {endTime}
+      <Input $onChange={setEndTime} name="time" type="datetime-local" />
       <Spacer $h5 />
       <BodyText>Building Name</BodyText>
       <select value={building} onChange={handleChange}>
@@ -125,7 +127,7 @@ export function CreateEventPage(props: CreateEventProps) {
       <LocationList parentCallback={parentCallback} buildingID={Number(building)} />
       <Spacer $h5 />
       <BodyText>MAXINUM NUMBER OF GUESTS</BodyText>
-      <Input $onChange={setGuest} name="guest" type="guest" /> {guest}
+      <Input $onChange={setGuest} name="guest" type="guest" />
       <Spacer $h5 />
       <Button onClick={() => handleSubmit()}>CREATE EVENT</Button>
     </Page>
