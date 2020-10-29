@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { RouteComponentProps } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import { format, parseISO } from 'date-fns'
 import * as React from 'react'
 import Card from 'react-bootstrap/Card'
@@ -15,7 +15,7 @@ import { Button } from '../../style/button'
 import { H2, H3, H5 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
-import { AppRouteParams } from '../nav/route'
+import { AppRouteParams, getEventPath } from '../nav/route'
 import { Page } from './Page'
 
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}
@@ -71,7 +71,7 @@ function RequestButton({
   }
 }
 
-function ActiveEventList() {
+export function HomePage(props: HomePageProps) {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
 
   // const [event, setEvent] = React.useState('')
@@ -98,6 +98,7 @@ function ActiveEventList() {
   }
 
   return (
+    <Page>
     <div>
       {data.activeEvents.map((e, i) => (
         <div key={i}>
@@ -105,6 +106,7 @@ function ActiveEventList() {
             <div style={{ textAlign: 'center' }}>
               <H2>{e.title}</H2>
               <H3>{e.description}</H3>
+              {()=>{}}
             </div>
             <Content>
               <RContent>
@@ -121,7 +123,16 @@ function ActiveEventList() {
                   # of People: {e.guestCount}/{e.maxGuestCount} confirmed
                 </H5>
                 <H5>Contact: {e.host.name}</H5>
+                <Content>
                 <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
+                <Button
+                  style={{margin:5}}
+                  onClick={()=>{navigate(getEventPath(e.id))}}
+                >
+                  Event Details Page
+                </Button>
+                </Content>
+
               </LContent>
             </Content>
           </Card>
@@ -130,22 +141,23 @@ function ActiveEventList() {
       ))}
       <br />
     </div>
-  )
-}
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function HomePage(props: HomePageProps) {
-  // const [startTime, setStartTime] = React.useState("");
-  // const [endTime, setEndTime] = React.useState("");
-  // const [email, setEmail] = React.useState("");
-  // const [location, setLocation] = React.useState("");
-  // const [numPeople, setNumPeople] = React.useState({numPeople:0});
-
-  return (
-    <Page>
-      <ActiveEventList />
     </Page>
   )
 }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// export function HomePage(props: HomePageProps) {
+//   // const [startTime, setStartTime] = React.useState("");
+//   // const [endTime, setEndTime] = React.useState("");
+//   // const [email, setEmail] = React.useState("");
+//   // const [location, setLocation] = React.useState("");
+//   // const [numPeople, setNumPeople] = React.useState({numPeople:0});
+
+//   return (
+//     <Page>
+//       <ActiveEventList />
+//     </Page>
+//   )
+// }
 
 // const Hero = style("div", "mb4 w-100 ba b--mid-gray br2 pa3 tc", {
 //   borderLeftColor: Colors.lemon + "!important",

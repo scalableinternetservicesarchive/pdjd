@@ -13,10 +13,12 @@ export enum Route {
   PROFILE = 'app/profile',
   CREATEEVENT = 'app/createevent',
   REQUESTS = 'app/requests',
+  EVENTDETAILS='app/eventdetails'
+
 }
 
 export enum PlaygroundApp {
-  SURVEYS = 'Sign Up',
+  SURVEYS = 'Survey',
   LOGIN = 'Sign In',
   SIGNUP = 'SIGNUP',
 }
@@ -24,6 +26,11 @@ export enum PlaygroundApp {
 export function getSurveyPath(surveyId?: number) {
   const path = getPath(Route.PLAYGROUND_APP, { app: PlaygroundApp.SURVEYS })
   return path + (surveyId ? `?surveyId=${surveyId}` : '')
+}
+export function getEventPath(eventId?: number) {
+  const path = getPath(Route.EVENTDETAILS)
+  const finalPath= path + (eventId ? `?eventId=${eventId}` : '')
+  return finalPath
 }
 export function getLoginPath() {
   return getPath(Route.PLAYGROUND_APP, { app: PlaygroundApp.LOGIN })
@@ -67,6 +74,7 @@ export function getPath(route: Route, arg?: Partial<ReturnType<typeof routeParam
 export interface AppRouteParams {
   userId?: string
   app?: PlaygroundApp
+  eventId?:number
 }
 
 /**
@@ -76,5 +84,6 @@ export function routeParams(params: AppRouteParams) {
   return {
     userId: Number(params.userId || 0),
     app: params.app,
+    eventId: params.eventId||0
   }
 }
