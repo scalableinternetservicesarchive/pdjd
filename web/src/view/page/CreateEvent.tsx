@@ -2,7 +2,7 @@
 <Button onSubmit={POST_to_API}/>
 */
 import { useQuery } from '@apollo/client'
-import { RouteComponentProps } from '@reach/router'
+import { navigate, RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchBuildings, fetchLocation } from '../../graphql/fetchLocations'
@@ -13,7 +13,7 @@ import { H1 } from '../../style/header'
 import { Input } from '../../style/input'
 import { Spacer } from '../../style/spacer'
 import { BodyText } from '../../style/text'
-import { AppRouteParams } from '../nav/route'
+import { AppRouteParams, getPath, Route } from '../nav/route'
 import { Page } from './Page'
 interface CreateEventProps extends RouteComponentProps, AppRouteParams {}
 
@@ -81,6 +81,7 @@ export function CreateEventPage(props: CreateEventProps) {
       .then(data => {
         console.log('Successful Mutation: ', data)
         alert('Event Created Successfully')
+        navigate(getPath(Route.HOME))
       })
       .catch(err => {
         // console.log("StartTime Is: ",startTime )
