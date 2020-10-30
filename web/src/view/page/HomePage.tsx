@@ -9,7 +9,7 @@ import { createRequest } from '../../graphql/mutateRequests'
 import {
   FetchAllActiveEvents,
   FetchEventRequestsGuests,
-  FetchEventRequestsGuestsVariables,
+  FetchEventRequestsGuestsVariables
 } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
 import { H2, H3, H5 } from '../../style/header'
@@ -65,7 +65,7 @@ function RequestButton({
   }
 }
 
-export function HomePage(props: HomePageProps) {
+export function ActiveEventList() {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
 
   // const [event, setEvent] = React.useState('')
@@ -139,19 +139,19 @@ export function HomePage(props: HomePageProps) {
   )
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-// export function HomePage(props: HomePageProps) {
-//   // const [startTime, setStartTime] = React.useState("");
-//   // const [endTime, setEndTime] = React.useState("");
-//   // const [email, setEmail] = React.useState("");
-//   // const [location, setLocation] = React.useState("");
-//   // const [numPeople, setNumPeople] = React.useState({numPeople:0});
+export function HomePage(props: HomePageProps) {
+  // const [startTime, setStartTime] = React.useState("");
+  // const [endTime, setEndTime] = React.useState("");
+  // const [email, setEmail] = React.useState("");
+  // const [location, setLocation] = React.useState("");
+  // const [numPeople, setNumPeople] = React.useState({numPeople:0});
 
-//   return (
-//     <Page>
-//       <ActiveEventList />
-//     </Page>
-//   )
-// }
+  return (
+    <Page>
+      <ActiveEventList />
+    </Page>
+  )
+}
 
 // const Hero = style("div", "mb4 w-100 ba b--mid-gray br2 pa3 tc", {
 //   borderLeftColor: Colors.lemon + "!important",

@@ -37,7 +37,7 @@ export const graphqlRoot: Resolvers<Context> = {
     userProfile: async (_, { id }) =>
       (await User.findOne({
         where: { id },
-        relations: ['hostEvents', 'guestEvents','hostEvents.location','hostEvents.location.building'],
+        relations: ['hostEvents', 'guestEvents', 'hostEvents.location', 'hostEvents.location.building'],
       })) || null,
     userHostRequests: async (_, { id }) =>
       (await Request.find({
@@ -159,6 +159,7 @@ export const graphqlRoot: Resolvers<Context> = {
       const event = check(await Event.findOne({ where: { id: eventId } }))
 
       event.eventStatus = EventStatus.Cancelled
+      await event.save()
       // TODO: subscription propagation? notify users that event is cancelled?
       return true
     },

@@ -9,6 +9,7 @@
 
 export interface FetchEventDetails_eventDetails_host {
   __typename: "User";
+  id: number;
   name: string;
   email: string;
 }
