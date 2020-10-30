@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchUserGuestRequests, fetchUserHostRequests } from '../../graphql/fetchRequests'
 import { acceptRequest, rejectRequest } from '../../graphql/mutateRequests'
@@ -28,12 +28,16 @@ function HostRequestsList() {
   const { loading, data } = useQuery<FetchUserHostRequests, FetchUserHostRequestsVariables>(fetchUserHostRequests, {
     variables: { id: 2 },
   })
+  const [userHostRequests, setUserHostRequests] = useState(data?.userHostRequests)
+  useEffect(() => {
+    setUserHostRequests(data?.userHostRequests)
+  }, [data])
 
   function handleAccept(requestId: number) {
     acceptRequest(getApolloClient(), { requestId: requestId })
       .then(() => {
         toast('successfully accept the request')
-        setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
+        // setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
       })
       .catch(err => {
         handleError(err)
@@ -44,7 +48,7 @@ function HostRequestsList() {
     rejectRequest(getApolloClient(), { requestId: requestId })
       .then(() => {
         toast('successfully reject the request')
-        setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
+        // setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
       })
       .catch(err => {
         handleError(err)
@@ -58,24 +62,24 @@ function HostRequestsList() {
     return <div>no requests</div>
   }
 
-  const [userHostRequests, setUserHostRequests] = useState(data.userHostRequests)
   return (
     <div>
       <div>As a host:</div>
       <div>
-        {userHostRequests.map(userHostRequest => (
-          <div key={userHostRequest.id}>
-            {userHostRequest.event.title}
-            <br />
-            {userHostRequest.guest.name}
-            <br />
-            <br />
-            <RequestButton handlerFunc={() => handleAccept(userHostRequest.id)} buttonText="Accept" />
-            <RequestButton handlerFunc={() => handleReject(userHostRequest.id)} buttonText="Reject" />
-            <br />
-            <br />
-          </div>
-        ))}
+        {userHostRequests &&
+          userHostRequests.map(userHostRequest => (
+            <div key={userHostRequest.id}>
+              {userHostRequest.event.title}
+              <br />
+              {userHostRequest.guest.name}
+              <br />
+              <br />
+              <RequestButton handlerFunc={() => handleAccept(userHostRequest.id)} buttonText="Accept" />
+              <RequestButton handlerFunc={() => handleReject(userHostRequest.id)} buttonText="Reject" />
+              <br />
+              <br />
+            </div>
+          ))}
       </div>
     </div>
   )
