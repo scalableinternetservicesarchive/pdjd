@@ -35,37 +35,41 @@ function RequestButton({
 
   function handleClick() {
     parentCallback(eventID, hostID)
-    setbuttonActive(false)
+    setButtonActive(false)
   }
 
-  const guestID = 2
+  const [eventRequests, setEventRequests] = React.useState(data?.eventRequests)
+
+  React.useEffect(() => {
+    setEventRequests(data?.eventRequests)
+  }, [data])
+
+  const guestID = 4 //TODO: Update this
   let activeCheck = true
-  let err = false
-  if (!data || !data.eventRequests) {
-    err = true
-  } else {
-    for (const guests of data.eventRequests) {
+
+  if (eventRequests)
+    for (const guests of eventRequests) {
       if (guests.guest.id == guestID) {
         activeCheck = false
         break
       }
     }
+  const [buttonActive, setButtonActive] = React.useState(activeCheck)
+
+  if (!data || !data.eventRequests) {
+    return <div>Error?</div>
   }
 
-  const [buttonActive, setbuttonActive] = React.useState(activeCheck)
-
-  if (buttonActive) {
-    return <Button onClick={handleClick}>Send Request</Button>
-  } else if (hostID == guestID) {
+  if (hostID == guestID) {
     return <div>You're the host of this event!</div>
-  } else if (err) {
-    return <div>Error?</div>
+  } else if (buttonActive) {
+    return <Button onClick={handleClick}>Send Request</Button>
   } else {
     return <div>Request sent!</div> //TODO: cancel request
   }
 }
 
-export function ActiveEventList() {
+function ActiveEventList() {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
 
   // const [event, setEvent] = React.useState('')
@@ -73,7 +77,7 @@ export function ActiveEventList() {
   if (loading) {
     return <div>Loading...</div>
   }
-  if (!data || !data.activeEvents) {
+  if (!data || !data.activeEvents || data.activeEvents.length == 0) {
     return <div>No events available. Make one!</div>
   }
 
@@ -92,50 +96,48 @@ export function ActiveEventList() {
   }
 
   return (
-    <Page>
-      <div>
-        {data.activeEvents.map((e, i) => (
-          <div key={i}>
-            <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
-              <div style={{ textAlign: 'center' }}>
-                <H2>{e.title}</H2>
-                <H3>{e.description}</H3>
-              </div>
-              <Content>
-                <RContent>
-                  <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
-                  <H5>
-                    Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
-                  </H5>
-                  <H5>
-                    Location: {e.location.building.name} {e.location.room}
-                  </H5>
-                </RContent>
-                <LContent>
-                  <H5>
-                    # of People: {e.guestCount}/{e.maxGuestCount} confirmed
-                  </H5>
-                  <H5>Contact: {e.host.name}</H5>
-                  <Content>
-                    <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={() => handleSubmit} />
-                    <Button
-                      style={{ margin: 5 }}
-                      onClick={() => {
-                        void navigate(getEventPath(e.id))
-                      }}
-                    >
-                      Check Event Details
-                    </Button>
-                  </Content>
-                </LContent>
-              </Content>
-            </Card>
-            <Spacer $h4 />
-          </div>
-        ))}
-        <br />
-      </div>
-    </Page>
+    <div>
+      {data.activeEvents.map((e, i) => (
+        <div key={i}>
+          <Card style={{ width: '50rem', backgroundColor: '#F2D9D9' }}>
+            <div style={{ textAlign: 'center' }}>
+              <H2>{e.title}</H2>
+              <H3>{e.description}</H3>
+            </div>
+            <Content>
+              <RContent>
+                <H5>Date: {format(parseISO(e.startTime), 'MMM do yyyy')}</H5>
+                <H5>
+                  Time: {format(parseISO(e.startTime), 'h:mm b')} - {format(parseISO(e.endTime), 'h:mm b')}
+                </H5>
+                <H5>
+                  Location: {e.location.building.name} {e.location.room}
+                </H5>
+              </RContent>
+              <LContent>
+                <H5>
+                  # of People: {e.guestCount}/{e.maxGuestCount} confirmed
+                </H5>
+                <H5>Contact: {e.host.name}</H5>
+                <Content>
+                  <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={() => handleSubmit} />
+                  <Button
+                    style={{ margin: 5 }}
+                    onClick={() => {
+                      void navigate(getEventPath(e.id))
+                    }}
+                  >
+                    Check Event Details
+                  </Button>
+                </Content>
+              </LContent>
+            </Content>
+          </Card>
+          <Spacer $h4 />
+        </div>
+      ))}
+      <br />
+    </div>
   )
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

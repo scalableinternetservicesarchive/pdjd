@@ -38,7 +38,7 @@ type Query {
   events: [Event!]!
 
   # return all active events
-  activeEvents: [Event!]!
+  activeEvents: [Event!]
 
   # return requests associated with event with eventID
   eventRequests(eventID: Int!): [Request!]

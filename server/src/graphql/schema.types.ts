@@ -24,7 +24,7 @@ export interface Query {
   userHostRequests?: Maybe<Array<Request>>
   userGuestRequests?: Maybe<Array<Request>>
   events: Array<Event>
-  activeEvents: Array<Event>
+  activeEvents?: Maybe<Array<Event>>
   eventRequests?: Maybe<Array<Request>>
   eventDetails?: Maybe<Event>
 }
@@ -387,7 +387,7 @@ export type QueryResolvers<
     RequireFields<QueryUserGuestRequestsArgs, 'id'>
   >
   events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
-  activeEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  activeEvents?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>
   eventRequests?: Resolver<
     Maybe<Array<ResolversTypes['Request']>>,
     ParentType,

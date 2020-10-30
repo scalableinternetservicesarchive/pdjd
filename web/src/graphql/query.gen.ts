@@ -87,7 +87,7 @@ export interface FetchAllActiveEvents_activeEvents {
 }
 
 export interface FetchAllActiveEvents {
-  activeEvents: FetchAllActiveEvents_activeEvents[];
+  activeEvents: FetchAllActiveEvents_activeEvents[] | null;
 }
 
 /* tslint:disable */
