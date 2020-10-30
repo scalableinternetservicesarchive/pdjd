@@ -13,7 +13,8 @@ import { H1 } from '../../style/header'
 import { Input } from '../../style/input'
 import { Spacer } from '../../style/spacer'
 import { BodyText } from '../../style/text'
-import { AppRouteParams, getPath, Route } from '../nav/route'
+import { AppRouteParams, getEventPath } from '../nav/route'
+import { toast } from '../toast/toast'
 import { Page } from './Page'
 interface CreateEventProps extends RouteComponentProps, AppRouteParams {}
 
@@ -80,8 +81,10 @@ export function CreateEventPage(props: CreateEventProps) {
     })
       .then(data => {
         console.log('Successful Mutation: ', data)
-        alert('Event Created Successfully')
-        navigate(getPath(Route.HOME))
+        toast('Event created successfully, redirecting to event page...')
+        void setTimeout(function () {
+          void navigate(getEventPath(data.data?.createEvent?.id))
+        }, 1500)
       })
       .catch(err => {
         // console.log("StartTime Is: ",startTime )

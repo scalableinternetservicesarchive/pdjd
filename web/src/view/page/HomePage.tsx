@@ -16,6 +16,7 @@ import { H2, H3, H5 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
 import { AppRouteParams, getEventPath } from '../nav/route'
+import { toast } from '../toast/toast'
 import { Page } from './Page'
 
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}
@@ -45,7 +46,7 @@ function RequestButton({
     setEventRequests(data?.eventRequests)
   }, [data])
 
-  const guestID = 4 //TODO: Update this
+  const guestID = 1 //TODO: Update this
 
   const [buttonActive, setButtonActive] = React.useState(true)
   const [requestSent, setRequestSent] = React.useState(false)
@@ -94,6 +95,7 @@ function ActiveEventList() {
     })
       .then(data => {
         console.log('Successful Mutation: ', data)
+        toast('Request successfully sent.')
       })
       .catch(err => {
         console.log('handlesubmit ERROR : ', err)
