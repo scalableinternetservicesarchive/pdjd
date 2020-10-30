@@ -16,18 +16,29 @@ import { Page } from './Page'
 interface EventDetailsPageProps extends RouteComponentProps, AppRouteParams {}
 
 function EventDetails({ eventId }: { eventId: number }) {
-  const { data } = useQuery<FetchEventDetails>(fetchEventDetails, { variables: { eventId: eventId } })
+  const { loading, data } = useQuery<FetchEventDetails>(fetchEventDetails, { variables: { eventId: eventId } })
 
-  const getLocation = () => `${data?.eventDetails?.location.building.name} ${data?.eventDetails?.location.room}`
-  const getConfirmed = () => `${data?.eventDetails?.guestCount}/ ${data?.eventDetails?.maxGuestCount}`
-  const getHostID = () => `${data?.eventDetails?.host.id}`
+  const [eventDetails, setEventDetails] = React.useState(data?.eventDetails)
+  React.useEffect(() => {
+    if (data?.eventDetails) {
+      setEventDetails(data.eventDetails)
+    }
+  }, [data])
   const LOGGED_IN = 3 //TODO: set current logged in user
-  //TODO: figure this out: query-hook ordering
-  const isHost = Number(getHostID()) == LOGGED_IN
-  const [{ showCancelButton, cancelled }, setCancelled] = React.useState({ showCancelButton: isHost, cancelled: false })
-  if (!data || !data.eventDetails) {
-    return null
+  const [{ showCancelButton, cancelled }, setCancelled] = React.useState({ showCancelButton: false, cancelled: false })
+  React.useEffect(() => {
+    if (eventDetails) {
+      const isHost = Number(eventDetails?.host.id) == LOGGED_IN
+      setCancelled({ showCancelButton: isHost, cancelled: false })
+    }
+  }, [data, eventDetails])
+  if (loading) {
+    return <div> Loading... </div>
   }
+  if (!data || !data.eventDetails || !eventDetails) {
+    return <div>No event details available</div>
+  }
+
   const handleClick = function () {
     cancelEvent(getApolloClient(), {
       eventId: eventId,
@@ -39,6 +50,7 @@ function EventDetails({ eventId }: { eventId: number }) {
       .catch(err => {
         console.log(err)
       })
+
     setCancelled({ showCancelButton: false, cancelled: true })
   }
 
@@ -56,24 +68,27 @@ function EventDetails({ eventId }: { eventId: number }) {
           <H3>{format(Date.parse(data.eventDetails.startTime), 'MMM do yyyy')}</H3>
           <Spacer $h8 />
           <H2> Location </H2>
-          <H3>{getLocation()}</H3>
+          <H3>
+            {eventDetails.location.building.name} {eventDetails.location.room}
+          </H3>
           <Spacer $h8 />
           <H2> Hosted By </H2>
-          <H3>{data?.eventDetails?.host.name}</H3>
+          <H3>{eventDetails.host.name}</H3>
         </RContent>
         <LContent>
           <Spacer $h8 />
           <H2> Time </H2>
           <H3>
-            {format(Date.parse(data.eventDetails.startTime), 'h:mm b')} -
-            {format(Date.parse(data.eventDetails.endTime), 'h:mm b')}
+            {format(Date.parse(eventDetails.startTime), 'h:mm b')} -{format(Date.parse(eventDetails.endTime), 'h:mm b')}
           </H3>
           <Spacer $h8 />
           <H2> # of People confirmed </H2>
-          <H3>{getConfirmed()} </H3>
+          <H3>
+            {eventDetails.guestCount} / {eventDetails.maxGuestCount}{' '}
+          </H3>
           <Spacer $h8 />
           <H2>Contact</H2>
-          <H3>{data?.eventDetails?.host.email}</H3>
+          <H3>{eventDetails.host.email}</H3>
           <Spacer $h8 />
           {showCancelButton ? <Button onClick={() => handleClick()}>Cancel Event</Button> : null}
           {cancelled ? <H3> Event cancelled </H3> : null}

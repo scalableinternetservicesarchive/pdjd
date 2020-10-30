@@ -36,6 +36,7 @@ function RequestButton({
   function handleClick() {
     parentCallback(eventID, hostID)
     setButtonActive(false)
+    setRequestSent(true)
   }
 
   const [eventRequests, setEventRequests] = React.useState(data?.eventRequests)
@@ -45,33 +46,37 @@ function RequestButton({
   }, [data])
 
   const guestID = 4 //TODO: Update this
-  let activeCheck = true
 
-  if (eventRequests)
-    for (const guests of eventRequests) {
-      if (guests.guest.id == guestID) {
-        activeCheck = false
-        break
+  const [buttonActive, setButtonActive] = React.useState(true)
+  const [requestSent, setRequestSent] = React.useState(false)
+  React.useEffect(() => {
+    if (eventRequests)
+      for (const guests of eventRequests) {
+        if (guests.guest.id == guestID) {
+          setButtonActive(false)
+          setRequestSent(true)
+          break
+        }
       }
-    }
-  const [buttonActive, setButtonActive] = React.useState(activeCheck)
-
+  }, [data, eventRequests])
   if (!data || !data.eventRequests) {
     return <div>Error?</div>
   }
 
   if (hostID == guestID) {
     return <div>You're the host of this event!</div>
-  } else if (buttonActive) {
-    return <Button onClick={handleClick}>Send Request</Button>
-  } else {
-    return <div>Request sent!</div> //TODO: cancel request
   }
+
+  return (
+    <div>
+      {buttonActive ? <Button onClick={handleClick}>Send Request</Button> : null}
+      {requestSent ? <div>Request sent!</div> : null}
+    </div>
+  )
 }
 
 function ActiveEventList() {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
-
   // const [event, setEvent] = React.useState('')
 
   if (loading) {
@@ -81,7 +86,7 @@ function ActiveEventList() {
     return <div>No events available. Make one!</div>
   }
 
-  const handleSubmit = function (eventID: number, hostID: number) {
+  function handleSubmit(eventID: number, hostID: number) {
     createRequest(getApolloClient(), {
       eventID: eventID,
       hostID: hostID,
@@ -120,7 +125,7 @@ function ActiveEventList() {
                 </H5>
                 <H5>Contact: {e.host.name}</H5>
                 <Content>
-                  <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={() => handleSubmit} />
+                  <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
                   <Button
                     style={{ margin: 5 }}
                     onClick={() => {
