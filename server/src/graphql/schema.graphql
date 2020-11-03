@@ -154,14 +154,14 @@ type User {
   phoneNumber: String
 
   # Relations
-  hostEvents: [Event]!
-  guestEvents: [Event]!
+  hostEvents: [Event!]!
+  guestEvents: [Event!]!
 
   # Requests for events where user is host
-  hostRequests: [Request]!
+  hostRequests: [Request!]!
 
   # Requests for events where user is guest
-  guestRequests: [Request]!
+  guestRequests: [Request!]!
 }
 
 type Event {
@@ -182,10 +182,10 @@ type Event {
   location: Location!
 
   # List of event attendees
-  guests: [User]!
+  guests: [User!]!
 
   # List of pending requests for the event
-  requests: [Request]!
+  requests: [Request!]!
   # Functions
   # True if the event has started.
   isStarted: Boolean!
@@ -203,13 +203,13 @@ type Location {
   id: Int!
   building: Building!
   room: String!
-  events: [Event]!
+  events: [Event!]!
 }
 
 type Building {
   id: Int!
   name: String!
-  locations: [Location]!
+  locations: [Location!]!
 }
 
 type Request {

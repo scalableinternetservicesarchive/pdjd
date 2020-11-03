@@ -33,6 +33,7 @@ function ActiveEventList() {
             location={e.location.building.name + ' ' + e.location.room}
             numPeople={String(e.guestCount) + '/' + String(e.maxGuestCount)}
             host={e.host.name}
+            width="50rem"
           />
           <Spacer $h3 />
         </div>

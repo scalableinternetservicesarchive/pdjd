@@ -21,12 +21,13 @@ export function EventDetailsCard(props: {
   endTime: string
   numPeople: string
   host: string
+  width: string
 }) {
   function onClick() {
     void navigate(getEventPath(props.id))
   }
   return (
-    <Card as="a" onClick={() => onClick()} bg="light" style={{ width: '50rem' }}>
+    <Card as="a" onClick={() => onClick()} bg="light" style={{ width: props.width }}>
       <Card.Header>
         <div style={{ textAlign: 'center' }}>
           <H2>{props.title}</H2>

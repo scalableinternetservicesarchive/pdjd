@@ -153,7 +153,7 @@ export interface FetchLocation_building_locations {
 
 export interface FetchLocation_building {
   __typename: "Building";
-  locations: (FetchLocation_building_locations | null)[];
+  locations: FetchLocation_building_locations[];
 }
 
 export interface FetchLocation {
@@ -262,6 +262,23 @@ export interface FetchUserProfile_userProfile_hostEvents {
   location: FetchUserProfile_userProfile_hostEvents_location;
 }
 
+export interface FetchUserProfile_userProfile_guestEvents_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchUserProfile_userProfile_guestEvents_location {
+  __typename: "Location";
+  building: FetchUserProfile_userProfile_guestEvents_location_building;
+  room: string;
+}
+
+export interface FetchUserProfile_userProfile_guestEvents_host {
+  __typename: "User";
+  name: string;
+  id: number;
+}
+
 export interface FetchUserProfile_userProfile_guestEvents {
   __typename: "Event";
   id: number;
@@ -274,6 +291,8 @@ export interface FetchUserProfile_userProfile_guestEvents {
   isStarted: boolean;
   isCompleted: boolean;
   guestCount: number;
+  location: FetchUserProfile_userProfile_guestEvents_location;
+  host: FetchUserProfile_userProfile_guestEvents_host;
 }
 
 export interface FetchUserProfile_userProfile {
@@ -283,8 +302,8 @@ export interface FetchUserProfile_userProfile {
   name: string;
   bio: string | null;
   phoneNumber: string | null;
-  hostEvents: (FetchUserProfile_userProfile_hostEvents | null)[];
-  guestEvents: (FetchUserProfile_userProfile_guestEvents | null)[];
+  hostEvents: FetchUserProfile_userProfile_hostEvents[];
+  guestEvents: FetchUserProfile_userProfile_guestEvents[];
 }
 
 export interface FetchUserProfile {

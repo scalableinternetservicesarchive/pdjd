@@ -167,10 +167,10 @@ export interface User {
   name: Scalars['String']
   bio?: Maybe<Scalars['String']>
   phoneNumber?: Maybe<Scalars['String']>
-  hostEvents: Array<Maybe<Event>>
-  guestEvents: Array<Maybe<Event>>
-  hostRequests: Array<Maybe<Request>>
-  guestRequests: Array<Maybe<Request>>
+  hostEvents: Array<Event>
+  guestEvents: Array<Event>
+  hostRequests: Array<Request>
+  guestRequests: Array<Request>
 }
 
 export interface Event {
@@ -184,8 +184,8 @@ export interface Event {
   eventStatus: EventStatus
   host: User
   location: Location
-  guests: Array<Maybe<User>>
-  requests: Array<Maybe<Request>>
+  guests: Array<User>
+  requests: Array<Request>
   isStarted: Scalars['Boolean']
   isCompleted: Scalars['Boolean']
   guestCount: Scalars['Int']
@@ -202,14 +202,14 @@ export interface Location {
   id: Scalars['Int']
   building: Building
   room: Scalars['String']
-  events: Array<Maybe<Event>>
+  events: Array<Event>
 }
 
 export interface Building {
   __typename?: 'Building'
   id: Scalars['Int']
   name: Scalars['String']
-  locations: Array<Maybe<Location>>
+  locations: Array<Location>
 }
 
 export interface Request {
@@ -513,10 +513,10 @@ export type UserResolvers<
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
   bio?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
   phoneNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
-  hostEvents?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
-  guestEvents?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
-  hostRequests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
-  guestRequests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
+  hostEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  guestEvents?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  hostRequests?: Resolver<Array<ResolversTypes['Request']>, ParentType, ContextType>
+  guestRequests?: Resolver<Array<ResolversTypes['Request']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
@@ -533,8 +533,8 @@ export type EventResolvers<
   eventStatus?: Resolver<ResolversTypes['eventStatus'], ParentType, ContextType>
   host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
   location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
-  guests?: Resolver<Array<Maybe<ResolversTypes['User']>>, ParentType, ContextType>
-  requests?: Resolver<Array<Maybe<ResolversTypes['Request']>>, ParentType, ContextType>
+  guests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
+  requests?: Resolver<Array<ResolversTypes['Request']>, ParentType, ContextType>
   isStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   isCompleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
   guestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
@@ -548,7 +548,7 @@ export type LocationResolvers<
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   building?: Resolver<ResolversTypes['Building'], ParentType, ContextType>
   room?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  events?: Resolver<Array<Maybe<ResolversTypes['Event']>>, ParentType, ContextType>
+  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
@@ -558,7 +558,7 @@ export type BuildingResolvers<
 > = {
   id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  locations?: Resolver<Array<Maybe<ResolversTypes['Location']>>, ParentType, ContextType>
+  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 

@@ -1,18 +1,46 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
-import { format, parseISO } from 'date-fns'
 import * as React from 'react'
-import { Card } from 'react-bootstrap'
 import { Colors } from '../../../../common/src/colors'
+import { EventDetailsCard } from '../../components/eventDetailsCard'
 import { fetchUserProfile } from '../../graphql/fetchUsers'
-import { FetchUserProfile, FetchUserProfileVariables } from '../../graphql/query.gen'
-import { H1, H2, H3, H5 } from '../../style/header'
+import {
+  FetchUserProfile,
+  FetchUserProfileVariables,
+  FetchUserProfile_userProfile_hostEvents
+} from '../../graphql/query.gen'
+import { H1, H2, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 interface ProfilePageProps extends RouteComponentProps, AppRouteParams {}
 
+function EventList(props: { events: FetchUserProfile_userProfile_hostEvents[] | undefined; host: string }) {
+  if (!props.events) {
+    return <H3>No events available.</H3>
+  }
+  return (
+    <div>
+      {props.events.map((event, i) => (
+        <div key={i}>
+          <EventDetailsCard
+            id={event.id}
+            title={event.title}
+            description={event.description}
+            startTime={event.startTime}
+            endTime={event.endTime}
+            location={event.location.building.name + ' ' + event.location.room}
+            numPeople={String(event.guestCount) + '/' + String(event.maxGuestCount)}
+            host={props.host}
+            width="30rem"
+          />
+          <Spacer $h5 />
+        </div>
+      ))}
+    </div>
+  )
+}
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ProfilePage(props: ProfilePageProps) {
   const userId = 1
@@ -25,13 +53,13 @@ export function ProfilePage(props: ProfilePageProps) {
   if (!data || !data.userProfile) {
     return <div> user does not exist </div>
   }
-  const getActiveEvents = () => data.userProfile?.hostEvents.filter(event => event?.eventStatus === 'OPEN')
-  const getInactiveEvents = () =>
-    data.userProfile?.hostEvents.filter(event => event?.eventStatus === 'CANCELLED' || event?.eventStatus === 'CLOSED')
+
+  const activeEvents = data.userProfile.hostEvents?.filter(event => event?.eventStatus === 'OPEN')
+  const inactiveEvents = data.userProfile.hostEvents?.filter(
+    event => event?.eventStatus === 'CANCELLED' || event?.eventStatus === 'CLOSED'
+  )
   return (
     <Page>
-      <H1 style={{ color: 'Navy', textAlign: 'center' }}>My Profile</H1>
-      <Spacer $h6 />
       <H1 style={{ textAlign: 'center' }}>{data.userProfile.name}</H1>
       <Spacer $h2 />
       <Hero>
@@ -58,64 +86,14 @@ export function ProfilePage(props: ProfilePageProps) {
           <H2>Upcoming Events</H2>
           <Spacer $h3 />
           <LContent>
-            {getActiveEvents()?.map((event, i) => (
-              // <div key={i}> {(event?.title, event?.description)} </div>
-
-              <div key={i}>
-                <Card style={{ width: '30rem', backgroundColor: '#F2D9D9' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <H2>{event?.title}</H2>
-                    <H3>{event?.description}</H3>
-                  </div>
-                  <Content>
-                    <RContent>
-                      <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
-                      <H5>Location: {`${event?.location.building.name} ${event?.location.room}`}</H5>
-                    </RContent>
-                    <LContent>
-                      <H5>
-                        Time: {format(parseISO(event?.startTime), 'h:mm b')} -{' '}
-                        {format(parseISO(event?.endTime), 'h:mm b')}
-                      </H5>
-                      <H5># of People: {event?.guestCount} confirmed</H5>
-                      <Content></Content>
-                    </LContent>
-                  </Content>
-                </Card>
-                <Spacer $h5 />
-              </div>
-            ))}
+            <EventList host={data.userProfile.name} events={activeEvents} />
           </LContent>
         </Hero>
         <Hero>
           <H2>Previous Events</H2>
           <Spacer $h3 />
           <RContent>
-            {getInactiveEvents()?.map((event, i) => (
-              <div key={i}>
-                <Card style={{ width: '30rem', backgroundColor: '#F2D9D9' }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <H2>{event?.title}</H2>
-                    <H3>{event?.description}</H3>
-                  </div>
-                  <Content>
-                    <RContent>
-                      <H5>Date: {format(parseISO(event?.startTime), 'MMM do yyyy')}</H5>
-                      <H5>Location: {`${event?.location.building.name} ${event?.location.room}`}</H5>
-                    </RContent>
-                    <LContent>
-                      <H5>
-                        Time: {format(parseISO(event?.startTime), 'h:mm b')} -{' '}
-                        {format(parseISO(event?.endTime), 'h:mm b')}
-                      </H5>
-                      <H5># of People: {event?.guestCount} confirmed</H5>
-                      <Content></Content>
-                    </LContent>
-                  </Content>
-                </Card>
-                <Spacer $h5 />
-              </div>
-            ))}
+            <EventList host={data.userProfile.name} events={inactiveEvents} />
           </RContent>
         </Hero>
       </Content>

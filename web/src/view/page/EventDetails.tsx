@@ -39,7 +39,7 @@ function RequestButton(props: {
     setEventRequests(data?.eventRequests)
   }, [data])
 
-  const guestID = 1 //TODO: Update this
+  const guestID = 3 //TODO: Update this
 
   const [buttonActive, setButtonActive] = React.useState(true)
   const [requestSent, setRequestSent] = React.useState(false)
@@ -68,7 +68,11 @@ function RequestButton(props: {
   return (
     <OverlayTrigger placement="auto" overlay={renderTooltip}>
       <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
-        <Button onClick={() => handleClick()} disabled={!buttonActive} style={{ pointerEvents: 'none' }}>
+        <Button
+          onClick={() => handleClick()}
+          disabled={!buttonActive}
+          style={{ pointerEvents: buttonActive ? 'all' : 'none' }}
+        >
           Send Request
         </Button>
       </div>
@@ -85,7 +89,7 @@ function EventDetails({ eventId }: { eventId: number }) {
       setEventDetails(data.eventDetails)
     }
   }, [data])
-  const LOGGED_IN = 1 //TODO: set current logged in user
+  const LOGGED_IN = 3 //TODO: set current logged in user
   const [{ showCancelButton, cancelled }, setCancelled] = React.useState({ showCancelButton: false, cancelled: false })
   React.useEffect(() => {
     if (eventDetails) {
@@ -104,7 +108,7 @@ function EventDetails({ eventId }: { eventId: number }) {
     createRequest(getApolloClient(), {
       eventID: eventID,
       hostID: hostID,
-      guestID: 1, //TODO: update this after sign in
+      guestID: LOGGED_IN, //TODO: update this after sign in
     })
       .then(data => {
         console.log('Successful Mutation: ', data)

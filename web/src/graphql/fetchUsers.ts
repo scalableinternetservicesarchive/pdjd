@@ -21,7 +21,7 @@ export const fetchUserProfile = gql`
         isCompleted
         guestCount
         location {
-          building{
+          building {
             name
           }
           room
@@ -38,6 +38,16 @@ export const fetchUserProfile = gql`
         isStarted
         isCompleted
         guestCount
+        location {
+          building {
+            name
+          }
+          room
+        }
+        host {
+          name
+          id
+        }
       }
     }
   }
