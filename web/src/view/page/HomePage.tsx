@@ -2,76 +2,12 @@ import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { EventDetailsCard } from '../../components/eventDetailsCard'
-import { getApolloClient } from '../../graphql/apolloClient'
-import { fetchAllActiveEvents, fetchEventRequestsGuests } from '../../graphql/fetchEvents'
-import { createRequest } from '../../graphql/mutateRequests'
-import {
-  FetchAllActiveEvents,
-  FetchEventRequestsGuests,
-  FetchEventRequestsGuestsVariables
-} from '../../graphql/query.gen'
-import { Button } from '../../style/button'
+import { fetchAllActiveEvents } from '../../graphql/fetchEvents'
+import { FetchAllActiveEvents } from '../../graphql/query.gen'
 import { Spacer } from '../../style/spacer'
-import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
-import { toast } from '../toast/toast'
 import { Page } from './Page'
 interface HomePageProps extends RouteComponentProps, AppRouteParams {}
-
-function RequestButton({
-  eventID,
-  hostID,
-  parentCallback,
-}: {
-  eventID: number
-  hostID: number
-  parentCallback: (eventID: number, hostID: number) => void
-}) {
-  const { data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(fetchEventRequestsGuests, {
-    variables: { eventID },
-  })
-
-  function handleClick() {
-    parentCallback(eventID, hostID)
-    setButtonActive(false)
-    setRequestSent(true)
-  }
-
-  const [eventRequests, setEventRequests] = React.useState(data?.eventRequests)
-
-  React.useEffect(() => {
-    setEventRequests(data?.eventRequests)
-  }, [data])
-
-  const guestID = 1 //TODO: Update this
-
-  const [buttonActive, setButtonActive] = React.useState(true)
-  const [requestSent, setRequestSent] = React.useState(false)
-  React.useEffect(() => {
-    if (eventRequests)
-      for (const guests of eventRequests) {
-        if (guests.guest.id == guestID) {
-          setButtonActive(false)
-          setRequestSent(true)
-          break
-        }
-      }
-  }, [data, eventRequests])
-  if (!data || !data.eventRequests) {
-    return <div>Error?</div>
-  }
-
-  if (hostID == guestID) {
-    return <div>You're the host of this event!</div>
-  }
-
-  return (
-    <div>
-      {buttonActive ? <Button onClick={handleClick}>Send Request</Button> : null}
-      {requestSent ? <div>Request sent!</div> : null}
-    </div>
-  )
-}
 
 function ActiveEventList() {
   const { loading, data } = useQuery<FetchAllActiveEvents>(fetchAllActiveEvents)
@@ -82,21 +18,6 @@ function ActiveEventList() {
   }
   if (!data || !data.activeEvents || data.activeEvents.length == 0) {
     return <div>No events available. Make one!</div>
-  }
-
-  function handleSubmit(eventID: number, hostID: number) {
-    createRequest(getApolloClient(), {
-      eventID: eventID,
-      hostID: hostID,
-      guestID: 1, //TODO: update this after sign in
-    })
-      .then(data => {
-        console.log('Successful Mutation: ', data)
-        toast('Request successfully sent.')
-      })
-      .catch(err => {
-        console.log('handlesubmit ERROR : ', err)
-      })
   }
 
   return (
@@ -113,7 +34,6 @@ function ActiveEventList() {
             numPeople={String(e.guestCount) + '/' + String(e.maxGuestCount)}
             host={e.host.name}
           />
-          <RequestButton eventID={e.id} hostID={e.host.id} parentCallback={handleSubmit} />
           <Spacer $h3 />
         </div>
       ))}
@@ -142,12 +62,6 @@ export function HomePage(props: HomePageProps) {
 //   borderLeftWidth: "4px",
 //   borderRightWidth: "4px",
 // });
-
-const Content = style('div', 'flex-l')
-
-const LContent = style('div', 'flex-grow-0 w-60-l mr4-l')
-
-const RContent = style('div', 'flex-grow-0  w-60-l')
 
 // const Section = style(
 //   "div",

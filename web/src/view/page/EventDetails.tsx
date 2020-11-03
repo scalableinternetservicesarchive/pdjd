@@ -2,18 +2,79 @@ import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import { format } from 'date-fns'
 import * as React from 'react'
-import { Card } from 'react-bootstrap'
+import { Button, Card, OverlayTrigger, Tooltip } from 'react-bootstrap'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchEventDetails } from '../../graphql/fetchEventDetails'
+import { fetchEventRequestsGuests } from '../../graphql/fetchEvents'
 import { cancelEvent } from '../../graphql/mutateEvents'
-import { FetchEventDetails } from '../../graphql/query.gen'
-import { Button } from '../../style/button'
+import { createRequest } from '../../graphql/mutateRequests'
+import { FetchEventDetails, FetchEventRequestsGuests, FetchEventRequestsGuestsVariables } from '../../graphql/query.gen'
 import { H1, H2, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
 import { AppRouteParams } from '../nav/route'
+import { toast } from '../toast/toast'
 import { Page } from './Page'
 interface EventDetailsPageProps extends RouteComponentProps, AppRouteParams {}
+
+function RequestButton(props: {
+  eventID: number
+  hostID: number
+  parentCallback: (eventID: number, hostID: number) => void
+}) {
+  const eventID = props.eventID
+  const { data } = useQuery<FetchEventRequestsGuests, FetchEventRequestsGuestsVariables>(fetchEventRequestsGuests, {
+    variables: { eventID },
+  })
+
+  function handleClick() {
+    props.parentCallback(props.eventID, props.hostID)
+    setButtonActive(false)
+    setRequestSent(true)
+  }
+
+  const [eventRequests, setEventRequests] = React.useState(data?.eventRequests)
+
+  React.useEffect(() => {
+    setEventRequests(data?.eventRequests)
+  }, [data])
+
+  const guestID = 1 //TODO: Update this
+
+  const [buttonActive, setButtonActive] = React.useState(true)
+  const [requestSent, setRequestSent] = React.useState(false)
+  React.useEffect(() => {
+    if (eventRequests)
+      for (const guests of eventRequests) {
+        if (guests.guest.id == guestID) {
+          setButtonActive(false)
+          setRequestSent(true)
+          break
+        }
+      }
+  }, [data, eventRequests])
+  if (!data || !data.eventRequests) {
+    return <div>Error?</div>
+  }
+
+  if (props.hostID == guestID) {
+    return <H3>You're the host of this event!</H3>
+  }
+  const renderTooltip = (props: any) => (
+    <Tooltip id="button-tooltip" {...props}>
+      {requestSent ? 'Request sent' : 'Click here to send request'}
+    </Tooltip>
+  )
+  return (
+    <OverlayTrigger placement="auto" overlay={renderTooltip}>
+      <div style={{ display: 'inline-block', cursor: 'not-allowed' }}>
+        <Button onClick={() => handleClick()} disabled={!buttonActive} style={{ pointerEvents: 'none' }}>
+          Send Request
+        </Button>
+      </div>
+    </OverlayTrigger>
+  )
+}
 
 function EventDetails({ eventId }: { eventId: number }) {
   const { loading, data } = useQuery<FetchEventDetails>(fetchEventDetails, { variables: { eventId: eventId } })
@@ -24,7 +85,7 @@ function EventDetails({ eventId }: { eventId: number }) {
       setEventDetails(data.eventDetails)
     }
   }, [data])
-  const LOGGED_IN = 3 //TODO: set current logged in user
+  const LOGGED_IN = 1 //TODO: set current logged in user
   const [{ showCancelButton, cancelled }, setCancelled] = React.useState({ showCancelButton: false, cancelled: false })
   React.useEffect(() => {
     if (eventDetails) {
@@ -39,6 +100,20 @@ function EventDetails({ eventId }: { eventId: number }) {
     return <div>No event details available</div>
   }
 
+  function handleSubmit(eventID: number, hostID: number) {
+    createRequest(getApolloClient(), {
+      eventID: eventID,
+      hostID: hostID,
+      guestID: 1, //TODO: update this after sign in
+    })
+      .then(data => {
+        console.log('Successful Mutation: ', data)
+        toast('Request successfully sent.')
+      })
+      .catch(err => {
+        console.log('handlesubmit ERROR : ', err)
+      })
+  }
   const handleClick = function () {
     cancelEvent(getApolloClient(), {
       eventId: eventId,
@@ -55,46 +130,56 @@ function EventDetails({ eventId }: { eventId: number }) {
   }
 
   return (
-    <Card style={{ width: '70rem', backgroundColor: '#eed9f2' }}>
-      <div style={{ textAlign: 'center' }}>
-        <H1>{data?.eventDetails?.title}</H1>
-        <Spacer $h4 />
-        <H3>{data?.eventDetails?.description}</H3>
-      </div>
-      <Content style={{ margin: 10 }}>
-        <RContent>
-          <Spacer $h8 />
-          <H2>Date</H2>
-          <H3>{format(Date.parse(data.eventDetails.startTime), 'MMM do yyyy')}</H3>
-          <Spacer $h8 />
-          <H2> Location </H2>
-          <H3>
-            {eventDetails.location.building.name} {eventDetails.location.room}
-          </H3>
-          <Spacer $h8 />
-          <H2> Hosted By </H2>
-          <H3>{eventDetails.host.name}</H3>
-        </RContent>
-        <LContent>
-          <Spacer $h8 />
-          <H2> Time </H2>
-          <H3>
-            {format(Date.parse(eventDetails.startTime), 'h:mm b')} -{format(Date.parse(eventDetails.endTime), 'h:mm b')}
-          </H3>
-          <Spacer $h8 />
-          <H2> # of People confirmed </H2>
-          <H3>
-            {eventDetails.guestCount} / {eventDetails.maxGuestCount}{' '}
-          </H3>
-          <Spacer $h8 />
-          <H2>Contact</H2>
-          <H3>{eventDetails.host.email}</H3>
-          <Spacer $h8 />
-          {showCancelButton ? <Button onClick={() => handleClick()}>Cancel Event</Button> : null}
-          {cancelled ? <H3> Event cancelled </H3> : null}
-          <Spacer $h8 />
-        </LContent>
-      </Content>
+    <Card
+      style={{
+        width: '70rem',
+      }}
+    >
+      <Card.Header>
+        <div style={{ textAlign: 'center' }}>
+          <H1>{data?.eventDetails?.title}</H1>
+          <Spacer $h4 />
+          <H3>{data?.eventDetails?.description}</H3>
+        </div>
+      </Card.Header>
+      <Card.Body>
+        <Content style={{ margin: 10 }}>
+          <RContent>
+            <Spacer $h8 />
+            <H2>Date</H2>
+            <H3>{format(Date.parse(data.eventDetails.startTime), 'MMM do yyyy')}</H3>
+            <Spacer $h8 />
+            <H2> Location </H2>
+            <H3>
+              {eventDetails.location.building.name} {eventDetails.location.room}
+            </H3>
+            <Spacer $h8 />
+            <H2> Hosted By </H2>
+            <H3>{eventDetails.host.name}</H3>
+          </RContent>
+          <LContent>
+            <Spacer $h8 />
+            <H2> Time </H2>
+            <H3>
+              {format(Date.parse(eventDetails.startTime), 'h:mm b')} -
+              {format(Date.parse(eventDetails.endTime), 'h:mm b')}
+            </H3>
+            <Spacer $h8 />
+            <H2> # of People confirmed </H2>
+            <H3>
+              {eventDetails.guestCount} / {eventDetails.maxGuestCount}{' '}
+            </H3>
+            <Spacer $h8 />
+            <H2>Contact</H2>
+            <H3>{eventDetails.host.email}</H3>
+            <Spacer $h8 />
+            <RequestButton eventID={eventId} hostID={eventDetails.host.id} parentCallback={handleSubmit} />
+            <Spacer $h8 />
+            {showCancelButton ? <Button onClick={() => handleClick()}>Cancel Event</Button> : null}
+            {cancelled ? <H3> Event cancelled </H3> : null}
+          </LContent>
+        </Content>
+      </Card.Body>
     </Card>
   )
 }

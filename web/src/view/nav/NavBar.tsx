@@ -73,7 +73,7 @@ export function NavBar() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 w-100 avenir">
+      <div className="fixed top-0 left-0 w-100 avenir" style={{ zIndex: 1 }}>
         {/* mount point for NavMenu */}
         <div id="nav-modal" />
         <Nav>
@@ -152,7 +152,7 @@ function NavItem(props: { name: string; path: string; title?: boolean }) {
 
 const NavAnchor = style(
   'a',
-  'link near-white hover-bg-black-10 pa2 br2',
+  'link near-white hover-bg-black-10 hover-white pa2 br2',
   (p: { $bold?: boolean; $title?: boolean }) => ({
     fontWeight: p.$bold ? 600 : 200,
     fontSize: p.$title ? '1.5em' : undefined,

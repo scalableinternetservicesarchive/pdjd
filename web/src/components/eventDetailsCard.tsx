@@ -11,6 +11,7 @@ const LContent = style('div', 'flex-grow-0 w-60-l mr4-l')
 
 const RContent = style('div', 'flex-grow-0  w-60-l')
 
+const H5Bold = style('h5', 'b', { fontSize: '16px' })
 export function EventDetailsCard(props: {
   id: number
   title: string
@@ -25,7 +26,7 @@ export function EventDetailsCard(props: {
     void navigate(getEventPath(props.id))
   }
   return (
-    <Card as="a" onClick={() => onClick()} bg="light">
+    <Card as="a" onClick={() => onClick()} bg="light" style={{ width: '50rem' }}>
       <Card.Header>
         <div style={{ textAlign: 'center' }}>
           <H2>{props.title}</H2>
@@ -33,21 +34,24 @@ export function EventDetailsCard(props: {
         </div>
       </Card.Header>
       <Card.Body>
-        <Card.Text>
-          <Content>
-            <RContent>
-              <H5>Date: {format(parseISO(props.startTime), 'MMM do yyyy')}</H5>
-              <H5>
-                Time: {format(parseISO(props.startTime), 'h:mm b')} - {format(parseISO(props.endTime), 'h:mm b')}
-              </H5>
-              <H5>Location: {props.location}</H5>
-            </RContent>
-            <LContent>
-              <H5># of People: {props.numPeople} confirmed</H5>
-              <H5>Contact: {props.host}</H5>
-            </LContent>
-          </Content>
-        </Card.Text>
+        <Content>
+          <RContent>
+            <H5Bold>Date</H5Bold>
+            <H5>{format(parseISO(props.startTime), 'MMM do yyyy')}</H5>
+            <H5Bold>Time</H5Bold>
+            <H5>
+              {format(parseISO(props.startTime), 'h:mm b')} - {format(parseISO(props.endTime), 'h:mm b')}
+            </H5>
+            <H5Bold>Location</H5Bold>
+            <H5>{props.location}</H5>
+          </RContent>
+          <LContent>
+            <H5Bold>Number of people</H5Bold>
+            <H5>{props.numPeople} confirmed</H5>
+            <H5Bold>Contact</H5Bold>
+            <H5>{props.host}</H5>
+          </LContent>
+        </Content>
       </Card.Body>
     </Card>
   )
