@@ -6,6 +6,7 @@ coverage/
 bin/
 bundle.zip
 bundle.js*
+bundle.css*
 bundle-graphiql.js*
 
 # expo
