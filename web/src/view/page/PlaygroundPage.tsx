@@ -1,7 +1,7 @@
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { Login } from '../auth/Login'
-import { SignUp } from '../auth/Signup'
+import { Signup } from '../auth/Signup'
 import { AppRouteParams, PlaygroundApp } from '../nav/route'
 import { Surveys } from '../playground/Surveys'
 import { Page } from './Page'
@@ -22,7 +22,7 @@ function getPlaygroundApp(app?: PlaygroundApp) {
     case PlaygroundApp.LOGIN:
       return <Login />
     case PlaygroundApp.SIGNUP:
-      return <SignUp/>
+      return <Signup />
     default:
       throw new Error('no app found')
   }
