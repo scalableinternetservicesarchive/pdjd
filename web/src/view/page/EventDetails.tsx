@@ -12,6 +12,7 @@ import { FetchEventDetails, FetchEventRequestsGuests, FetchEventRequestsGuestsVa
 import { H1, H2, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
+import { UserContext } from '../auth/user'
 import { AppRouteParams } from '../nav/route'
 import { toast } from '../toast/toast'
 import { Page } from './Page'
@@ -39,7 +40,8 @@ function RequestButton(props: {
     setEventRequests(data?.eventRequests)
   }, [data])
 
-  const guestID = props.hostID //TODO: Update this
+  const { user } = React.useContext(UserContext)
+  const guestID = Number(user?.id)
   const [buttonActive, setButtonActive] = React.useState(true)
   const [requestSent, setRequestSent] = React.useState(false)
   React.useEffect(() => {
@@ -51,7 +53,7 @@ function RequestButton(props: {
           break
         }
       }
-  }, [data, eventRequests])
+  }, [data, eventRequests, guestID])
   if (!data || !data.eventRequests) {
     return <div>Error?</div>
   }
@@ -80,6 +82,9 @@ function RequestButton(props: {
 }
 
 function EventDetails({ eventId }: { eventId: number }) {
+  const { user } = React.useContext(UserContext)
+  const LOGGED_IN = Number(user?.id)
+
   const { loading, data } = useQuery<FetchEventDetails>(fetchEventDetails, { variables: { eventId: eventId } })
 
   const [eventDetails, setEventDetails] = React.useState(data?.eventDetails)
@@ -88,14 +93,13 @@ function EventDetails({ eventId }: { eventId: number }) {
       setEventDetails(data.eventDetails)
     }
   }, [data])
-  const LOGGED_IN = 3 //TODO: set current logged in user
   const [{ showCancelButton, cancelled }, setCancelled] = React.useState({ showCancelButton: false, cancelled: false })
   React.useEffect(() => {
     if (eventDetails) {
       const isHost = Number(eventDetails?.host.id) == LOGGED_IN
       setCancelled({ showCancelButton: isHost, cancelled: false })
     }
-  }, [data, eventDetails])
+  }, [data, eventDetails, LOGGED_IN])
   if (loading) {
     return <div> Loading... </div>
   }
