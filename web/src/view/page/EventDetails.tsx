@@ -40,7 +40,6 @@ function RequestButton(props: {
   }, [data])
 
   const guestID = props.hostID //TODO: Update this
-  console.log('ID: ', guestID)
   const [buttonActive, setButtonActive] = React.useState(true)
   const [requestSent, setRequestSent] = React.useState(false)
   React.useEffect(() => {

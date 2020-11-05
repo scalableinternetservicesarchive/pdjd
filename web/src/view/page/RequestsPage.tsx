@@ -9,7 +9,7 @@ import {
   FetchUserGuestRequests,
   FetchUserGuestRequestsVariables,
   FetchUserHostRequests,
-  FetchUserHostRequestsVariables
+  FetchUserHostRequestsVariables,
 } from '../../graphql/query.gen'
 import { Button } from '../../style/button'
 import { AppRouteParams } from '../nav/route'

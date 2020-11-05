@@ -7,11 +7,12 @@ import { fetchUserProfile } from '../../graphql/fetchUsers'
 import {
   FetchUserProfile,
   FetchUserProfileVariables,
-  FetchUserProfile_userProfile_hostEvents
+  FetchUserProfile_userProfile_hostEvents,
 } from '../../graphql/query.gen'
 import { H1, H2, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
 import { style } from '../../style/styled'
+import { UserContext } from '../auth/user'
 import { AppRouteParams } from '../nav/route'
 import { Page } from './Page'
 interface ProfilePageProps extends RouteComponentProps, AppRouteParams {}
@@ -43,7 +44,8 @@ function EventList(props: { events: FetchUserProfile_userProfile_hostEvents[] | 
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function ProfilePage(props: ProfilePageProps) {
-  const userId = 1
+  const { user } = React.useContext(UserContext)
+  const userId = Number(user?.id)
   const { loading, data } = useQuery<FetchUserProfile, FetchUserProfileVariables>(fetchUserProfile, {
     variables: { id: userId },
   })

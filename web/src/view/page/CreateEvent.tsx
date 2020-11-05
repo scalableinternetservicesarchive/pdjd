@@ -90,7 +90,9 @@ export function CreateEventPage(props: CreateEventProps) {
       .catch(err => {
         // console.log("StartTime Is: ",startTime )
         console.log('handlesubmit ERROR : ', err)
-        alert(err)
+        if (user?.id === undefined) {
+          alert('Please Sign In to create an event')
+        } else alert(err)
       })
   }
 
