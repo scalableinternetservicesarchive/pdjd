@@ -75,7 +75,7 @@ server.express.post(
     user.phoneNumber=req.body.phoneNumber;
     // save the User model to the database, refresh `user` to get ID
     user = await user.save()
-
+    //console.log(user.id)
     const authToken = await createSession(user)
     res
       .status(200)
@@ -102,7 +102,8 @@ server.express.post(
     res
       .status(200)
       .cookie('authToken', authToken, { maxAge: SESSION_DURATION, path: '/', httpOnly: true, secure: Config.isProd })
-      .send('Success!')
+      //.send('Successful!')
+      .send({userId:user.id})
   })
 )
 
@@ -113,7 +114,7 @@ async function createSession(user: User): Promise<string> {
   session.authToken = authToken
   session.user = user
   await Session.save(session).then(s => console.log('saved session ' + s.id))
-
+  console.log(session.user.id)
   return authToken
 }
 

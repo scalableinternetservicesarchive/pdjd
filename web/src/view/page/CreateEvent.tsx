@@ -13,6 +13,7 @@ import { H1 } from '../../style/header'
 import { Input } from '../../style/input'
 import { Spacer } from '../../style/spacer'
 import { BodyText } from '../../style/text'
+import { UserContext } from '../auth/user'
 import { AppRouteParams, getEventPath } from '../nav/route'
 import { toast } from '../toast/toast'
 import { Page } from './Page'
@@ -61,7 +62,7 @@ export function CreateEventPage(props: CreateEventProps) {
   const [endTime, setEndTime] = React.useState('')
   const [guest, setGuest] = React.useState('')
   const [building, setBuilding] = React.useState('1')
-
+  const { user } = React.useContext(UserContext)
   const { loading, data } = useQuery<FetchBuildings>(fetchBuildings)
 
   if (loading) {
@@ -77,7 +78,7 @@ export function CreateEventPage(props: CreateEventProps) {
       maxGuestCount: guest,
       eventGuestCount: '1',
       eventLocationID: Number(location),
-      eventHostID: 1,
+      eventHostID: Number(user?.id),
     })
       .then(data => {
         console.log('Successful Mutation: ', data)

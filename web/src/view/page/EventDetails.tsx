@@ -39,8 +39,8 @@ function RequestButton(props: {
     setEventRequests(data?.eventRequests)
   }, [data])
 
-  const guestID = 3 //TODO: Update this
-
+  const guestID = props.hostID //TODO: Update this
+  console.log('ID: ', guestID)
   const [buttonActive, setButtonActive] = React.useState(true)
   const [requestSent, setRequestSent] = React.useState(false)
   React.useEffect(() => {

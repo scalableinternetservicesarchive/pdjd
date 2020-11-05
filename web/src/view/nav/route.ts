@@ -72,7 +72,7 @@ export function getPath(route: Route, arg?: Partial<ReturnType<typeof routeParam
  * Represents parameters parsed from URL routes, e.g. /leasing/tasks/task/123 parses taskId=123.
  */
 export interface AppRouteParams {
-  userId?: string
+  userId?: number,
   app?: PlaygroundApp
   eventId?:number
 }
@@ -82,7 +82,7 @@ export interface AppRouteParams {
  */
 export function routeParams(params: AppRouteParams) {
   return {
-    userId: Number(params.userId || 0),
+    userId: params.userId || 0,
     app: params.app,
     eventId: params.eventId||0
   }
