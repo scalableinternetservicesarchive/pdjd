@@ -1,5 +1,5 @@
 require('honeycomb-beeline')({
-  writeKey: process.env.HONEYCOMB_KEY || 'd29d5f5ec24178320dae437383480737',
+  writeKey: process.env.HONEYCOMB_KEY || '3056d6ea9bb4ea0561f59bf134f5950b',
   dataset: process.env.APP_NAME || 'pdjd',
   serviceName: process.env.APPSERVER_TAG || 'local',
   enabledInstrumentations: ['express', 'mysql2', 'react-dom/server'],
@@ -67,12 +67,12 @@ server.express.post(
     console.log('POST /auth/createUser')
     // create User model with data from HTTP request
     let user = new User()
-    user.email = req.body.email;
-    user.name = req.body.name;
-    user.userType = UserType.User;
-    user.password = req.body.password;
-    user.bio=req.body.bio;
-    user.phoneNumber=req.body.phoneNumber;
+    user.email = req.body.email
+    user.name = req.body.name
+    user.userType = UserType.User
+    user.password = req.body.password
+    user.bio = req.body.bio
+    user.phoneNumber = req.body.phoneNumber
     // save the User model to the database, refresh `user` to get ID
     user = await user.save()
     //console.log(user.id)
@@ -103,7 +103,7 @@ server.express.post(
       .status(200)
       .cookie('authToken', authToken, { maxAge: SESSION_DURATION, path: '/', httpOnly: true, secure: Config.isProd })
       //.send('Successful!')
-      .send({userId:user.id})
+      .send({ userId: user.id })
   })
 )
 
