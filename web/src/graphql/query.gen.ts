@@ -173,9 +173,31 @@ export interface FetchLocationVariables {
 // GraphQL query operation: FetchUserHostRequests
 // ====================================================
 
+export interface FetchUserHostRequests_userHostRequests_event_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchUserHostRequests_userHostRequests_event_location {
+  __typename: "Location";
+  building: FetchUserHostRequests_userHostRequests_event_location_building;
+  room: string;
+}
+
 export interface FetchUserHostRequests_userHostRequests_event {
   __typename: "Event";
   title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  location: FetchUserHostRequests_userHostRequests_event_location;
+  guestCount: number;
+  maxGuestCount: number;
+}
+
+export interface FetchUserHostRequests_userHostRequests_host {
+  __typename: "User";
+  name: string;
 }
 
 export interface FetchUserHostRequests_userHostRequests_guest {
@@ -187,6 +209,7 @@ export interface FetchUserHostRequests_userHostRequests {
   __typename: "Request";
   id: number;
   event: FetchUserHostRequests_userHostRequests_event;
+  host: FetchUserHostRequests_userHostRequests_host;
   guest: FetchUserHostRequests_userHostRequests_guest;
 }
 
@@ -207,15 +230,38 @@ export interface FetchUserHostRequestsVariables {
 // GraphQL query operation: FetchUserGuestRequests
 // ====================================================
 
+export interface FetchUserGuestRequests_userGuestRequests_event_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchUserGuestRequests_userGuestRequests_event_location {
+  __typename: "Location";
+  building: FetchUserGuestRequests_userGuestRequests_event_location_building;
+  room: string;
+}
+
 export interface FetchUserGuestRequests_userGuestRequests_event {
   __typename: "Event";
   title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  location: FetchUserGuestRequests_userGuestRequests_event_location;
+  guestCount: number;
+  maxGuestCount: number;
+}
+
+export interface FetchUserGuestRequests_userGuestRequests_host {
+  __typename: "User";
+  name: string;
 }
 
 export interface FetchUserGuestRequests_userGuestRequests {
   __typename: "Request";
   id: number;
   event: FetchUserGuestRequests_userGuestRequests_event;
+  host: FetchUserGuestRequests_userGuestRequests_host;
   requestStatus: requestStatus;
 }
 

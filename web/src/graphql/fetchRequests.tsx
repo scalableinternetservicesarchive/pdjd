@@ -6,6 +6,20 @@ export const fetchUserHostRequests = gql`
       id
       event {
         title
+        description
+        startTime
+        endTime
+        location {
+          building {
+            name
+          }
+          room
+        }
+        guestCount
+        maxGuestCount
+      }
+      host {
+        name
       }
       guest {
         name
@@ -20,6 +34,20 @@ export const fetchUserGuestRequests = gql`
       id
       event {
         title
+        description
+        startTime
+        endTime
+        location {
+          building {
+            name
+          }
+          room
+        }
+        guestCount
+        maxGuestCount
+      }
+      host {
+        name
       }
       requestStatus
     }

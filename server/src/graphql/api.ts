@@ -50,12 +50,12 @@ export const graphqlRoot: Resolvers<Context> = {
     userHostRequests: async (_, { id }) =>
       (await Request.find({
         where: { host: id, requestStatus: RequestStatus.Pending },
-        relations: ['event', 'host', 'guest'],
+        relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
     userGuestRequests: async (_, { id }) =>
       (await Request.find({
         where: { guest: id },
-        relations: ['event', 'host', 'guest'],
+        relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
     activeEvents: () =>
       Event.find({

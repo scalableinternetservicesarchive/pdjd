@@ -2,6 +2,7 @@ import { navigate } from '@reach/router'
 import { format, parseISO } from 'date-fns'
 import * as React from 'react'
 import { Card } from 'react-bootstrap'
+import { Button } from '../style/button'
 import { H2, H3, H5 } from '../style/header'
 import { style } from '../style/styled'
 import { getEventPath } from '../view/nav/route'
@@ -22,6 +23,10 @@ export function EventDetailsCard(props: {
   numPeople: string
   host: string
   width: string
+  requestStatus?: string
+  requestGuestName?: string
+  acceptHandler?: (e: any) => void
+  rejectHandler?: (e: any) => void
 }) {
   function onClick() {
     void navigate(getEventPath(props.id))
@@ -51,6 +56,16 @@ export function EventDetailsCard(props: {
             <H5>{props.numPeople} confirmed</H5>
             <H5Bold>Contact</H5Bold>
             <H5>{props.host}</H5>
+            {props.requestStatus && <H5Bold>Request Status</H5Bold>}
+            {props.requestStatus && <H5>{props.requestStatus}</H5>}
+            {props.requestGuestName && <H5Bold>{props.requestGuestName} Wants To Join</H5Bold>}
+            {props.requestGuestName && (
+              <H5>
+                {' '}
+                <Button onClick={props.acceptHandler}>Accept</Button>{' '}
+                <Button onClick={props.rejectHandler}>Reject</Button>{' '}
+              </H5>
+            )}
           </LContent>
         </Content>
       </Card.Body>

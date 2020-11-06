@@ -1,7 +1,9 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
+import { Colors } from '../../../../common/src/colors'
+import { EventDetailsCard } from '../../components/eventDetailsCard'
 import { getApolloClient } from '../../graphql/apolloClient'
 import { fetchUserGuestRequests, fetchUserHostRequests } from '../../graphql/fetchRequests'
 import { acceptRequest, rejectRequest } from '../../graphql/mutateRequests'
@@ -9,9 +11,12 @@ import {
   FetchUserGuestRequests,
   FetchUserGuestRequestsVariables,
   FetchUserHostRequests,
-  FetchUserHostRequestsVariables,
+  FetchUserHostRequestsVariables
 } from '../../graphql/query.gen'
-import { Button } from '../../style/button'
+import { H2 } from '../../style/header'
+import { Spacer } from '../../style/spacer'
+import { style } from '../../style/styled'
+import { UserContext } from '../auth/user'
 import { AppRouteParams } from '../nav/route'
 import { handleError } from '../toast/error'
 import { toast } from '../toast/toast'
@@ -19,36 +24,38 @@ import { Page } from './Page'
 
 interface RequestsPageProps extends RouteComponentProps, AppRouteParams {}
 
-function RequestButton(props: { handlerFunc: () => void; buttonText: string }) {
-  return <Button onClick={props.handlerFunc}>{props.buttonText}</Button>
-}
+// function RequestButton(props: { handlerFunc: () => void; buttonText: string }) {
+//   return <Button onClick={props.handlerFunc}>{props.buttonText}</Button>
+// }
 
 function HostRequestsList() {
-  // const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext)
   const { loading, data } = useQuery<FetchUserHostRequests, FetchUserHostRequestsVariables>(fetchUserHostRequests, {
-    variables: { id: 2 },
+    variables: { id: Number(user?.id) },
   })
   const [userHostRequests, setUserHostRequests] = useState(data?.userHostRequests)
   useEffect(() => {
     setUserHostRequests(data?.userHostRequests)
   }, [data])
 
-  function handleAccept(requestId: number) {
+  function handleAccept(e: any, requestId: number) {
+    e.stopPropagation()
     acceptRequest(getApolloClient(), { requestId: requestId })
       .then(() => {
         toast('successfully accept the request')
-        // setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
+        setUserHostRequests(userHostRequests?.filter(userHostRequest => userHostRequest.id != requestId))
       })
       .catch(err => {
         handleError(err)
       })
   }
 
-  function handleReject(requestId: number) {
+  function handleReject(e: any, requestId: number) {
+    e.stopPropagation()
     rejectRequest(getApolloClient(), { requestId: requestId })
       .then(() => {
         toast('successfully reject the request')
-        // setUserHostRequests(userHostRequests.filter(userHostRequest => userHostRequest.id != requestId))
+        setUserHostRequests(userHostRequests?.filter(userHostRequest => userHostRequest.id != requestId))
       })
       .catch(err => {
         handleError(err)
@@ -64,20 +71,25 @@ function HostRequestsList() {
 
   return (
     <div>
-      <div>As a host:</div>
       <div>
         {userHostRequests &&
           userHostRequests.map(userHostRequest => (
             <div key={userHostRequest.id}>
-              {userHostRequest.event.title}
-              <br />
-              {userHostRequest.guest.name}
-              <br />
-              <br />
-              <RequestButton handlerFunc={() => handleAccept(userHostRequest.id)} buttonText="Accept" />
-              <RequestButton handlerFunc={() => handleReject(userHostRequest.id)} buttonText="Reject" />
-              <br />
-              <br />
+              <EventDetailsCard
+                id={userHostRequest.id}
+                title={userHostRequest.event.title}
+                description={userHostRequest.event.description}
+                startTime={userHostRequest.event.startTime}
+                endTime={userHostRequest.event.endTime}
+                location={userHostRequest.event.location.building.name + ' ' + userHostRequest.event.location.room}
+                numPeople={String(userHostRequest.event.guestCount) + '/' + String(userHostRequest.event.maxGuestCount)}
+                host={userHostRequest.host.name}
+                requestGuestName={userHostRequest.guest.name}
+                acceptHandler={e => handleAccept(e, userHostRequest.id)}
+                rejectHandler={e => handleReject(e, userHostRequest.id)}
+                width="40rem"
+              />
+              <Spacer $h5 />
             </div>
           ))}
       </div>
@@ -86,9 +98,9 @@ function HostRequestsList() {
 }
 
 function GuestRequestsList() {
-  // const { user } = useContext(UserContext);
+  const { user } = useContext(UserContext)
   const { loading, data } = useQuery<FetchUserGuestRequests, FetchUserGuestRequestsVariables>(fetchUserGuestRequests, {
-    variables: { id: 2 },
+    variables: { id: Number(user?.id) },
   })
   if (loading) {
     return <div>loading...</div>
@@ -99,15 +111,22 @@ function GuestRequestsList() {
 
   return (
     <div>
-      <div>As a guest:</div>
       <div>
         {data.userGuestRequests.map(userGuestRequest => (
           <div key={userGuestRequest.id}>
-            {userGuestRequest.event.title}
-            <br />
-            {userGuestRequest.requestStatus}
-            <br />
-            <br />
+            <EventDetailsCard
+              id={userGuestRequest.id}
+              title={userGuestRequest.event.title}
+              description={userGuestRequest.event.description}
+              startTime={userGuestRequest.event.startTime}
+              endTime={userGuestRequest.event.endTime}
+              location={userGuestRequest.event.location.building.name + ' ' + userGuestRequest.event.location.room}
+              numPeople={String(userGuestRequest.event.guestCount) + '/' + String(userGuestRequest.event.maxGuestCount)}
+              host={userGuestRequest.host.name}
+              requestStatus={userGuestRequest.requestStatus}
+              width="40rem"
+            />
+            <Spacer $h5 />
           </div>
         ))}
       </div>
@@ -119,8 +138,35 @@ function GuestRequestsList() {
 export function RequestsPage(props: RequestsPageProps) {
   return (
     <Page>
-      <HostRequestsList />
-      <GuestRequestsList />
+      <Content>
+        <Hero>
+          <H2>As A Host</H2>
+          <Spacer $h3 />
+          <LContent>
+            <HostRequestsList />
+          </LContent>
+        </Hero>
+        <Hero>
+          <H2>As A Guest</H2>
+          <Spacer $h3 />
+          <RContent>
+            <GuestRequestsList />
+          </RContent>
+        </Hero>
+      </Content>
     </Page>
   )
 }
+
+const Hero = style('div', 'mb4 w-100 ba b--mid-gray br2 pa3 tc', {
+  borderLeftColor: Colors.lemon + '!important',
+  borderRightColor: Colors.lemon + '!important',
+  borderLeftWidth: '4px',
+  borderRightWidth: '4px',
+})
+
+const Content = style('div', 'flex-l')
+
+const LContent = style('div', 'flex-grow-0 w-60-l mr4-l')
+
+const RContent = style('div', 'flex-grow-0  w-60-l')
