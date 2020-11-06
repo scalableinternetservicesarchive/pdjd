@@ -76,7 +76,7 @@ function HostRequestsList() {
           userHostRequests.map(userHostRequest => (
             <div key={userHostRequest.id}>
               <EventDetailsCard
-                id={userHostRequest.id}
+                id={userHostRequest.event.id}
                 title={userHostRequest.event.title}
                 description={userHostRequest.event.description}
                 startTime={userHostRequest.event.startTime}
@@ -87,7 +87,7 @@ function HostRequestsList() {
                 requestGuestName={userHostRequest.guest.name}
                 acceptHandler={e => handleAccept(e, userHostRequest.id)}
                 rejectHandler={e => handleReject(e, userHostRequest.id)}
-                width="40rem"
+                width="30rem"
               />
               <Spacer $h5 />
             </div>
@@ -115,7 +115,7 @@ function GuestRequestsList() {
         {data.userGuestRequests.map(userGuestRequest => (
           <div key={userGuestRequest.id}>
             <EventDetailsCard
-              id={userGuestRequest.id}
+              id={userGuestRequest.event.id}
               title={userGuestRequest.event.title}
               description={userGuestRequest.event.description}
               startTime={userGuestRequest.event.startTime}
@@ -124,7 +124,7 @@ function GuestRequestsList() {
               numPeople={String(userGuestRequest.event.guestCount) + '/' + String(userGuestRequest.event.maxGuestCount)}
               host={userGuestRequest.host.name}
               requestStatus={userGuestRequest.requestStatus}
-              width="40rem"
+              width="30rem"
             />
             <Spacer $h5 />
           </div>

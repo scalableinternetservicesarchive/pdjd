@@ -5,6 +5,7 @@ export const fetchUserHostRequests = gql`
     userHostRequests(id: $id) {
       id
       event {
+        id
         title
         description
         startTime
@@ -33,6 +34,7 @@ export const fetchUserGuestRequests = gql`
     userGuestRequests(id: $id) {
       id
       event {
+        id
         title
         description
         startTime

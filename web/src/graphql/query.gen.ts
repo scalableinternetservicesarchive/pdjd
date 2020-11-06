@@ -186,6 +186,7 @@ export interface FetchUserHostRequests_userHostRequests_event_location {
 
 export interface FetchUserHostRequests_userHostRequests_event {
   __typename: "Event";
+  id: number;
   title: string;
   description: string;
   startTime: any;
@@ -243,6 +244,7 @@ export interface FetchUserGuestRequests_userGuestRequests_event_location {
 
 export interface FetchUserGuestRequests_userGuestRequests_event {
   __typename: "Event";
+  id: number;
   title: string;
   description: string;
   startTime: any;
