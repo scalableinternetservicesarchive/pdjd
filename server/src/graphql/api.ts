@@ -97,22 +97,28 @@ export const graphqlRoot: Resolvers<Context> = {
       return survey
     },
     acceptRequest: async (_, { requestId }) => {
-      // todo: 1. put everything in a transaction 2. check if reaching attendee limit already 3. should not allow a user to attend same event twice
+      // todo: 1. put everything in a transaction 2. check if reaching attendee limit already
       const request = check(
         await Request.findOne({ where: { id: requestId }, relations: ['event', 'guest', 'guest.guestEvents'] })
       )
-      request.requestStatus = RequestStatus.Accepted
-
       const event = request.event
-      event.guestCount += 1
 
-      const guest = request.guest
-      guest.guestEvents.push(event)
+      if (event.guestCount + 1 > event.maxGuestCount) {
+        request.requestStatus = RequestStatus.Rejected
+        return false
+      } else {
+        request.requestStatus = RequestStatus.Accepted
 
-      await request.save()
-      await event.save()
-      await guest.save()
-      return true
+        event.guestCount += 1
+
+        const guest = request.guest
+        guest.guestEvents.push(event)
+
+        await request.save()
+        await event.save()
+        await guest.save()
+        return true
+      }
     },
     rejectRequest: async (_, { requestId }) => {
       const request = check(await Request.findOne({ where: { id: requestId } }))

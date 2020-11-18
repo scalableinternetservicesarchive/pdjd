@@ -53,9 +53,13 @@ function HostRequestsList() {
   function handleReject(e: any, requestId: number) {
     e.stopPropagation()
     rejectRequest(getApolloClient(), { requestId: requestId })
-      .then(() => {
-        toast('successfully reject the request')
-        setUserHostRequests(userHostRequests?.filter(userHostRequest => userHostRequest.id != requestId))
+      .then(res => {
+        if (res) {
+          toast('successfully reject the request')
+          setUserHostRequests(userHostRequests?.filter(userHostRequest => userHostRequest.id != requestId))
+        } else {
+          toast('You cannot accept this request')
+        }
       })
       .catch(err => {
         handleError(err)
@@ -65,7 +69,7 @@ function HostRequestsList() {
   if (loading) {
     return <div>loading...</div>
   }
-  if (!data || !data.userHostRequests) {
+  if (!data || !data.userHostRequests || data.userHostRequests.length <= 0) {
     return <div>no requests</div>
   }
 
@@ -105,7 +109,7 @@ function GuestRequestsList() {
   if (loading) {
     return <div>loading...</div>
   }
-  if (!data || !data.userGuestRequests) {
+  if (!data || !data.userGuestRequests || data.userGuestRequests.length <= 0) {
     return <div>no requests</div>
   }
 
