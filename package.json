@@ -42,6 +42,7 @@
     "@types/k6": "^0.28.2",
     "@types/react-bootstrap": "^0.32.24",
     "bootstrap": "^4.5.3",
+    "dataloader": "^2.0.0",
     "date-fns": "^2.16.1",
     "graphql": "^15.3.0",
     "react": "^17.0.0",

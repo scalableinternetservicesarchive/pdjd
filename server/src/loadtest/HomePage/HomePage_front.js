@@ -14,8 +14,8 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '35s', target: 200 },
-        { duration: '35s', target: 0 },
+        { duration: '30s', target: 500 },
+        { duration: '30s', target: 0 },
       ],
       gracefulRampDown: '10s',
     },
@@ -42,9 +42,11 @@ export function setup() {
 
 export default function (data) {
   // GET request
-  http.get('http://localhost:3000/app/index', {
+  http.get('http://localhost:3000/', {
     cookies: {
       authToken: data.authToken,
     },
   })
+
+  sleep(Math.random() * 3)
 }

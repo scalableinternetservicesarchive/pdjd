@@ -17,6 +17,7 @@ bundle-graphiql.js*
 .terraform/
 .terraform*
 terraform.tfstate.backup
+terraform/*
 
 # other
 .DS_Store

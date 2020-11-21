@@ -20,16 +20,16 @@ export function Login() {
         <label className="db fw4 lh-copy f6" htmlFor="email">
           Email add
         </label>
-        <Input $hasError={err.email} $onChange={setEmail} $onSubmit={} name="email" type="email" />
+        <Input $hasError={err.email} $onChange={setEmail} name="email" type="email" />
       </div>
       <div className="mt3">
         <label className="db fw4 lh-copy f6" htmlFor="password">
           Password
         </label>
-        <Input $hasError={err.password} $onChange={setPassword} $onSubmit={} name="password" type="password" />
+        <Input $hasError={err.password} $onChange={setPassword} name="password" type="password" />
       </div>
       <div className="mt3">
-        <Button onClick={}>Sign Up</Button>
+        <Button>Sign Up</Button>
       </div>
     </>
   )
