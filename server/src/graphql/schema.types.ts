@@ -27,6 +27,7 @@ export interface Query {
   activeEvents?: Maybe<Array<Event>>
   eventRequests?: Maybe<Array<Request>>
   eventDetails?: Maybe<Event>
+  redisTest?: Maybe<Scalars['String']>
 }
 
 export interface QuerySurveyArgs {
@@ -306,10 +307,10 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
   Int: ResolverTypeWrapper<Scalars['Int']>
+  String: ResolverTypeWrapper<Scalars['String']>
   Mutation: ResolverTypeWrapper<{}>
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>
   EventInput: EventInput
-  String: ResolverTypeWrapper<Scalars['String']>
   RequestInput: RequestInput
   Subscription: ResolverTypeWrapper<{}>
   UserType: UserType
@@ -331,10 +332,10 @@ export type ResolversTypes = {
 export type ResolversParentTypes = {
   Query: {}
   Int: Scalars['Int']
+  String: Scalars['String']
   Mutation: {}
   Boolean: Scalars['Boolean']
   EventInput: EventInput
-  String: Scalars['String']
   RequestInput: RequestInput
   Subscription: {}
   Survey: Survey
@@ -400,6 +401,7 @@ export type QueryResolvers<
     ContextType,
     RequireFields<QueryEventDetailsArgs, 'eventId'>
   >
+  redisTest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
 export type MutationResolvers<

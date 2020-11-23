@@ -44,6 +44,8 @@ type Query {
   eventRequests(eventID: Int!): [Request!]
 
   eventDetails(eventId: Int!): Event
+
+  redisTest: String
 }
 
 type Mutation {

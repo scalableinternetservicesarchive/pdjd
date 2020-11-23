@@ -11,6 +11,7 @@ import cors from 'cors'
 import { json, raw, RequestHandler, static as expressStatic } from 'express'
 import { getOperationAST, parse as parseGraphql, specifiedRules, subscribe as gqlSubscribe, validate } from 'graphql'
 import { GraphQLServer } from 'graphql-yoga'
+import Redis from 'ioredis'
 import { forAwaitEach, isAsyncIterable } from 'iterall'
 import path from 'path'
 import 'reflect-metadata'
@@ -27,10 +28,12 @@ import { UserType } from './graphql/schema.types'
 import { expressLambdaProxy } from './lambda/handler'
 import { renderApp } from './render'
 
+const redis = new Redis()
+
 const server = new GraphQLServer({
   typeDefs: getSchema(),
   resolvers: graphqlRoot as any,
-  context: ctx => ({ ...ctx, pubsub, user: (ctx.request as any)?.user || null }),
+  context: ctx => ({ ...ctx, pubsub, user: (ctx.request as any)?.user || null, redis }),
 })
 
 server.express.use(cookieParser())

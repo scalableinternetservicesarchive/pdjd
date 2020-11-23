@@ -1,5 +1,6 @@
 import { readFileSync } from 'fs'
 import { PubSub } from 'graphql-yoga'
+import { Redis } from 'ioredis'
 import path from 'path'
 import { check } from '../../../common/src/util'
 import { Building } from '../entities/Building'
@@ -24,6 +25,7 @@ interface Context {
   request: Request
   response: Response
   pubsub: PubSub
+  redis: Redis
 }
 
 export const graphqlRoot: Resolvers<Context> = {
@@ -57,11 +59,26 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { guest: id },
         relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
-    activeEvents: () =>
-      Event.find({
-        where: { eventStatus: EventStatus.Open },
-        relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
-      }), // find only open events
+    activeEvents: async (_, args, ctx) => {
+      const redis = ctx.redis
+      const redisRes = await ctx.redis.get('activeEvents')
+      // find active events in the cache
+      if (redisRes) {
+        // console.log('has cache')
+        return JSON.parse(redisRes!)
+      }
+      // didn't find active events in cache
+      else {
+        // console.log('no cache')
+        const events = await Event.find({
+          where: { eventStatus: EventStatus.Open },
+          relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
+        }) // find only open events
+        // set the cache to expire after 5 seconds
+        await redis.set('activeEvents', JSON.stringify(events), 'EX', 5)
+        return events
+      }
+    },
     eventRequests: async (_, { eventID }) =>
       (await Request.find({
         where: { event: eventID },
@@ -72,6 +89,10 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { id: eventId },
         relations: ['host', 'location', 'location.building'],
       })) || null,
+    redisTest: async (_, args, ctx) => {
+      await ctx.redis.del('activeEvents')
+      return 'random string'
+    },
   },
   Mutation: {
     answerSurvey: async (_, { input }, ctx) => {
