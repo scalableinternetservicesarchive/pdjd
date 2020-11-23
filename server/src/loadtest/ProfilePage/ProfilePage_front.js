@@ -4,12 +4,13 @@ import { sleep } from 'k6'
 export const options = {
   scenarios: {
     standard: {
-      executor: 'ramping-arrival-rate',
-      startRate: '50',
-      timeUnit: '1s',
-      preAllocatedVUs: 50,
-      maxVUs: 1000,
-      stages: [{ target: 100, duration: '30s' }],
+      executor: 'ramping-vus',
+      startVUs: 0,
+      stages: [
+        { duration: '30s', target: 500 },
+        { duration: '30s', target: 0 },
+      ],
+      gracefulRampDown: '10s',
     },
   },
 }
@@ -39,4 +40,6 @@ export default function (data) {
       authToken: data.authToken,
     },
   })
+
+  sleep(Math.random() * 3)
 }
