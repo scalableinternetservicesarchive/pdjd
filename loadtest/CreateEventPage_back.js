@@ -36,27 +36,28 @@ export function setup() {
 export default function (data) {
   // GET request
   var payload = JSON.stringify({
-    operationName: "CreateEvent",
+    operationName: 'CreateEvent',
     variables: {
-      eventTitle: "test",
-      eventDesc: "test desc",
-      eventStartTime: "2020-11-06T20:20",
-      eventEndTime: "2020-11-06T20:25",
-      maxGuestCount: "123",
-      eventGuestCount: "1",
+      eventTitle: 'test',
+      eventDesc: 'test desc',
+      eventStartTime: '2020-11-06T20:20',
+      eventEndTime: '2020-11-06T20:25',
+      maxGuestCount: '123',
+      eventGuestCount: '1',
       eventLocationID: 1,
-      eventHostID: 1
+      eventHostID: 1,
     },
-    query: "mutation CreateEvent($eventTitle: String!, $eventDesc: String!, $eventStartTime: Date!, $eventEndTime: Date!, $maxGuestCount: String!, $eventGuestCount: String!, $eventLocationID: Int!, $eventHostID: Int!) {\n  createEvent(event_input: {eventTitle: $eventTitle, eventDesc: $eventDesc, eventEndTime: $eventEndTime, eventStartTime: $eventStartTime, eventMaxGuestCount: $maxGuestCount, eventGuestCount: $eventGuestCount, eventLocationID: $eventLocationID, eventHostID: $eventHostID}) {\n    id\n    title\n    __typename\n  }\n}\n"})
-    var params = {
+    query:
+      'mutation CreateEvent($eventTitle: String!, $eventDesc: String!, $eventStartTime: Date!, $eventEndTime: Date!, $maxGuestCount: String!, $eventGuestCount: String!, $eventLocationID: Int!, $eventHostID: Int!) {\n  createEvent(event_input: {eventTitle: $eventTitle, eventDesc: $eventDesc, eventEndTime: $eventEndTime, eventStartTime: $eventStartTime, eventMaxGuestCount: $maxGuestCount, eventGuestCount: $eventGuestCount, eventLocationID: $eventLocationID, eventHostID: $eventHostID}) {\n    id\n    title\n    __typename\n  }\n}\n',
+  })
+  var params = {
     headers: {
       'Content-Type': 'application/json',
-      cookies: {
-        authToken: data.authToken
-      }
-    }
+    },
+    cookies: {
+      authToken: data.authToken,
+    },
   }
-    var res = http.post("http://localhost:3000/graphql", payload, params)
-    sleep(Math.random() * 3)
+  var res = http.post('http://localhost:3000/graphql', payload, params)
+  sleep(Math.random() * 3)
 }
-
