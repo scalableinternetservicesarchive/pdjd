@@ -15,10 +15,10 @@ services:
   #     MYSQL_HOST: "db"
   #     MYSQL_PORT: "3306"
   db:
-    # image: "mysql:8"
-    build:
-      context: .
-      dockerfile: db.Dockerfile
+    image: "mysql:8"
+    # build:
+    #   context: .
+    #   dockerfile: db.Dockerfile
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_ROOT_HOST=%

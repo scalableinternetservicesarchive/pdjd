@@ -7,6 +7,7 @@ import random
 from faker.providers.person.en import Provider
 import sys
 from datetime import datetime, timedelta
+from csv_to_sql import *
 
 first_names = list(set(Provider.first_names))
 
@@ -15,7 +16,7 @@ shuffle(first_names)
 
 
 def generate_users(num):
-    with open("users.csv", 'w', newline='') as csv_file:
+    with open("user.csv", 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["email", "userType", "password",
                          "name", "bio", "phoneNumber"])
@@ -31,7 +32,7 @@ def generate_users(num):
 
 def generate_events(num_events, num_users):
     events = {}
-    with open("events.csv", 'w', newline='') as csv_file:
+    with open("event.csv", 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["title", "description", "startTime", "endTime",
                          "maxGuestCount", "eventStatus", "locationID", "hostID", "guestCount"])
@@ -60,7 +61,7 @@ def generate_events(num_events, num_users):
 
 def generate_requests(num, num_users, events):
     request_count = 0
-    with open("requests.csv", 'w', newline='') as csv_file:
+    with open("request.csv", 'w', newline='') as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(["eventID", "hostID", "guestID"])
 
@@ -90,5 +91,5 @@ if __name__ == "__main__":
     num_requests = int(sys.argv[3])
     generate_users(num_users)
     events = generate_events(num_events, num_users)
-    print(events[1])
     generate_requests(num_requests, num_users, events)
+    csv_to_sql.convert_sql()
