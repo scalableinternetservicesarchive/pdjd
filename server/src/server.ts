@@ -254,7 +254,16 @@ server.express.post(
   asyncRoute(async (req, res, next) => {
     const authToken = req.cookies.authToken || req.header('x-authtoken')
     if (authToken) {
-      const session = await Session.findOne({ where: { authToken }, relations: ['user'] })
+      // const session = await Session.findOne({ where: { authToken }, relations: ['user'] })
+
+      let session: any
+      const redisRes = await redis.get(authToken.toString())
+      if (redisRes) {
+        session = JSON.parse(redisRes!)
+      } else {
+        session = await Session.findOne({ where: { authToken }, relations: ['user'] })
+        await redis.set(authToken.toString(), JSON.stringify(session), 'EX', SESSION_DURATION)
+      }
       if (session) {
         const reqAny = req as any
         reqAny.user = session.user
