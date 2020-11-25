@@ -27,7 +27,7 @@ export function setup() {
   // Login and profile
   var payload = JSON.stringify({
     email: 'jbruin@ucla.edu',
-    password: 'testpassword',
+    password: 'password',
   })
   var params = {
     headers: {
@@ -42,7 +42,7 @@ export function setup() {
 
 export default function (data) {
   // GET request
-  http.get('http://localhost:3000/', {
+  http.get('http://localhost:3000/app/index', {
     cookies: {
       authToken: data.authToken,
     },

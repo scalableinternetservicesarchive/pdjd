@@ -36,4 +36,5 @@
   "jestrunner.configPath": "jest.config.js",
   "jestrunner.jestPath": "${workspaceFolder}/node_modules/jest/bin/jest",
   "typescript.preferences.importModuleSpecifier": "relative",
+  "python.pythonPath": "/usr/bin/python3",
 }

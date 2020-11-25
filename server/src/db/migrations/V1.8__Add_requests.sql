@@ -1,25 +1,6 @@
-insert into `request` (`eventID`, `hostID`, `guestID`, `requestStatus`) values (1, 1, 2, "PENDING"),
-(1, 1, 3, "PENDING"),
-(1, 1, 4, "PENDING"),
-(1, 1, 5, "PENDING"),
-(1, 1, 6, "PENDING"),
-(2, 2, 1, "PENDING"),
-(2, 2, 3, "PENDING"),
-(2, 2, 4, "PENDING"),
-(2, 2, 5, "PENDING"),
-(2, 2, 6, "PENDING"),
-(3, 2, 1, "PENDING"),
-(3, 2, 3, "PENDING"),
-(3, 2, 4, "PENDING"),
-(3, 2, 5, "PENDING"),
-(3, 2, 6, "PENDING"),
-(4, 3, 1, "PENDING"),
-(4, 3, 2, "PENDING"),
-(4, 3, 4, "PENDING"),
-(4, 3, 5, "PENDING"),
-(4, 3, 6, "PENDING"),
-(5, 3, 1, "PENDING"),
-(5, 3, 2, "PENDING"),
-(5, 3, 4, "PENDING"),
-(5, 3, 5, "PENDING"),
-(5, 3, 6, "PENDING");
+LOAD DATA INFILE '../migration_data/requests.csv'
+INTO TABLE `request`
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS
+(`eventID`, `hostID`, `guestID`);
