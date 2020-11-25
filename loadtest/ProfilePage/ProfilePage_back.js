@@ -45,9 +45,9 @@ export default function (data) {
   const params = {
     headers: {
       'Content-Type': 'application/json',
-      cookies: {
-        authToken: data.authToken,
-      },
+    },
+    cookies: {
+      authToken: data.authToken,
     },
   }
   http.post('http://localhost:3000/graphql', payload, params)
