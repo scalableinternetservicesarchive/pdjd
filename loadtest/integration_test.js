@@ -28,6 +28,24 @@ export const options = {
   },
 }
 
+// setup code
+export function setup() {
+  // Login and profile
+  var payload = JSON.stringify({
+    email: 'jbruin@ucla.edu',
+    password: 'password',
+  })
+  var params = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }
+  http.post('http://localhost:3000/auth/login', payload, params)
+  var jar = http.cookieJar()
+  let cookies = jar.cookiesForURL('http://localhost:3000')
+  return { authToken: cookies.authToken[0] }
+}
+
 export default function () {
   var jar = http.cookieJar()
 
@@ -130,15 +148,17 @@ export default function () {
   )
 
   // Login to jbruin
-  var jbruin_login = JSON.stringify({
-    email: 'jbruin@ucla.edu',
-    password: 'password',
-  })
+  // Race condition somewhere in here, don't login, just login once and share session token
 
-  http.post('http://localhost:3000/auth/login', jbruin_login, params)
-  cookies = jar.cookiesForURL('http://localhost:3000')
-  const jbruin_cookie = cookies.authToken[0]
+  // var jbruin_login = JSON.stringify({
+  //   email: 'jbruin@ucla.edu',
+  //   password: 'password',
+  // })
+  // http.post('http://localhost:3000/auth/login', jbruin_login, params)
+  // cookies = jar.cookiesForURL('http://localhost:3000')
+  // const jbruin_cookie = cookies.authToken[0]
 
+  const jbruin_cookie = data.authToken
   const jbruin_params = {
     headers: {
       'Content-Type': 'application/json',
