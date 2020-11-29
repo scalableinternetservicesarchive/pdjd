@@ -116,6 +116,11 @@ export default function () {
   const request_id = request_res.json('data.createRequest.id')
 
   sleep(1)
+
+  http.get('http://localhost:3000/createevent')
+
+  sleep(5)
+
   // Create new event
   const create_event_payload = JSON.stringify({
     operationName: 'CreateEvent',
