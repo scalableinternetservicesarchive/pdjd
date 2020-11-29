@@ -45,7 +45,8 @@ export function setup() {
 
 export default function (data) {
   // GET request
-  http.get('http://localhost:3000/app/index', {
+  const rand_event = Math.floor(Math.random() * 2000)
+  http.get(`http://localhost:3000/app/eventdetails?eventid=${rand_event}`, {
     cookies: {
       authToken: data.authToken,
     },

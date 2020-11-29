@@ -19,7 +19,7 @@ export function setup() {
   // Login and profile
   var payload = JSON.stringify({
     email: 'jbruin@ucla.edu',
-    password: 'testpassword',
+    password: 'password',
   })
   var params = {
     headers: {

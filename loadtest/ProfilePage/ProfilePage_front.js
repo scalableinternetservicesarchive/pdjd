@@ -7,7 +7,7 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 500 },
+        { duration: '30s', target: 50 },
         { duration: '30s', target: 0 },
       ],
       gracefulRampDown: '10s',
@@ -20,7 +20,7 @@ export function setup() {
   // Login and profile
   var payload = JSON.stringify({
     email: 'jbruin@ucla.edu',
-    password: 'testpassword',
+    password: 'password',
   })
   var params = {
     headers: {

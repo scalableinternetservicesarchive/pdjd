@@ -16,8 +16,8 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '60s', target: 200 },
-        { duration: '60s', target: 0 },
+        { duration: '30s', target: 10 },
+        { duration: '30s', target: 0 },
       ],
       gracefulRampDown: '60s',
       ////////////////////////
@@ -46,7 +46,7 @@ export function setup() {
   return { authToken: cookies.authToken[0] }
 }
 
-export default function () {
+export default function (data) {
   var jar = http.cookieJar()
 
   const id = uuid.v4()
@@ -117,7 +117,7 @@ export default function () {
 
   sleep(1)
 
-  http.get('http://localhost:3000/createevent')
+  http.get('http://localhost:3000/app/createevent')
 
   sleep(5)
 

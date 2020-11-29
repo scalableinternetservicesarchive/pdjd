@@ -45,7 +45,7 @@ export function setup() {
 
 export default function (data) {
   // GET request
-  http.get('http://localhost:3000/app/index', {
+  http.get(`http://localhost:3000/app/createevent`, {
     cookies: {
       authToken: data.authToken,
     },
