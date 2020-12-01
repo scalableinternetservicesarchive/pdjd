@@ -14,13 +14,14 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 50 },
+        { duration: '30s', target: 10 },
         { duration: '30s', target: 0 },
       ],
       gracefulRampDown: '10s',
 
       // executor: 'constant-vus',
       // vus: 1,
+      // duration: '60s',
     },
   },
 }

@@ -32,9 +32,14 @@ export function EventDetailsCard(props: {
     void navigate(getEventPath(props.id))
   }
 
+  let startTime: Date
+  let endTime: Date
   if (!(props.startTime instanceof Date)) {
-    props.startTime = parseISO(props.startTime)
-    props.endTime = parseISO(props.endTime)
+    startTime = parseISO(props.startTime)
+    endTime = parseISO(props.endTime)
+  } else {
+    startTime = props.startTime
+    endTime = props.endTime
   }
 
   return (
@@ -49,10 +54,10 @@ export function EventDetailsCard(props: {
         <Content>
           <RContent>
             <H5Bold>Date</H5Bold>
-            <H5>{format(props.startTime, 'MMM do yyyy')}</H5>
+            <H5>{format(startTime, 'MMM do yyyy')}</H5>
             <H5Bold>Time</H5Bold>
             <H5>
-              {format(props.startTime, 'h:mm b')} - {format(props.endTime, 'h:mm b')}
+              {format(startTime, 'h:mm b')} - {format(endTime, 'h:mm b')}
             </H5>
             <H5Bold>Location</H5Bold>
             <H5>{props.location}</H5>
