@@ -18,8 +18,8 @@ export function EventDetailsCard(props: {
   title: string
   description: string
   location: string
-  startTime: string
-  endTime: string
+  startTime: any
+  endTime: any
   numPeople: string
   host: string
   width: string
@@ -31,6 +31,12 @@ export function EventDetailsCard(props: {
   function onClick() {
     void navigate(getEventPath(props.id))
   }
+
+  if (!(props.startTime instanceof Date)) {
+    props.startTime = parseISO(props.startTime)
+    props.endTime = parseISO(props.endTime)
+  }
+
   return (
     <Card as="a" onClick={() => onClick()} bg="light" style={{ width: props.width }}>
       <Card.Header>
@@ -43,10 +49,10 @@ export function EventDetailsCard(props: {
         <Content>
           <RContent>
             <H5Bold>Date</H5Bold>
-            <H5>{format(parseISO(props.startTime), 'MMM do yyyy')}</H5>
+            <H5>{format(props.startTime, 'MMM do yyyy')}</H5>
             <H5Bold>Time</H5Bold>
             <H5>
-              {format(parseISO(props.startTime), 'h:mm b')} - {format(parseISO(props.endTime), 'h:mm b')}
+              {format(props.startTime, 'h:mm b')} - {format(props.endTime, 'h:mm b')}
             </H5>
             <H5Bold>Location</H5Bold>
             <H5>{props.location}</H5>

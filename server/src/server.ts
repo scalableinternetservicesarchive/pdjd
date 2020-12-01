@@ -28,7 +28,7 @@ import { UserType } from './graphql/schema.types'
 import { expressLambdaProxy } from './lambda/handler'
 import { renderApp } from './render'
 
-const redis = new Redis()
+export const redis = new Redis()
 
 const server = new GraphQLServer({
   typeDefs: getSchema(),

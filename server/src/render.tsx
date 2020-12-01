@@ -10,14 +10,24 @@ import * as ReactDOMServer from 'react-dom/server'
 import { Provider as StyletronProvider } from 'styletron-react'
 import { App } from '../../web/src/view/App'
 import { Config } from './config'
+import { Context, pubsub } from './graphql/api'
+import { redis } from './server'
 
 const Styletron = require('styletron-engine-monolithic')
-
+const getContext = function (req: Request, res: Response): Context {
+  return {
+    user: null,
+    request: req,
+    response: res,
+    pubsub: pubsub,
+    redis: redis,
+  }
+}
 // export function renderApp(req: Request, res: Response) {
 export function renderApp(req: Request, res: Response, schema: any) {
   const apolloClient = new ApolloClient({
     ssrMode: true,
-    link: new SchemaLink({ schema }),
+    link: new SchemaLink({ schema, context: getContext(req, res) }),
     // link: new HttpLink({
     //   uri: `http://127.0.0.1:${Config.appserverPort}/graphql`,
     //   credentials: 'same-origin',
