@@ -28,8 +28,41 @@ import { UserType } from './graphql/schema.types'
 import { expressLambdaProxy } from './lambda/handler'
 import { renderApp } from './render'
 
-export const redis = new Redis()
+export const redis = new Redis({
+  host: process.env.REDIS_HOST || '127.0.0.1',
+  port: 6379,
+})
 
+const getContext = async function (req: any, res: any) {
+  const authToken = req.cookies.authToken || req.header('x-authtoken')
+  let session: any
+
+  if (authToken) {
+    // console.log(authToken)
+    // const session = await Session.findOne({ where: { authToken }, relations: ['user'] })
+
+    const redisRes = await redis.get(authToken.toString())
+    if (redisRes) {
+      session = JSON.parse(redisRes!)
+    } else {
+      session = await Session.findOne({ where: { authToken }, relations: ['user'] })
+      await redis.set(authToken.toString(), JSON.stringify(session), 'EX', SESSION_DURATION)
+    }
+
+    if (session) {
+      const reqAny = req as any
+      reqAny.user = session.user
+    }
+  }
+
+  return {
+    user: session?.user ? session.user : null,
+    request: req,
+    response: res,
+    pubsub: pubsub,
+    redis: redis,
+  }
+}
 const server = new GraphQLServer({
   typeDefs: getSchema(),
   resolvers: graphqlRoot as any,
@@ -49,10 +82,11 @@ server.express.get('/', (req, res) => {
   res.redirect('/app')
 })
 
-server.express.get('/app/*', (req, res) => {
+server.express.get('/app/*', async (req, res) => {
   console.log('GET /app')
   // renderApp(req, res)
-  renderApp(req, res, server.executableSchema)
+  const context = await getContext(req, res)
+  renderApp(req, res, server.executableSchema, context)
 })
 
 server.express.get(
@@ -252,23 +286,7 @@ server.express.post('/graphqlsubscription/disconnect', (req, res) => {
 server.express.post(
   '/graphql',
   asyncRoute(async (req, res, next) => {
-    const authToken = req.cookies.authToken || req.header('x-authtoken')
-    if (authToken) {
-      // const session = await Session.findOne({ where: { authToken }, relations: ['user'] })
-
-      let session: any
-      const redisRes = await redis.get(authToken.toString())
-      if (redisRes) {
-        session = JSON.parse(redisRes!)
-      } else {
-        session = await Session.findOne({ where: { authToken }, relations: ['user'] })
-        await redis.set(authToken.toString(), JSON.stringify(session), 'EX', SESSION_DURATION)
-      }
-      if (session) {
-        const reqAny = req as any
-        reqAny.user = session.user
-      }
-    }
+    await getContext(req, res)
     next()
   })
 )

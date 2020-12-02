@@ -77,7 +77,7 @@ export const graphqlRoot: Resolvers<Context> = {
           relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
         }) // find only open events
         // set the cache to expire after 5 seconds
-        await redis.set('activeEvents', JSON.stringify(events), 'EX', 5)
+        await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
         // console.log(events)
         return events
       }

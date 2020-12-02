@@ -13,6 +13,95 @@ export interface Scalars {
   Date: any
 }
 
+export interface Building {
+  __typename?: 'Building'
+  id: Scalars['Int']
+  name: Scalars['String']
+  locations: Array<Location>
+}
+
+export interface Event {
+  __typename?: 'Event'
+  id: Scalars['Int']
+  title: Scalars['String']
+  description: Scalars['String']
+  startTime: Scalars['Date']
+  endTime: Scalars['Date']
+  maxGuestCount: Scalars['Int']
+  eventStatus: EventStatus
+  host: User
+  location: Location
+  guests: Array<User>
+  requests: Array<Request>
+  isStarted: Scalars['Boolean']
+  isCompleted: Scalars['Boolean']
+  guestCount: Scalars['Int']
+}
+
+export interface EventInput {
+  eventTitle: Scalars['String']
+  eventDesc: Scalars['String']
+  eventStartTime: Scalars['Date']
+  eventEndTime: Scalars['Date']
+  eventMaxGuestCount: Scalars['String']
+  eventLocationID: Scalars['Int']
+  eventHostID: Scalars['Int']
+  eventGuestCount: Scalars['String']
+}
+
+export enum EventStatus {
+  Open = 'OPEN',
+  Closed = 'CLOSED',
+  Cancelled = 'CANCELLED',
+}
+
+export interface Location {
+  __typename?: 'Location'
+  id: Scalars['Int']
+  building: Building
+  room: Scalars['String']
+  events: Array<Event>
+}
+
+export interface Mutation {
+  __typename?: 'Mutation'
+  answerSurvey: Scalars['Boolean']
+  nextSurveyQuestion?: Maybe<Survey>
+  acceptRequest: Scalars['Boolean']
+  rejectRequest: Scalars['Boolean']
+  createEvent?: Maybe<Event>
+  cancelEvent: Scalars['Boolean']
+  createRequest?: Maybe<Request>
+}
+
+export interface MutationAnswerSurveyArgs {
+  input: SurveyInput
+}
+
+export interface MutationNextSurveyQuestionArgs {
+  surveyId: Scalars['Int']
+}
+
+export interface MutationAcceptRequestArgs {
+  requestId: Scalars['Int']
+}
+
+export interface MutationRejectRequestArgs {
+  requestId: Scalars['Int']
+}
+
+export interface MutationCreateEventArgs {
+  event_input: EventInput
+}
+
+export interface MutationCancelEventArgs {
+  eventId: Scalars['Int']
+}
+
+export interface MutationCreateRequestArgs {
+  request_input: RequestInput
+}
+
 export interface Query {
   __typename?: 'Query'
   self?: Maybe<User>
@@ -58,60 +147,25 @@ export interface QueryEventDetailsArgs {
   eventId: Scalars['Int']
 }
 
-export interface Mutation {
-  __typename?: 'Mutation'
-  answerSurvey: Scalars['Boolean']
-  nextSurveyQuestion?: Maybe<Survey>
-  acceptRequest: Scalars['Boolean']
-  rejectRequest: Scalars['Boolean']
-  createEvent?: Maybe<Event>
-  cancelEvent: Scalars['Boolean']
-  createRequest?: Maybe<Request>
-}
-
-export interface MutationAnswerSurveyArgs {
-  input: SurveyInput
-}
-
-export interface MutationNextSurveyQuestionArgs {
-  surveyId: Scalars['Int']
-}
-
-export interface MutationAcceptRequestArgs {
-  requestId: Scalars['Int']
-}
-
-export interface MutationRejectRequestArgs {
-  requestId: Scalars['Int']
-}
-
-export interface MutationCreateEventArgs {
-  event_input: EventInput
-}
-
-export interface MutationCancelEventArgs {
-  eventId: Scalars['Int']
-}
-
-export interface MutationCreateRequestArgs {
-  request_input: RequestInput
-}
-
-export interface EventInput {
-  eventTitle: Scalars['String']
-  eventDesc: Scalars['String']
-  eventStartTime: Scalars['Date']
-  eventEndTime: Scalars['Date']
-  eventMaxGuestCount: Scalars['String']
-  eventLocationID: Scalars['Int']
-  eventHostID: Scalars['Int']
-  eventGuestCount: Scalars['String']
+export interface Request {
+  __typename?: 'Request'
+  id: Scalars['Int']
+  event: Event
+  host: User
+  guest: User
+  requestStatus: RequestStatus
 }
 
 export interface RequestInput {
   guestID: Scalars['Int']
   eventID: Scalars['Int']
   hostID: Scalars['Int']
+}
+
+export enum RequestStatus {
+  Pending = 'PENDING',
+  Accepted = 'ACCEPTED',
+  Rejected = 'REJECTED',
 }
 
 export interface Subscription {
@@ -121,11 +175,6 @@ export interface Subscription {
 
 export interface SubscriptionSurveyUpdatesArgs {
   surveyId: Scalars['Int']
-}
-
-export enum UserType {
-  Admin = 'ADMIN',
-  User = 'USER',
 }
 
 export interface Survey {
@@ -138,15 +187,6 @@ export interface Survey {
   questions: Array<Maybe<SurveyQuestion>>
 }
 
-export interface SurveyQuestion {
-  __typename?: 'SurveyQuestion'
-  id: Scalars['Int']
-  prompt: Scalars['String']
-  choices?: Maybe<Array<Scalars['String']>>
-  answers: Array<SurveyAnswer>
-  survey: Survey
-}
-
 export interface SurveyAnswer {
   __typename?: 'SurveyAnswer'
   id: Scalars['Int']
@@ -157,6 +197,15 @@ export interface SurveyAnswer {
 export interface SurveyInput {
   questionId: Scalars['Int']
   answer: Scalars['String']
+}
+
+export interface SurveyQuestion {
+  __typename?: 'SurveyQuestion'
+  id: Scalars['Int']
+  prompt: Scalars['String']
+  choices?: Maybe<Array<Scalars['String']>>
+  answers: Array<SurveyAnswer>
+  survey: Survey
 }
 
 export interface User {
@@ -174,58 +223,9 @@ export interface User {
   guestRequests: Array<Request>
 }
 
-export interface Event {
-  __typename?: 'Event'
-  id: Scalars['Int']
-  title: Scalars['String']
-  description: Scalars['String']
-  startTime: Scalars['Date']
-  endTime: Scalars['Date']
-  maxGuestCount: Scalars['Int']
-  eventStatus: EventStatus
-  host: User
-  location: Location
-  guests: Array<User>
-  requests: Array<Request>
-  isStarted: Scalars['Boolean']
-  isCompleted: Scalars['Boolean']
-  guestCount: Scalars['Int']
-}
-
-export enum EventStatus {
-  Open = 'OPEN',
-  Closed = 'CLOSED',
-  Cancelled = 'CANCELLED',
-}
-
-export interface Location {
-  __typename?: 'Location'
-  id: Scalars['Int']
-  building: Building
-  room: Scalars['String']
-  events: Array<Event>
-}
-
-export interface Building {
-  __typename?: 'Building'
-  id: Scalars['Int']
-  name: Scalars['String']
-  locations: Array<Location>
-}
-
-export interface Request {
-  __typename?: 'Request'
-  id: Scalars['Int']
-  event: Event
-  host: User
-  guest: User
-  requestStatus: RequestStatus
-}
-
-export enum RequestStatus {
-  Pending = 'PENDING',
-  Accepted = 'ACCEPTED',
-  Rejected = 'REJECTED',
+export enum UserType {
+  Admin = 'ADMIN',
+  User = 'USER',
 }
 
 export type ResolverTypeWrapper<T> = Promise<T> | T
@@ -306,48 +306,142 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Query: ResolverTypeWrapper<{}>
-  Int: ResolverTypeWrapper<Scalars['Int']>
-  String: ResolverTypeWrapper<Scalars['String']>
-  Mutation: ResolverTypeWrapper<{}>
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
-  EventInput: EventInput
-  RequestInput: RequestInput
-  Subscription: ResolverTypeWrapper<{}>
-  UserType: UserType
-  Survey: ResolverTypeWrapper<Survey>
-  SurveyQuestion: ResolverTypeWrapper<SurveyQuestion>
-  SurveyAnswer: ResolverTypeWrapper<SurveyAnswer>
-  SurveyInput: SurveyInput
-  Date: ResolverTypeWrapper<Scalars['Date']>
   User: ResolverTypeWrapper<User>
+  Int: ResolverTypeWrapper<Scalars['Int']>
+  UserType: UserType
+  String: ResolverTypeWrapper<Scalars['String']>
   Event: ResolverTypeWrapper<Event>
+  Date: ResolverTypeWrapper<Scalars['Date']>
   eventStatus: EventStatus
   Location: ResolverTypeWrapper<Location>
   Building: ResolverTypeWrapper<Building>
   Request: ResolverTypeWrapper<Request>
   requestStatus: RequestStatus
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>
+  Survey: ResolverTypeWrapper<Survey>
+  SurveyQuestion: ResolverTypeWrapper<SurveyQuestion>
+  SurveyAnswer: ResolverTypeWrapper<SurveyAnswer>
+  Mutation: ResolverTypeWrapper<{}>
+  SurveyInput: SurveyInput
+  EventInput: EventInput
+  RequestInput: RequestInput
+  Subscription: ResolverTypeWrapper<{}>
 }
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Query: {}
+  User: User
   Int: Scalars['Int']
   String: Scalars['String']
-  Mutation: {}
-  Boolean: Scalars['Boolean']
-  EventInput: EventInput
-  RequestInput: RequestInput
-  Subscription: {}
-  Survey: Survey
-  SurveyQuestion: SurveyQuestion
-  SurveyAnswer: SurveyAnswer
-  SurveyInput: SurveyInput
-  Date: Scalars['Date']
-  User: User
   Event: Event
+  Date: Scalars['Date']
   Location: Location
   Building: Building
   Request: Request
+  Boolean: Scalars['Boolean']
+  Survey: Survey
+  SurveyQuestion: SurveyQuestion
+  SurveyAnswer: SurveyAnswer
+  Mutation: {}
+  SurveyInput: SurveyInput
+  EventInput: EventInput
+  RequestInput: RequestInput
+  Subscription: {}
+}
+
+export type BuildingResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Building'] = ResolversParentTypes['Building']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date'
+}
+
+export type EventResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  startTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  endTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
+  maxGuestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  eventStatus?: Resolver<ResolversTypes['eventStatus'], ParentType, ContextType>
+  host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
+  guests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
+  requests?: Resolver<Array<ResolversTypes['Request']>, ParentType, ContextType>
+  isStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  isCompleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
+  guestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}
+
+export type LocationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  building?: Resolver<ResolversTypes['Building'], ParentType, ContextType>
+  room?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
+}
+
+export type MutationResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+> = {
+  answerSurvey?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAnswerSurveyArgs, 'input'>
+  >
+  nextSurveyQuestion?: Resolver<
+    Maybe<ResolversTypes['Survey']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationNextSurveyQuestionArgs, 'surveyId'>
+  >
+  acceptRequest?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationAcceptRequestArgs, 'requestId'>
+  >
+  rejectRequest?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationRejectRequestArgs, 'requestId'>
+  >
+  createEvent?: Resolver<
+    Maybe<ResolversTypes['Event']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateEventArgs, 'event_input'>
+  >
+  cancelEvent?: Resolver<
+    ResolversTypes['Boolean'],
+    ParentType,
+    ContextType,
+    RequireFields<MutationCancelEventArgs, 'eventId'>
+  >
+  createRequest?: Resolver<
+    Maybe<ResolversTypes['Request']>,
+    ParentType,
+    ContextType,
+    RequireFields<MutationCreateRequestArgs, 'request_input'>
+  >
 }
 
 export type QueryResolvers<
@@ -404,52 +498,16 @@ export type QueryResolvers<
   redisTest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>
 }
 
-export type MutationResolvers<
+export type RequestResolvers<
   ContextType = any,
-  ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']
+  ParentType extends ResolversParentTypes['Request'] = ResolversParentTypes['Request']
 > = {
-  answerSurvey?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationAnswerSurveyArgs, 'input'>
-  >
-  nextSurveyQuestion?: Resolver<
-    Maybe<ResolversTypes['Survey']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationNextSurveyQuestionArgs, 'surveyId'>
-  >
-  acceptRequest?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationAcceptRequestArgs, 'requestId'>
-  >
-  rejectRequest?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationRejectRequestArgs, 'requestId'>
-  >
-  createEvent?: Resolver<
-    Maybe<ResolversTypes['Event']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateEventArgs, 'event_input'>
-  >
-  cancelEvent?: Resolver<
-    ResolversTypes['Boolean'],
-    ParentType,
-    ContextType,
-    RequireFields<MutationCancelEventArgs, 'eventId'>
-  >
-  createRequest?: Resolver<
-    Maybe<ResolversTypes['Request']>,
-    ParentType,
-    ContextType,
-    RequireFields<MutationCreateRequestArgs, 'request_input'>
-  >
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>
+  host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  guest?: Resolver<ResolversTypes['User'], ParentType, ContextType>
+  requestStatus?: Resolver<ResolversTypes['requestStatus'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
 export type SubscriptionResolvers<
@@ -478,18 +536,6 @@ export type SurveyResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
-export type SurveyQuestionResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['SurveyQuestion'] = ResolversParentTypes['SurveyQuestion']
-> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  prompt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  choices?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>
-  answers?: Resolver<Array<ResolversTypes['SurveyAnswer']>, ParentType, ContextType>
-  survey?: Resolver<ResolversTypes['Survey'], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>
-}
-
 export type SurveyAnswerResolvers<
   ContextType = any,
   ParentType extends ResolversParentTypes['SurveyAnswer'] = ResolversParentTypes['SurveyAnswer']
@@ -500,8 +546,16 @@ export type SurveyAnswerResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
-export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
-  name: 'Date'
+export type SurveyQuestionResolvers<
+  ContextType = any,
+  ParentType extends ResolversParentTypes['SurveyQuestion'] = ResolversParentTypes['SurveyQuestion']
+> = {
+  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
+  prompt?: Resolver<ResolversTypes['String'], ParentType, ContextType>
+  choices?: Resolver<Maybe<Array<ResolversTypes['String']>>, ParentType, ContextType>
+  answers?: Resolver<Array<ResolversTypes['SurveyAnswer']>, ParentType, ContextType>
+  survey?: Resolver<ResolversTypes['Survey'], ParentType, ContextType>
+  __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
 export type UserResolvers<
@@ -522,73 +576,19 @@ export type UserResolvers<
   __isTypeOf?: IsTypeOfResolverFn<ParentType>
 }
 
-export type EventResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Event'] = ResolversParentTypes['Event']
-> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  description?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  startTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  endTime?: Resolver<ResolversTypes['Date'], ParentType, ContextType>
-  maxGuestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  eventStatus?: Resolver<ResolversTypes['eventStatus'], ParentType, ContextType>
-  host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
-  location?: Resolver<ResolversTypes['Location'], ParentType, ContextType>
-  guests?: Resolver<Array<ResolversTypes['User']>, ParentType, ContextType>
-  requests?: Resolver<Array<ResolversTypes['Request']>, ParentType, ContextType>
-  isStarted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  isCompleted?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>
-  guestCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>
-}
-
-export type LocationResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Location'] = ResolversParentTypes['Location']
-> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  building?: Resolver<ResolversTypes['Building'], ParentType, ContextType>
-  room?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>
-}
-
-export type BuildingResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Building'] = ResolversParentTypes['Building']
-> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>
-  locations?: Resolver<Array<ResolversTypes['Location']>, ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>
-}
-
-export type RequestResolvers<
-  ContextType = any,
-  ParentType extends ResolversParentTypes['Request'] = ResolversParentTypes['Request']
-> = {
-  id?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
-  event?: Resolver<ResolversTypes['Event'], ParentType, ContextType>
-  host?: Resolver<ResolversTypes['User'], ParentType, ContextType>
-  guest?: Resolver<ResolversTypes['User'], ParentType, ContextType>
-  requestStatus?: Resolver<ResolversTypes['requestStatus'], ParentType, ContextType>
-  __isTypeOf?: IsTypeOfResolverFn<ParentType>
-}
-
 export type Resolvers<ContextType = any> = {
-  Query?: QueryResolvers<ContextType>
-  Mutation?: MutationResolvers<ContextType>
-  Subscription?: SubscriptionResolvers<ContextType>
-  Survey?: SurveyResolvers<ContextType>
-  SurveyQuestion?: SurveyQuestionResolvers<ContextType>
-  SurveyAnswer?: SurveyAnswerResolvers<ContextType>
+  Building?: BuildingResolvers<ContextType>
   Date?: GraphQLScalarType
-  User?: UserResolvers<ContextType>
   Event?: EventResolvers<ContextType>
   Location?: LocationResolvers<ContextType>
-  Building?: BuildingResolvers<ContextType>
+  Mutation?: MutationResolvers<ContextType>
+  Query?: QueryResolvers<ContextType>
   Request?: RequestResolvers<ContextType>
+  Subscription?: SubscriptionResolvers<ContextType>
+  Survey?: SurveyResolvers<ContextType>
+  SurveyAnswer?: SurveyAnswerResolvers<ContextType>
+  SurveyQuestion?: SurveyQuestionResolvers<ContextType>
+  User?: UserResolvers<ContextType>
 }
 
 /**
