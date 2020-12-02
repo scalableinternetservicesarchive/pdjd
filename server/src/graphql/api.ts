@@ -1,3 +1,4 @@
+import { Request as ExpressRequest, Response } from 'express'
 import { readFileSync } from 'fs'
 import { PubSub } from 'graphql-yoga'
 import { Redis } from 'ioredis'
@@ -20,9 +21,9 @@ export function getSchema() {
   return schema.toString()
 }
 
-interface Context {
+export interface Context {
   user: User | null
-  request: Request
+  request: ExpressRequest
   response: Response
   pubsub: PubSub
   redis: Redis
@@ -60,6 +61,7 @@ export const graphqlRoot: Resolvers<Context> = {
         relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
     activeEvents: async (_, args, ctx) => {
+      // console.log('activeEvent')
       const redis = ctx.redis
       const redisRes = await ctx.redis.get('activeEvents')
       // find active events in the cache
@@ -75,7 +77,8 @@ export const graphqlRoot: Resolvers<Context> = {
           relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
         }) // find only open events
         // set the cache to expire after 5 seconds
-        await redis.set('activeEvents', JSON.stringify(events), 'EX', 5)
+        await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
+        // console.log(events)
         return events
       }
     },

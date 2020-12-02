@@ -14,10 +14,10 @@ import { Config } from './config'
 const Styletron = require('styletron-engine-monolithic')
 
 // export function renderApp(req: Request, res: Response) {
-export function renderApp(req: Request, res: Response, schema: any) {
+export function renderApp(req: Request, res: Response, schema: any, context: any) {
   const apolloClient = new ApolloClient({
     ssrMode: true,
-    link: new SchemaLink({ schema }),
+    link: new SchemaLink({ schema, context }),
     // link: new HttpLink({
     //   uri: `http://127.0.0.1:${Config.appserverPort}/graphql`,
     //   credentials: 'same-origin',

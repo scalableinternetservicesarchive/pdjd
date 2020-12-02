@@ -66,6 +66,10 @@ function HostRequestsList() {
       })
   }
 
+  if (!user) {
+    return <div>No user currently logged in.</div>
+  }
+
   if (loading) {
     return <div>loading...</div>
   }
@@ -87,7 +91,7 @@ function HostRequestsList() {
                 endTime={userHostRequest.event.endTime}
                 location={userHostRequest.event.location.building.name + ' ' + userHostRequest.event.location.room}
                 numPeople={String(userHostRequest.event.guestCount) + '/' + String(userHostRequest.event.maxGuestCount)}
-                host={userHostRequest.host.name}
+                host={user.name}
                 requestGuestName={userHostRequest.guest.name}
                 acceptHandler={e => handleAccept(e, userHostRequest.id)}
                 rejectHandler={e => handleReject(e, userHostRequest.id)}
