@@ -114,6 +114,8 @@ export interface Query {
   userGuestRequests?: Maybe<Array<Request>>
   events: Array<Event>
   activeEvents?: Maybe<Array<Event>>
+  activeEventsPage?: Maybe<Array<Event>>
+  activeEventsPages: Scalars['Int']
   eventRequests?: Maybe<Array<Request>>
   eventDetails?: Maybe<Event>
   redisTest?: Maybe<Scalars['String']>
@@ -137,6 +139,10 @@ export interface QueryUserHostRequestsArgs {
 
 export interface QueryUserGuestRequestsArgs {
   id: Scalars['Int']
+}
+
+export interface QueryActiveEventsPageArgs {
+  page: Scalars['Int']
 }
 
 export interface QueryEventRequestsArgs {
@@ -483,6 +489,13 @@ export type QueryResolvers<
   >
   events?: Resolver<Array<ResolversTypes['Event']>, ParentType, ContextType>
   activeEvents?: Resolver<Maybe<Array<ResolversTypes['Event']>>, ParentType, ContextType>
+  activeEventsPage?: Resolver<
+    Maybe<Array<ResolversTypes['Event']>>,
+    ParentType,
+    ContextType,
+    RequireFields<QueryActiveEventsPageArgs, 'page'>
+  >
+  activeEventsPages?: Resolver<ResolversTypes['Int'], ParentType, ContextType>
   eventRequests?: Resolver<
     Maybe<Array<ResolversTypes['Request']>>,
     ParentType,

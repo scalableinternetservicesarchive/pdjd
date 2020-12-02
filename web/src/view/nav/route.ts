@@ -5,7 +5,7 @@
  * Some routes are special values that map to one of the other routes depending on current location context.
  */
 export enum Route {
-  HOME = 'app/index',
+  HOME = 'app/index/:page',
   LECTURES = 'app/lectures',
   PROJECTS = 'app/projects',
   PLAYGROUND = 'app/playground',
@@ -13,8 +13,7 @@ export enum Route {
   PROFILE = 'app/profile',
   CREATEEVENT = 'app/createevent',
   REQUESTS = 'app/requests',
-  EVENTDETAILS='app/eventdetails'
-
+  EVENTDETAILS = 'app/eventdetails/:eventId',
 }
 
 export enum PlaygroundApp {
@@ -27,10 +26,15 @@ export function getSurveyPath(surveyId?: number) {
   const path = getPath(Route.PLAYGROUND_APP, { app: PlaygroundApp.SURVEYS })
   return path + (surveyId ? `?surveyId=${surveyId}` : '')
 }
+
+export function getHomePath(page?: number) {
+  const path = getPath(Route.HOME, { page: page })
+  return path
+}
+
 export function getEventPath(eventId?: number) {
-  const path = getPath(Route.EVENTDETAILS)
-  const finalPath= path + (eventId ? `?eventId=${eventId}` : '')
-  return finalPath
+  const path = getPath(Route.EVENTDETAILS, { eventId: eventId })
+  return path
 }
 export function getLoginPath() {
   return getPath(Route.PLAYGROUND_APP, { app: PlaygroundApp.LOGIN })
@@ -72,9 +76,10 @@ export function getPath(route: Route, arg?: Partial<ReturnType<typeof routeParam
  * Represents parameters parsed from URL routes, e.g. /leasing/tasks/task/123 parses taskId=123.
  */
 export interface AppRouteParams {
-  userId?: number,
+  userId?: number
   app?: PlaygroundApp
-  eventId?:number
+  eventId?: number
+  page?: number
 }
 
 /**
@@ -84,6 +89,7 @@ export function routeParams(params: AppRouteParams) {
   return {
     userId: params.userId || 0,
     app: params.app,
-    eventId: params.eventId||0
+    eventId: params.eventId || 0,
+    page: params.page || 1,
   }
 }

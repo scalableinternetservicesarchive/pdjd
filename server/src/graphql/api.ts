@@ -16,6 +16,8 @@ import { EventStatus, RequestStatus, Resolvers } from './schema.types'
 
 export const pubsub = new PubSub()
 
+const EVENTS_PER_PAGE = 9
+
 export function getSchema() {
   const schema = readFileSync(path.join(__dirname, 'schema.graphql'))
   return schema.toString()
@@ -27,6 +29,26 @@ export interface Context {
   response: Response
   pubsub: PubSub
   redis: Redis
+}
+
+async function getActiveEvents(ctx: Context) {
+  const redis = ctx.redis
+  const redisRes = await ctx.redis.get('activeEvents')
+  // find active events in the cache
+  if (redisRes) {
+    // console.log('has cache')
+    return JSON.parse(redisRes!)
+  }
+  // didn't find active events in cache
+  else {
+    const events = await Event.find({
+      where: { eventStatus: EventStatus.Open },
+      relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
+    }) // find only open events
+    await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
+    // console.log(events)
+    return events
+  }
 }
 
 export const graphqlRoot: Resolvers<Context> = {
@@ -60,10 +82,16 @@ export const graphqlRoot: Resolvers<Context> = {
         where: { guest: id },
         relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
-    activeEvents: async (_, args, ctx) => {
-      // console.log('activeEvent')
+    activeEvents: async (_, __, ctx) => {
+      return await getActiveEvents(ctx)
+    },
+    activeEventsPage: async (_, { page }, ctx) => {
+      const events = await getActiveEvents(ctx)
+      return events.slice((page - 1) * EVENTS_PER_PAGE, page * EVENTS_PER_PAGE)
+    },
+    activeEventsPages: async (_, __, ctx) => {
       const redis = ctx.redis
-      const redisRes = await ctx.redis.get('activeEvents')
+      const redisRes = await ctx.redis.get('activeEventsPages')
       // find active events in the cache
       if (redisRes) {
         // console.log('has cache')
@@ -71,15 +99,15 @@ export const graphqlRoot: Resolvers<Context> = {
       }
       // didn't find active events in cache
       else {
-        // console.log('no cache')
-        const events = await Event.find({
-          where: { eventStatus: EventStatus.Open },
-          relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
-        }) // find only open events
-        // set the cache to expire after 5 seconds
-        await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
+        const events = await getActiveEvents(ctx)
+        let page = 1
+        if (events.length > EVENTS_PER_PAGE) {
+          page = Math.floor(events.length / EVENTS_PER_PAGE)
+        }
+        await redis.set('activeEventsPages', page, 'EX', 30)
+
+        return page
         // console.log(events)
-        return events
       }
     },
     eventRequests: async (_, { eventID }) =>

@@ -40,6 +40,11 @@ type Query {
   # return all active events
   activeEvents: [Event!]
 
+  # return the active events in certain page
+  activeEventsPage(page: Int!): [Event!]
+  # return the number of pages in activeEvents
+  activeEventsPages: Int!
+
   # return requests associated with event with eventID
   eventRequests(eventID: Int!): [Request!]
 
