@@ -28,7 +28,10 @@ import { UserType } from './graphql/schema.types'
 import { expressLambdaProxy } from './lambda/handler'
 import { renderApp } from './render'
 
-const redis = new Redis()
+export const redis = new Redis({
+  port: 6379,
+  host: process.env.REDIS_HOST || '127.0.0.1',
+})
 
 const server = new GraphQLServer({
   typeDefs: getSchema(),
