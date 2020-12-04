@@ -69,6 +69,9 @@ type Mutation {
 
   # Create a new request
   createRequest (request_input: RequestInput!): Request
+
+  # background process automatic update event
+  autoUpdateEvent: Boolean
 }
 
 input EventInput {

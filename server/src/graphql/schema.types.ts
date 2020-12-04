@@ -72,6 +72,7 @@ export interface Mutation {
   createEvent?: Maybe<Event>
   cancelEvent: Scalars['Boolean']
   createRequest?: Maybe<Request>
+  autoUpdateEvent?: Maybe<Scalars['Boolean']>
 }
 
 export interface MutationAnswerSurveyArgs {
@@ -442,6 +443,7 @@ export type MutationResolvers<
     ContextType,
     RequireFields<MutationCreateRequestArgs, 'request_input'>
   >
+  autoUpdateEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>
 }
 
 export type QueryResolvers<

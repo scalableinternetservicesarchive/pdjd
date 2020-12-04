@@ -201,6 +201,18 @@ export const graphqlRoot: Resolvers<Context> = {
       // TODO: subscription propagation? notify users that event is cancelled?
       return true
     },
+    autoUpdateEvent: async (_, {}) => {
+      const events = await Event.find({})
+      const currDate = new Date(Date.now())
+      events.map(async currEvent => {
+        if (currEvent.guestCount >= currEvent.maxGuestCount || currEvent.endTime < currDate) {
+          currEvent.eventStatus = EventStatus.Closed
+          await currEvent.save()
+        }
+      })
+
+      return true
+    },
   },
   Subscription: {
     surveyUpdates: {

@@ -415,6 +415,19 @@ export interface CancelEventVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL mutation operation: AutoUpdateEvent
+// ====================================================
+
+export interface AutoUpdateEvent {
+  autoUpdateEvent: boolean | null;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL mutation operation: CreateRequest
 // ====================================================
 

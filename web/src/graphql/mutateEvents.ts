@@ -1,5 +1,5 @@
 import { ApolloClient, gql } from '@apollo/client'
-import { CancelEvent, CancelEventVariables, CreateEvent, CreateEventVariables } from './query.gen'
+import { AutoUpdateEvent, CancelEvent, CancelEventVariables, CreateEvent, CreateEventVariables } from './query.gen'
 
 const createEventMutation = gql`
   mutation CreateEvent(
@@ -36,6 +36,12 @@ const cancelEventMutation = gql`
   }
 `
 
+const autoUpdateEventMutation = gql`
+  mutation AutoUpdateEvent {
+    autoUpdateEvent
+  }
+`
+
 export function createEvent(client: ApolloClient<any>, event_input: CreateEventVariables) {
   return client.mutate<CreateEvent, CreateEventVariables>({
     mutation: createEventMutation,
@@ -56,5 +62,11 @@ export function cancelEvent(client: ApolloClient<any>, eventId: CancelEventVaria
   return client.mutate<CancelEvent, CancelEventVariables>({
     mutation: cancelEventMutation,
     variables: eventId,
+  })
+}
+
+export function autoUpdateEvent(client: ApolloClient<any>) {
+  return client.mutate<AutoUpdateEvent>({
+    mutation: autoUpdateEventMutation,
   })
 }
