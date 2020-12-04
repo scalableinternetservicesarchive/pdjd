@@ -7,7 +7,7 @@ import { fetchUserProfile } from '../../graphql/fetchUsers'
 import {
   FetchUserProfile,
   FetchUserProfileVariables,
-  FetchUserProfile_userProfile_hostEvents,
+  FetchUserProfile_userProfile_hostEvents
 } from '../../graphql/query.gen'
 import { H1, H2, H3 } from '../../style/header'
 import { Spacer } from '../../style/spacer'
@@ -49,6 +49,13 @@ export function ProfilePage(props: ProfilePageProps) {
   const { loading, data } = useQuery<FetchUserProfile, FetchUserProfileVariables>(fetchUserProfile, {
     variables: { id: userId },
   })
+  if (!user) {
+    return (
+      <Page>
+        <div>No logged in user</div>
+      </Page>
+    )
+  }
   if (loading) {
     return <div>loading...</div>
   }

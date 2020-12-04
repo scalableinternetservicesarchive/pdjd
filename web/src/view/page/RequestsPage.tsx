@@ -67,9 +67,8 @@ function HostRequestsList() {
   }
 
   if (!user) {
-    return <div>No user currently logged in.</div>
+    return <div>no loggedin user</div>
   }
-
   if (loading) {
     return <div>loading...</div>
   }
@@ -110,6 +109,9 @@ function GuestRequestsList() {
   const { loading, data } = useQuery<FetchUserGuestRequests, FetchUserGuestRequestsVariables>(fetchUserGuestRequests, {
     variables: { id: Number(user?.id) },
   })
+  if (!user) {
+    return <div>no loggedin user</div>
+  }
   if (loading) {
     return <div>loading...</div>
   }
@@ -144,6 +146,14 @@ function GuestRequestsList() {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function RequestsPage(props: RequestsPageProps) {
+  const { user } = useContext(UserContext)
+  if (!user) {
+    return (
+      <Page>
+        <div>No logged in user</div>
+      </Page>
+    )
+  }
   return (
     <Page>
       <Content>

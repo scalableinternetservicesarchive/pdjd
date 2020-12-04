@@ -103,7 +103,13 @@ export function CreateEventPage(props: CreateEventProps) {
   const parentCallback = function (locationID: string) {
     setLocation(locationID)
   }
-
+  if (!user) {
+    return (
+      <Page>
+        <div>No logged in user</div>
+      </Page>
+    )
+  }
   return (
     <Page>
       <H1>Create Event</H1>
