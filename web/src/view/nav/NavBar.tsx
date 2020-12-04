@@ -13,7 +13,7 @@ import { getLoginPath, getPath, getSignupPath, Route } from './route'
 
 const title = {
   name: 'Home',
-  path: getPath(Route.HOME),
+  path: getPath(Route.HOME, { page: 1 }),
   title: true,
 }
 

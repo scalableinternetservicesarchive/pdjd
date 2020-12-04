@@ -192,9 +192,16 @@ function EventDetails({ eventId }: { eventId: number }) {
 }
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function EventDetailsPage(props: EventDetailsPageProps) {
-  const getEventId = () => Number(props.location?.search.match(/\d+/g))
+  const eventId = Number(props.eventId)
 
-  const eventId = getEventId()
+  if (!eventId) {
+    return (
+      <Page>
+        <div>No event details available</div>
+      </Page>
+    )
+  }
+
   return (
     <Page>
       <EventDetails eventId={eventId} />

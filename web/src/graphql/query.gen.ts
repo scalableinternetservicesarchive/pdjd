@@ -123,6 +123,67 @@ export interface FetchEventRequestsGuestsVariables {
 // This file was automatically generated and should not be edited.
 
 // ====================================================
+// GraphQL query operation: FetchActiveEventsPages
+// ====================================================
+
+export interface FetchActiveEventsPages {
+  activeEventsPages: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
+// GraphQL query operation: FetchActiveEventsPage
+// ====================================================
+
+export interface FetchActiveEventsPage_activeEventsPage_location_building {
+  __typename: "Building";
+  name: string;
+}
+
+export interface FetchActiveEventsPage_activeEventsPage_location {
+  __typename: "Location";
+  building: FetchActiveEventsPage_activeEventsPage_location_building;
+  room: string;
+}
+
+export interface FetchActiveEventsPage_activeEventsPage_host {
+  __typename: "User";
+  id: number;
+  name: string;
+  email: string;
+}
+
+export interface FetchActiveEventsPage_activeEventsPage {
+  __typename: "Event";
+  id: number;
+  title: string;
+  description: string;
+  startTime: any;
+  endTime: any;
+  maxGuestCount: number;
+  location: FetchActiveEventsPage_activeEventsPage_location;
+  host: FetchActiveEventsPage_activeEventsPage_host;
+  guestCount: number;
+}
+
+export interface FetchActiveEventsPage {
+  activeEventsPage: FetchActiveEventsPage_activeEventsPage[] | null;
+}
+
+export interface FetchActiveEventsPageVariables {
+  page: number;
+}
+
+/* tslint:disable */
+/* eslint-disable */
+// @generated
+// This file was automatically generated and should not be edited.
+
+// ====================================================
 // GraphQL query operation: FetchBuildings
 // ====================================================
 

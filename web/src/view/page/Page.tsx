@@ -3,7 +3,7 @@ import { NavBar } from '../nav/NavBar'
 
 export function Page(props: React.PropsWithChildren<JSX.IntrinsicElements['div']>) {
   return (
-    <div className="mw8">
+    <div>
       <NavBar />
       {props.children}
     </div>

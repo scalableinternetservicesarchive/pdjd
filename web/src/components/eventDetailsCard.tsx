@@ -43,7 +43,13 @@ export function EventDetailsCard(props: {
   }
 
   return (
-    <Card as="a" onClick={() => onClick()} bg="light" style={{ width: props.width }}>
+    <Card
+      className="h-100 my-2"
+      as="a"
+      onClick={() => onClick()}
+      bg="light"
+      style={{ width: props.width, flex: 1, maxHeight: '90%' }}
+    >
       <Card.Header>
         <div style={{ textAlign: 'center' }}>
           <H2>{props.title}</H2>
