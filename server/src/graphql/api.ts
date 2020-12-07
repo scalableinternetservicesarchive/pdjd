@@ -1,8 +1,10 @@
+import { parseISO } from 'date-fns'
 import { Request as ExpressRequest, Response } from 'express'
 import { readFileSync } from 'fs'
 import { PubSub } from 'graphql-yoga'
 import { Redis } from 'ioredis'
 import path from 'path'
+import { getConnection, In } from 'typeorm'
 import { check } from '../../../common/src/util'
 import { Building } from '../entities/Building'
 import { Event } from '../entities/Event'
@@ -42,9 +44,16 @@ async function getActiveEvents(ctx: Context) {
   // didn't find active events in cache
   else {
     const events = await Event.find({
-      where: { eventStatus: EventStatus.Open },
+      where: {
+        eventStatus: EventStatus.Open,
+      },
       relations: ['host', 'location', 'location.building', 'requests', 'requests.guest'],
+      order: {
+        id: 'ASC',
+      },
     }) // find only open events
+    console.log('Setting redis cache for actieEvents')
+
     await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
     // console.log(events)
     return events
@@ -104,6 +113,7 @@ export const graphqlRoot: Resolvers<Context> = {
         if (events.length > EVENTS_PER_PAGE) {
           page = Math.floor(events.length / EVENTS_PER_PAGE)
         }
+        console.log('Setting redis cache for pages')
         await redis.set('activeEventsPages', page, 'EX', 30)
 
         return page
@@ -229,15 +239,31 @@ export const graphqlRoot: Resolvers<Context> = {
       // TODO: subscription propagation? notify users that event is cancelled?
       return true
     },
-    autoUpdateEvent: async (_, {}) => {
-      const events = await Event.find({})
+    autoUpdateEvent: async (_, {}, ctx) => {
+      const events = await getActiveEvents(ctx)
       const currDate = new Date(Date.now())
-      events.map(async currEvent => {
-        if (currEvent.guestCount >= currEvent.maxGuestCount || currEvent.endTime < currDate) {
-          currEvent.eventStatus = EventStatus.Closed
-          await currEvent.save()
+      const inactiveEvents: any[] = []
+      events.map((currEvent: any) => {
+        let endTime = currEvent.endTime
+        if (!(endTime instanceof Date)) {
+          endTime = parseISO(endTime)
+        }
+        if (currEvent.guestCount >= currEvent.maxGuestCount || endTime < currDate) {
+          inactiveEvents.push(currEvent.id)
         }
       })
+      await getConnection()
+        .createQueryBuilder()
+        .update(Event)
+        .set({ eventStatus: EventStatus.Closed })
+        .where({ id: In(inactiveEvents.sort()) })
+        .execute()
+
+      // Force update redis if activeEvents is updated
+      console.log('Dropping redis cache for activeEvents')
+      if (inactiveEvents.length > 0) {
+        await ctx.redis.del('activeEvents')
+      }
 
       return true
     },

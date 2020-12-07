@@ -14,6 +14,7 @@ interface HomePageProps extends RouteComponentProps, AppRouteParams {}
 function ActiveEventList({ page }: { page: number }) {
   const { loading, data } = useQuery<FetchActiveEventsPage, FetchActiveEventsPageVariables>(fetchActiveEventsPage, {
     variables: { page },
+    pollInterval: 10 * 1000,
   })
   // const [event, setEvent] = React.useState('')
 
@@ -78,7 +79,9 @@ function PaginationNextBuilder(page: number, maxPage: number) {
 }
 
 function PaginationBuilder({ page }: { page: number }) {
-  const { loading, data } = useQuery<FetchActiveEventsPages>(fetchActiveEventsPages)
+  const { loading, data } = useQuery<FetchActiveEventsPages>(fetchActiveEventsPages, {
+    pollInterval: 10 * 1000,
+  })
   if (loading) {
     return <div>Loading...</div>
   }
@@ -111,7 +114,6 @@ function PaginationBuilder({ page }: { page: number }) {
     void navigate(getHomePath(target_page))
   }
 
-  console.log(numPages)
   let items: JSX.Element[] = []
   const prev = PaginationPrevBuilder(page)
   const next = PaginationNextBuilder(page, numPages)

@@ -16,7 +16,7 @@ export const options = {
       executor: 'ramping-vus',
       startVUs: 0,
       stages: [
-        { duration: '30s', target: 10 },
+        { duration: '30s', target: 100 },
         { duration: '30s', target: 0 },
       ],
       gracefulRampDown: '60s',
@@ -40,9 +40,9 @@ export function setup() {
       'Content-Type': 'application/json',
     },
   }
-  http.post('http://localhost:3000/auth/login', payload, params)
+  const res = http.post('http://pdjd.cloudcity.computer/auth/login', payload, params)
   var jar = http.cookieJar()
-  let cookies = jar.cookiesForURL('http://localhost:3000')
+  let cookies = jar.cookiesForURL('https://pdjd.cloudcity.computer')
   return { authToken: cookies.authToken[0] }
 }
 
@@ -64,8 +64,8 @@ export default function (data) {
       'Content-Type': 'application/json',
     },
   }
-  http.post('http://localhost:3000/auth/createUser', payload, params)
-  let cookies = jar.cookiesForURL('http://localhost:3000')
+  http.post('http://pdjd.cloudcity.computer/auth/createUser', payload, params)
+  let cookies = jar.cookiesForURL('https://pdjd.cloudcity.computer')
   const newacc_cookie = cookies.authToken[0]
 
   // Update params to use auth token
@@ -84,20 +84,20 @@ export default function (data) {
     variables: {},
     query: 'query FetchUserContext {\n  self {\n    id\n    name\n    userType\n    __typename\n  }\n}\n',
   })
-  const ctx_res = http.post('http://localhost:3000/graphql', ctx_payload, new_acc_params)
+  const ctx_res = http.post('http://pdjd.cloudcity.computer/graphql', ctx_payload, new_acc_params)
   const newacc_id = ctx_res.json('data.self.id')
 
   // Go to home page, look at events
   sleep(1)
 
-  http.get('http://localhost:3000/app/index', {
+  http.get('http://pdjd.cloudcity.computer/app/index', {
     cookies: newacc_cookie,
   })
 
   sleep(5)
   // Look at random event on the event page
   const rand_event = Math.floor(Math.random() * 2000)
-  http.get(`http://localhost:3000/app/eventdetails?eventid=${rand_event}`)
+  http.get(`http://pdjd.cloudcity.computer/app/eventdetails?eventid=${rand_event}`)
 
   sleep(2)
   // Send a request to jbruin
@@ -112,12 +112,12 @@ export default function (data) {
       'mutation CreateRequest($eventID: Int!, $guestID: Int!, $hostID: Int!) {\n  createRequest(request_input: {eventID: $eventID, guestID: $guestID, hostID: $hostID}) {\n    id\n    __typename\n  }\n}\n',
   })
 
-  const request_res = http.post('http://localhost:3000/graphql', request_payload, new_acc_params)
+  const request_res = http.post('http://pdjd.cloudcity.computer/graphql', request_payload, new_acc_params)
   const request_id = request_res.json('data.createRequest.id')
 
   sleep(1)
 
-  http.get('http://localhost:3000/app/createevent')
+  http.get('http://pdjd.cloudcity.computer/app/createevent')
 
   sleep(5)
 
@@ -138,12 +138,12 @@ export default function (data) {
       'mutation CreateEvent($eventTitle: String!, $eventDesc: String!, $eventStartTime: Date!, $eventEndTime: Date!, $maxGuestCount: String!, $eventGuestCount: String!, $eventLocationID: Int!, $eventHostID: Int!) {\n  createEvent(event_input: {eventTitle: $eventTitle, eventDesc: $eventDesc, eventEndTime: $eventEndTime, eventStartTime: $eventStartTime, eventMaxGuestCount: $maxGuestCount, eventGuestCount: $eventGuestCount, eventLocationID: $eventLocationID, eventHostID: $eventHostID}) {\n    id\n    title\n    __typename\n  }\n}\n',
   })
 
-  http.post('http://localhost:3000/graphql', create_event_payload, new_acc_params)
+  http.post('http://pdjd.cloudcity.computer/graphql', create_event_payload, new_acc_params)
 
   sleep(1)
   // Logout
   http.post(
-    'http://localhost:3000/auth/logout',
+    'http://pdjd.cloudcity.computer/auth/logout',
     {},
     {
       cookies: {
@@ -159,8 +159,8 @@ export default function (data) {
   //   email: 'jbruin@ucla.edu',
   //   password: 'password',
   // })
-  // http.post('http://localhost:3000/auth/login', jbruin_login, params)
-  // cookies = jar.cookiesForURL('http://localhost:3000')
+  // http.post('http://pdjd.cloudcity.computer/auth/login', jbruin_login, params)
+  // cookies = jar.cookiesForURL('http://pdjd.cloudcity.computer')
   // const jbruin_cookie = cookies.authToken[0]
 
   const jbruin_cookie = data.authToken
@@ -175,13 +175,13 @@ export default function (data) {
   // Loaded this page by default
   sleep(1)
 
-  http.get('http://localhost:3000/app/index', {
+  http.get('http://pdjd.cloudcity.computer/app/index', {
     cookies: jbruin_cookie,
   })
 
   sleep(1)
   // Check profile page
-  http.get('http://localhost:3000/app/profile', {
+  http.get('http://pdjd.cloudcity.computer/app/profile', {
     cookies: {
       authToken: jbruin_cookie,
     },
@@ -189,7 +189,7 @@ export default function (data) {
 
   sleep(3)
   // Check requests page
-  http.get('http://localhost:3000/app/requests', {
+  http.get('http://pdjd.cloudcity.computer/app/requests', {
     cookies: {
       authToken: jbruin_cookie,
     },
@@ -216,5 +216,5 @@ export default function (data) {
     query: accept ? accept_request_mutation : reject_request_mutation,
   })
 
-  http.post('http://localhost:3000/graphql', modify_request_payload, jbruin_params)
+  http.post('http://pdjd.cloudcity.computer/graphql', modify_request_payload, jbruin_params)
 }

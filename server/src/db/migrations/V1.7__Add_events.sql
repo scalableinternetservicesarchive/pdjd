@@ -1,5 +1,5 @@
 INSERT INTO `event` (`title`, `description`, `startTime`, `endTime`, `maxGuestCount`, `eventStatus`, `locationID`, `hostID`, `guestCount`) VALUES
-("CS188", "Scalable Internet Services", "2020-10-19 08:00:00", "2020-10-19 10:00:00", "100", "OPEN", "1", "1", "3"),
+("CS188", "Scalable Internet Services", "2021-10-19 08:00:00", "2021-10-19 10:00:00", "10000", "OPEN", "1", "1", "3"),
 ("Event#2", "Event#2's description", "2020-11-24 19:00:00", "2020-11-24 20:00:00", "18", "OPEN", "118", "127", "1"),
 ("Event#3", "Event#3's description", "2020-11-24 20:00:00", "2020-11-24 21:00:00", "13", "OPEN", "192", "468", "1"),
 ("Event#4", "Event#4's description", "2020-11-24 21:00:00", "2020-11-24 22:00:00", "9", "OPEN", "116", "307", "1"),
