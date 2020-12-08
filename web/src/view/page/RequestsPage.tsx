@@ -2,6 +2,7 @@ import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
 import { useContext, useEffect, useState } from 'react'
+import { CardDeck } from 'react-bootstrap'
 import { Colors } from '../../../../common/src/colors'
 import { EventDetailsCard } from '../../components/eventDetailsCard'
 import { getApolloClient } from '../../graphql/apolloClient'
@@ -78,7 +79,7 @@ function HostRequestsList() {
 
   return (
     <div>
-      <div>
+      <CardDeck style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {userHostRequests &&
           userHostRequests.map(userHostRequest => (
             <div key={userHostRequest.id}>
@@ -99,7 +100,7 @@ function HostRequestsList() {
               <Spacer $h5 />
             </div>
           ))}
-      </div>
+      </CardDeck>
     </div>
   )
 }
@@ -121,7 +122,7 @@ function GuestRequestsList() {
 
   return (
     <div>
-      <div>
+      <CardDeck style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
         {data.userGuestRequests.map(userGuestRequest => (
           <div key={userGuestRequest.id}>
             <EventDetailsCard
@@ -139,7 +140,7 @@ function GuestRequestsList() {
             <Spacer $h5 />
           </div>
         ))}
-      </div>
+      </CardDeck>
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client'
 import { RouteComponentProps } from '@reach/router'
 import * as React from 'react'
+import { CardDeck } from 'react-bootstrap'
 import { Colors } from '../../../../common/src/colors'
 import { EventDetailsCard } from '../../components/eventDetailsCard'
 import { fetchUserProfile } from '../../graphql/fetchUsers'
@@ -23,22 +24,24 @@ function EventList(props: { events: FetchUserProfile_userProfile_hostEvents[] | 
   }
   return (
     <div>
-      {props.events.map((event, i) => (
-        <div key={i}>
-          <EventDetailsCard
-            id={event.id}
-            title={event.title}
-            description={event.description}
-            startTime={event.startTime}
-            endTime={event.endTime}
-            location={event.location.building.name + ' ' + event.location.room}
-            numPeople={String(event.guestCount) + '/' + String(event.maxGuestCount)}
-            host={props.host}
-            width="30rem"
-          />
-          <Spacer $h5 />
-        </div>
-      ))}
+      <CardDeck style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        {props.events.map((event, i) => (
+          <div key={i}>
+            <EventDetailsCard
+              id={event.id}
+              title={event.title}
+              description={event.description}
+              startTime={event.startTime}
+              endTime={event.endTime}
+              location={event.location.building.name + ' ' + event.location.room}
+              numPeople={String(event.guestCount) + '/' + String(event.maxGuestCount)}
+              host={props.host}
+              width="30rem"
+            />
+            <Spacer $h5 />
+          </div>
+        ))}
+      </CardDeck>
     </div>
   )
 }

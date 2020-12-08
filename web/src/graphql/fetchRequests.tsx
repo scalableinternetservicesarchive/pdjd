@@ -19,9 +19,6 @@ export const fetchUserHostRequests = gql`
         guestCount
         maxGuestCount
       }
-      host {
-        name
-      }
       guest {
         name
       }

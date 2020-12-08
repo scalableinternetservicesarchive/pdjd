@@ -257,11 +257,6 @@ export interface FetchUserHostRequests_userHostRequests_event {
   maxGuestCount: number;
 }
 
-export interface FetchUserHostRequests_userHostRequests_host {
-  __typename: "User";
-  name: string;
-}
-
 export interface FetchUserHostRequests_userHostRequests_guest {
   __typename: "User";
   name: string;
@@ -271,7 +266,6 @@ export interface FetchUserHostRequests_userHostRequests {
   __typename: "Request";
   id: number;
   event: FetchUserHostRequests_userHostRequests_event;
-  host: FetchUserHostRequests_userHostRequests_host;
   guest: FetchUserHostRequests_userHostRequests_guest;
 }
 

@@ -80,8 +80,9 @@ export const graphqlRoot: Resolvers<Context> = {
     building: async (_, { buildingID }) =>
       (await Building.findOne({ where: { id: buildingID }, relations: ['locations'] })) || null,
     buildings: () => Building.find(),
-    userProfile: async (_, { id }) =>
-      (await User.findOne({
+    userProfile: async (_, { id }) => {
+      // const t1 = new Timer('TypeORM query')
+      const profile = await User.findOne({
         where: { id },
         relations: [
           'hostEvents',
@@ -92,17 +93,28 @@ export const graphqlRoot: Resolvers<Context> = {
           'guestEvents.location.building',
           'guestEvents.host',
         ],
-      })) || null,
-    userHostRequests: async (_, { id }) =>
-      (await Request.find({
+      })
+      // t1.stop()
+      return profile || null
+    },
+    userHostRequests: async (_, { id }) => {
+      // const t1 = new Timer('userHostRequests')
+      const requests = await Request.find({
         where: { host: id, requestStatus: RequestStatus.Pending },
-        relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
-      })) || null,
-    userGuestRequests: async (_, { id }) =>
-      (await Request.find({
+        relations: ['event', 'guest', 'event.location', 'event.location.building'],
+      })
+      // t1.stop()
+      return requests || null
+    },
+    userGuestRequests: async (_, { id }) => {
+      // const t1 = new Timer('userGuestRequests')
+      const requests = await Request.find({
         where: { guest: id },
-        relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
-      })) || null,
+        relations: ['event', 'host', 'event.location', 'event.location.building'],
+      })
+      // t1.stop()
+      return requests || null
+    },
     activeEvents: async (_, __, ctx) => {
       const events_paged = await getActiveEvents(ctx)
       return [].concat(...events_paged) // flatten

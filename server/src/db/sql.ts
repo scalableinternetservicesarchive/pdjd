@@ -116,3 +116,8 @@ export class SQL {
     return res
   }
 }
+
+export async function getSQLConnection() {
+  const conn = await getConnection()
+  return new SQL(conn)
+}

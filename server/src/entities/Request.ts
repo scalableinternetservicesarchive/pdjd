@@ -1,4 +1,4 @@
-import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { BaseEntity, Column, Entity, Index, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
 import { RequestStatus } from '../graphql/schema.types'
 import { Event } from './Event'
 import { User } from './User'
@@ -22,5 +22,6 @@ export class Request extends BaseEntity {
     enum: RequestStatus,
     default: RequestStatus.Pending,
   })
+  @Index('requestStatus-idx')
   requestStatus: RequestStatus
 }
