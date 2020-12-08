@@ -20,6 +20,16 @@ export const pubsub = new PubSub()
 
 const EVENTS_PER_PAGE = 9
 
+function paginate(arr: any[], size: number) {
+  return arr.reduce((acc, val, i) => {
+    const idx = Math.floor(i / size)
+    const page = acc[idx] || (acc[idx] = [])
+    page.push(val)
+
+    return acc
+  }, [])
+}
+
 export function getSchema() {
   const schema = readFileSync(path.join(__dirname, 'schema.graphql'))
   return schema.toString()
@@ -52,11 +62,13 @@ async function getActiveEvents(ctx: Context) {
         id: 'ASC',
       },
     }) // find only open events
-    console.log('Setting redis cache for actieEvents')
 
-    await redis.set('activeEvents', JSON.stringify(events), 'EX', 30)
+    const events_paged = paginate(events, EVENTS_PER_PAGE)
+    console.log('Setting redis cache for activeEvents')
+
+    await redis.set('activeEvents', JSON.stringify(events_paged), 'EX', 30)
     // console.log(events)
-    return events
+    return events_paged
   }
 }
 
@@ -92,11 +104,12 @@ export const graphqlRoot: Resolvers<Context> = {
         relations: ['event', 'host', 'guest', 'event.location', 'event.location.building'],
       })) || null,
     activeEvents: async (_, __, ctx) => {
-      return await getActiveEvents(ctx)
+      const events_paged = await getActiveEvents(ctx)
+      return [].concat(...events_paged) // flatten
     },
     activeEventsPage: async (_, { page }, ctx) => {
-      const events = await getActiveEvents(ctx)
-      return events.slice((page - 1) * EVENTS_PER_PAGE, page * EVENTS_PER_PAGE)
+      const events_paged = await getActiveEvents(ctx)
+      return events_paged[page - 1]
     },
     activeEventsPages: async (_, __, ctx) => {
       const redis = ctx.redis
@@ -109,10 +122,7 @@ export const graphqlRoot: Resolvers<Context> = {
       // didn't find active events in cache
       else {
         const events = await getActiveEvents(ctx)
-        let page = 1
-        if (events.length > EVENTS_PER_PAGE) {
-          page = Math.floor(events.length / EVENTS_PER_PAGE)
-        }
+        const page = events.length
         console.log('Setting redis cache for pages')
         await redis.set('activeEventsPages', page, 'EX', 30)
 
@@ -240,7 +250,8 @@ export const graphqlRoot: Resolvers<Context> = {
       return true
     },
     autoUpdateEvent: async (_, {}, ctx) => {
-      const events = await getActiveEvents(ctx)
+      const events_paged = await getActiveEvents(ctx)
+      const events = [].concat(...events_paged) // flatten
       const currDate = new Date(Date.now())
       const inactiveEvents: any[] = []
       events.map((currEvent: any) => {
